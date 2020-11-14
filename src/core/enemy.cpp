@@ -2,7 +2,7 @@
 
 namespace tank_hero {
 
-Enemy::Enemy(vec2 position, float speed, Tank* target)
+Enemy::Enemy(const vec2& position, float speed, Tank* target)
     : position_(position), speed_(speed), target_(target) {}
 
 void Enemy::ApproachTank() {

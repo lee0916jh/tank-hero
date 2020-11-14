@@ -9,11 +9,11 @@ using glm::vec2;
 
 class Enemy {
  public:
-  Enemy(vec2 position, float speed, Tank* target);
+  Enemy(const vec2& position, float speed, Tank* target);
 
   // Getters
   const vec2& GetPosition() const { return position_; };
-  void ApproachTank();
+  void ApproachTank() ;
 
  private:
   vec2 position_;

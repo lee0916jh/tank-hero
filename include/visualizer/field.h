@@ -6,6 +6,7 @@
 #include "cinder/Rand.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
+#include "core/bullet.h"
 #include "core/enemy.h"
 #include "core/tank.h"
 
@@ -21,18 +22,21 @@ class Field {
   Field();
 
   float GetWidth() { return width_; }
-  void Draw();
+  void Draw() const;
   void Update();
   void HandleKeyInputs(const std::set<int>& keys);
+  void FireBullet(const glm::ivec2& mouse_pos);
 
  private:
-  void DrawTank();
-  void DrawEnemies();
+  void DrawTank() const;
+  void DrawEnemies() const;
+  void DrawBullets() const;
 
   // member variables
   float width_;
   Tank tank_;
   vector<Enemy> enemies_;
+  vector<Bullet> bullets_;
 };
 }  // namespace tank_hero::visualizer
 #endif  // TANK_HERO_FIELD_H

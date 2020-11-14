@@ -22,5 +22,8 @@ void TankHeroApp::keyDown(KeyEvent event) {
 }
 
 void TankHeroApp::keyUp(KeyEvent event) { held_keys_.erase(event.getCode()); }
+void TankHeroApp::mouseDown(MouseEvent event) {
+  field_.FireBullet(event.getPos());
+}
 
 }  // namespace tank_hero::visualizer

@@ -13,7 +13,8 @@ class Tank {
   explicit Tank(const vec2& position);
 
   // Getters
-  const vec2& GetPosition() { return position_; }
+  const vec2& GetPosition() const { return position_; }
+  float GetBulletSize() const { return bullet_size_; }
 
   void MoveUp();
   void MoveDown();
@@ -23,6 +24,7 @@ class Tank {
  private:
   vec2 position_;
   float speed_;
+  float bullet_size_{1};
 };
 }  // namespace tank_hero
 
