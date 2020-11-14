@@ -6,13 +6,13 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
+#include "visualizer/field.h"
 
 namespace tank_hero::visualizer {
 using ci::app::KeyEvent;
 using glm::vec2;
 
 constexpr int kWindowSize = 1000;
-const vec2 kSpawnPoint = vec2(100, 100);
 
 class TankHeroApp : public ci::app::App {
  public:
@@ -24,11 +24,10 @@ class TankHeroApp : public ci::app::App {
   void keyUp(KeyEvent event) override;
 
  private:
-  void HandleKeyInputs();
 
   // data members
   std::set<int> held_keys_;
-  Tank tank_;
+  Field field_;
 };
 
 }  // namespace tank_hero::visualizer

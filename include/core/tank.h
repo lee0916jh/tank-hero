@@ -6,12 +6,23 @@
 namespace tank_hero {
 using glm::vec2;
 
+constexpr float kDefaultSpeed = 1;
+
 class Tank {
  public:
-  Tank(const vec2& position);
+  explicit Tank(const vec2& position);
+
+  // Getters
+  const vec2& GetPosition() { return position_; }
+
+  void MoveUp();
+  void MoveDown();
+  void MoveLeft();
+  void MoveRight();
 
  private:
   vec2 position_;
+  float speed_;
 };
 }  // namespace tank_hero
 
