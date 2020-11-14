@@ -5,7 +5,11 @@ TankHeroApp::TankHeroApp() {
                          static_cast<int>(kWindowSize));
 }
 
-void TankHeroApp::update() { field_.HandleKeyInputs(held_keys_); }
+void TankHeroApp::update() {
+  field_.HandleKeyInputs(held_keys_);
+  field_.Update();
+}
+
 void TankHeroApp::draw() {
   ci::Color8u background_color(ci::Color("grey"));
   ci::gl::clear(background_color);

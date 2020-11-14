@@ -20,10 +20,28 @@ void Field::HandleKeyInputs(const std::set<int>& keys) {
   if (s_pressed) tank_.MoveDown();
 }
 
-void Field::Draw() { DrawTank(); }
+void Field::Draw() {
+  DrawTank();
+  DrawEnemies();
+}
+
+void Field::Update() {
+  enemies_.emplace_back(ci::randVec2(), 1.0f, &tank_);
+
+  for (Enemy& enemy : enemies_) {
+    enemy.ApproachTank();
+  }
+}
 
 void Field::DrawTank() {
-  ci::Color("green");
+  ci::gl::color(ci::Color("green"));
   ci::gl::drawSolidCircle(tank_.GetPosition(), 10);
+}
+
+void Field::DrawEnemies() {
+  ci::gl::color(ci::Color("red"));
+  for (const Enemy& enemy : enemies_) {
+    ci::gl::drawSolidCircle(enemy.GetPosition(), 3);
+  }
 }
 }  // namespace tank_hero::visualizer

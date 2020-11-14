@@ -11,10 +11,11 @@ class Enemy {
  public:
   Enemy(vec2 position, float speed, Tank* target);
 
+  // Getters
+  const vec2& GetPosition() const { return position_; };
   void ApproachTank();
 
  private:
-
   vec2 position_;
   float speed_;
   Tank* target_;
