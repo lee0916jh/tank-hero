@@ -12,13 +12,21 @@ class Enemy {
   Enemy(const vec2& position, float speed, Tank* target);
 
   // Getters
-  const vec2& GetPosition() const { return position_; };
-  void ApproachTank() ;
+  const vec2& GetPosition() const { return position_; }
+  float GetRadius() const { return radius_; }
+  bool IsDead() const { return dead_; }
+
+  void ApproachTank();
+
+  void Dies() { dead_ = true; }
 
  private:
   vec2 position_;
+  float radius_;
   float speed_;
   Tank* target_;
+
+  bool dead_ = false;
 };
 }  // namespace tank_hero
 #endif  // TANK_HERO_ENEMY_H

@@ -6,7 +6,8 @@
 namespace tank_hero {
 using glm::vec2;
 
-constexpr float kDefaultSpeed = 1;
+constexpr float kDefaultSpeed = 3;
+constexpr float kDefaultWidth = 20;
 
 class Tank {
  public:
@@ -14,6 +15,8 @@ class Tank {
 
   // Getters
   const vec2& GetPosition() const { return position_; }
+  vec2 GetTopLeftCorner() const;
+  vec2 GetBottomRightCorner() const;
   float GetBulletSize() const { return bullet_size_; }
 
   void MoveUp();
@@ -24,7 +27,7 @@ class Tank {
  private:
   vec2 position_;
   float speed_;
-  float bullet_size_{1};
+  float bullet_size_ = 5;
 };
 }  // namespace tank_hero
 

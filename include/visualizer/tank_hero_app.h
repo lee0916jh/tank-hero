@@ -6,7 +6,7 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
-#include "visualizer/field.h"
+#include "core/game.h"
 
 namespace tank_hero::visualizer {
 using ci::app::KeyEvent;
@@ -28,7 +28,7 @@ class TankHeroApp : public ci::app::App {
  private:
   // data members
   std::set<int> held_keys_;
-  Field field_;
+  Game game_;
 };
 
 }  // namespace tank_hero::visualizer
