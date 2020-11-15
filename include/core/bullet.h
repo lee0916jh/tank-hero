@@ -6,6 +6,7 @@
 #include "cinder/gl/gl.h"
 #include "core/enemy.h"
 #include "core/tank.h"
+
 namespace tank_hero {
 using glm::vec2;
 
@@ -21,8 +22,13 @@ class Bullet {
   bool IsActive() const { return active_; }
   void GoesInactive() { active_ = false; }
 
+  /// Returns true only if the bullet is outside the map.
   bool IsOutOfMap(size_t map_width) const;
+
+  /// Moves the bullet by 1 unit of time.
   void Move();
+
+  /// Returns true if the bullet collided with the enemy.
   bool DidHit(const Enemy& enemy) const;
 
  private:

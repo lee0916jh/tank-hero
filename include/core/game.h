@@ -27,7 +27,6 @@ class Game {
  public:
   Game(size_t window_width);
 
-  size_t GetWidth() { return map_width_; }
   void Draw() const;
   void Update();
   void HandleKeyInputs(const set<int>& keys);
@@ -43,7 +42,6 @@ class Game {
   void RemoveDeadEnemies();
 
   // member variables
-  size_t map_width_;
   size_t window_width_;
   Tank tank_;
   vector<Enemy> enemies_;

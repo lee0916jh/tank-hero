@@ -11,11 +11,11 @@ void Tank::MoveLeft() { position_ += speed_ * vec2(-1, 0); }
 void Tank::MoveRight() { position_ += speed_ * vec2(1, 0); }
 
 vec2 Tank::GetTopLeftCorner() const {
-  return position_ - vec2(kDefaultWidth / 2, kDefaultWidth / 2);
+  return position_ - vec2(kDefaultTankWidth / 2, kDefaultTankWidth / 2);
 }
 
 vec2 Tank::GetBottomRightCorner() const {
-  return position_ + vec2(kDefaultWidth / 2, kDefaultWidth / 2);
+  return position_ + vec2(kDefaultTankWidth / 2, kDefaultTankWidth / 2);
 }
 
 }  // namespace tank_hero

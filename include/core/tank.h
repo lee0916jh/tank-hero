@@ -7,7 +7,8 @@ namespace tank_hero {
 using glm::vec2;
 
 constexpr float kDefaultSpeed = 2;
-constexpr size_t kDefaultWidth = 30;
+constexpr float kDefaultBulletSize = 5;
+constexpr size_t kDefaultTankWidth = 30;
 
 class Tank {
  public:
@@ -27,7 +28,7 @@ class Tank {
  private:
   vec2 position_;
   float speed_;
-  float bullet_size_ = 5;
+  float bullet_size_ = kDefaultBulletSize;
 };
 }  // namespace tank_hero
 
