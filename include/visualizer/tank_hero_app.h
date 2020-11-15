@@ -24,11 +24,16 @@ class TankHeroApp : public ci::app::App {
   void keyDown(KeyEvent event) override;
   void keyUp(KeyEvent event) override;
   void mouseDown(MouseEvent event) override;
+  void mouseDrag(MouseEvent event) override;
+  void mouseUp(MouseEvent event) override;
 
  private:
   // data members
   std::set<int> held_keys_;
+  vec2 mouse_pos_;
+  bool mouse_down_;
   Game game_;
+  size_t frame_count_;
 };
 
 }  // namespace tank_hero::visualizer

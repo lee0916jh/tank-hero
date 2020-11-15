@@ -6,8 +6,8 @@
 namespace tank_hero {
 using glm::vec2;
 
-constexpr float kDefaultSpeed = 3;
-constexpr float kDefaultWidth = 20;
+constexpr float kDefaultSpeed = 2;
+constexpr size_t kDefaultWidth = 30;
 
 class Tank {
  public:

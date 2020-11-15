@@ -2,7 +2,8 @@
 
 namespace tank_hero::visualizer {
 
-Game::Game() : tank_(kSpawnPoint) {}
+Game::Game(size_t window_width)
+    : window_width_(window_width), tank_(kSpawnPoint) {}
 
 void Game::HandleKeyInputs(const std::set<int>& keys) {
   bool a_pressed = false, s_pressed = false, d_pressed = false,
@@ -27,9 +28,6 @@ void Game::Draw() const {
 }
 
 void Game::Update() {
-  if (counter % 100 == 0)
-    enemies_.emplace_back(ci::randVec2(), kEnemySpeed, &tank_);
-
   HandleBulletEnemyCollision();
   RemoveInvalidBullets();
   RemoveDeadEnemies();
@@ -88,6 +86,12 @@ void Game::RemoveDeadEnemies() {
       std::remove_if(enemies_.begin(), enemies_.end(),
                      [](const Enemy& enemy) { return enemy.IsDead(); }),
       enemies_.end());
+}
+
+void Game::SpawnEnemy() {
+  vec2 spawn_point =
+      tank_.GetPosition() + ci::randVec2() * (float)(window_width_);
+  enemies_.emplace_back(spawn_point, kInitialEnemySpeed, &tank_);
 }
 
 }  // namespace tank_hero::visualizer

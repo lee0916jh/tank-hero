@@ -4,6 +4,7 @@
 #include "cinder/gl/gl.h"
 #include "core/tank.h"
 
+constexpr float kEnemyRadius = 10;
 namespace tank_hero {
 using glm::vec2;
 
@@ -17,12 +18,11 @@ class Enemy {
   bool IsDead() const { return dead_; }
 
   void ApproachTank();
-
   void Dies() { dead_ = true; }
 
  private:
   vec2 position_;
-  float radius_;
+  float radius_ = kEnemyRadius;
   float speed_;
   Tank* target_;
 

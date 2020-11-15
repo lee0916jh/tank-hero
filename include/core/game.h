@@ -19,34 +19,35 @@ using std::pair;
 using std::set;
 using std::vector;
 
-const size_t kFieldWidth = 10000;
+constexpr size_t kFieldWidth = 1000;
 const vec2 kSpawnPoint = vec2(100, 100);
-constexpr float kEnemySpeed = 1.0f;
+constexpr float kInitialEnemySpeed = 1.0f;
 
 class Game {
  public:
-  Game();
+  Game(size_t window_width);
 
-  size_t GetWidth() { return width_; }
+  size_t GetWidth() { return map_width_; }
   void Draw() const;
   void Update();
   void HandleKeyInputs(const set<int>& keys);
   void FireBullet(const vec2& mouse_pos);
+  void SpawnEnemy();
 
  private:
   void DrawTank() const;
   void DrawEnemies() const;
   void DrawBullets() const;
   void HandleBulletEnemyCollision();
-  unsigned counter = 0;
+  void RemoveInvalidBullets();
+  void RemoveDeadEnemies();
 
   // member variables
-  size_t width_;
+  size_t map_width_;
+  size_t window_width_;
   Tank tank_;
   vector<Enemy> enemies_;
   vector<Bullet> bullets_;
-  void RemoveInvalidBullets();
-  void RemoveDeadEnemies();
 };
 }  // namespace tank_hero::visualizer
 #endif  // TANK_HERO_GAME_H
