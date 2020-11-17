@@ -1,11 +1,9 @@
-#include "core/bullet.h"
+#include "components/bullet.h"
 namespace tank_hero {
 Bullet::Bullet(const Tank& tank, const vec2& mouse_pos)
-    : position_(tank.GetPosition()),
-      velocity_(glm::normalize(mouse_pos - position_) * kBulletSpeed),
+    : Movable(tank.GetPosition(),
+              glm::normalize(mouse_pos - tank.GetPosition()), kBulletSpeed),
       radius_(tank.GetBulletSize()) {}
-
-void Bullet::Move() { position_ += velocity_; }
 
 bool Bullet::DidHit(const Enemy& enemy) const {
   return glm::distance2(position_, enemy.GetPosition()) <=

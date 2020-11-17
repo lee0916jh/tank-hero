@@ -1,14 +1,15 @@
-#include "core/game.h"
+#include "app/game.h"
 
-namespace tank_hero::visualizer {
+namespace tank_hero::app {
 
 Game::Game(size_t window_width)
-    : window_width_(window_width), tank_(kSpawnPoint) {}
+    : window_width_(window_width),
+      tank_(vec2(window_width / 2, window_width / 2)) {}
 
-void Game::HandleKeyInputs(const std::set<int>& keys) {
+void Game::HandleTankMovement(const std::set<int>& key) {
   bool a_pressed = false, s_pressed = false, d_pressed = false,
        w_pressed = false;
-  for (int key : keys) {
+  for (int key : key) {
     if (key == KeyEvent::KEY_a) a_pressed = true;
     if (key == KeyEvent::KEY_s) s_pressed = true;
     if (key == KeyEvent::KEY_d) d_pressed = true;
@@ -31,27 +32,30 @@ void Game::Update() {
   HandleBulletEnemyCollision();
   RemoveInvalidBullets();
   RemoveDeadEnemies();
-  for (Bullet& bullet : bullets_)
+
+  for (Bullet& bullet : bullets_) {
     bullet.Move();
-  for (Enemy& enemy : enemies_)
-    enemy.ApproachTank();
+  }
+  for (Enemy& enemy : enemies_) {
+    enemy.Move();
+  }
 }
 
 void Game::DrawTank() const {
-  ci::gl::color(ci::Color("green"));
+  ci::gl::color(kTankColor);
   ci::Rectf tank_rect(tank_.GetTopLeftCorner(), tank_.GetBottomRightCorner());
   ci::gl::drawSolidRect(tank_rect);
 }
 
 void Game::DrawEnemies() const {
-  ci::gl::color(ci::Color("red"));
+  ci::gl::color(kEnemyColor);
   for (const Enemy& enemy : enemies_) {
     ci::gl::drawSolidCircle(enemy.GetPosition(), enemy.GetRadius());
   }
 }
 
 void Game::DrawBullets() const {
-  ci::gl::color(ci::Color("yellow"));
+  ci::gl::color(kBulletColor);
   for (const Bullet& bullet : bullets_) {
     ci::gl::drawSolidCircle(bullet.GetPosition(), bullet.GetRadius());
   }
@@ -90,8 +94,12 @@ void Game::RemoveDeadEnemies() {
 
 void Game::SpawnEnemy() {
   vec2 spawn_point =
-      tank_.GetPosition() + ci::randVec2() * (float)(window_width_);
+      tank_.GetPosition() + ci::randVec2() * static_cast<float>(window_width_);
   enemies_.emplace_back(spawn_point, kInitialEnemySpeed, &tank_);
 }
 
-}  // namespace tank_hero::visualizer
+void Game::DropBomb() {
+  enemies_.clear();
+}
+
+}  // namespace tank_hero::app

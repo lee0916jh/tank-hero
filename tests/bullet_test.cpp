@@ -1,9 +1,10 @@
-#include "core/bullet.h"
+#include "components/bullet.h"
 
 #include <catch2/catch.hpp>
 
 #include "cinder/gl/gl.h"
-#include "core/tank.h"
+#include "components/enemy.h"
+#include "components/tank.h"
 
 using glm::vec2;
 using tank_hero::Bullet;
@@ -15,22 +16,22 @@ TEST_CASE("Bullet Moves", "[Move]") {
   SECTION("Bullet Moves Right") {
     Bullet bullet(tank, vec2(200, 100));
     bullet.Move();
-    REQUIRE(bullet.GetPosition() == vec2(107, 100));  // default speed is 7
+    REQUIRE(bullet.GetPosition() == vec2(108, 100));  // default speed is 7
   }
   SECTION("Bullet Moves Left") {
     Bullet bullet(tank, vec2(0, 100));
     bullet.Move();
-    REQUIRE(bullet.GetPosition() == vec2(93, 100));
+    REQUIRE(bullet.GetPosition() == vec2(92, 100));
   }
   SECTION("Bullet Moves Up") {
     Bullet bullet(tank, vec2(100, 0));
     bullet.Move();
-    REQUIRE(bullet.GetPosition() == vec2(100, 93));
+    REQUIRE(bullet.GetPosition() == vec2(100, 92));
   }
   SECTION("Bullet Moves Down") {
     Bullet bullet(tank, vec2(100, 200));
     bullet.Move();
-    REQUIRE(bullet.GetPosition() == vec2(100, 107));
+    REQUIRE(bullet.GetPosition() == vec2(100, 108));
   }
 }
 
@@ -38,7 +39,7 @@ TEST_CASE("IsOutOfMap returns true when the bullet goes outside the map.",
           "[IsOutOfMap]") {
   Tank tank(vec2(5, 5));
   SECTION("Bullet crosses boundary to the top") {
-    Bullet bullet(tank, vec2(5, 0));       // speed = 7
+    Bullet bullet(tank, vec2(5, 0));       // speed = 8
     REQUIRE_FALSE(bullet.IsOutOfMap(10));  // 10 x 10 map
     bullet.Move();
     REQUIRE(bullet.IsOutOfMap(10));

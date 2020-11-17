@@ -1,5 +1,5 @@
-#include "visualizer/tank_hero_app.h"
-namespace tank_hero::visualizer {
+#include "app/tank_hero_app.h"
+namespace tank_hero::app {
 TankHeroApp::TankHeroApp() : game_(kWindowSize) {
   ci::app::setWindowSize(static_cast<int>(kWindowSize),
                          static_cast<int>(kWindowSize));
@@ -10,7 +10,7 @@ void TankHeroApp::update() {
   frame_count_++;
 
   if (mouse_down_) game_.FireBullet(mouse_pos_);
-  game_.HandleKeyInputs(held_keys_);
+  game_.HandleTankMovement(held_keys_);
   game_.Update();
 }
 
@@ -22,7 +22,11 @@ void TankHeroApp::draw() {
 }
 
 void TankHeroApp::keyDown(KeyEvent event) {
-  held_keys_.insert(event.getCode());
+  if (event.getCode() == KeyEvent::KEY_SPACE) {
+    game_.DropBomb();
+  } else {
+    held_keys_.insert(event.getCode());
+  }
 }
 
 void TankHeroApp::keyUp(KeyEvent event) { held_keys_.erase(event.getCode()); }
@@ -36,4 +40,4 @@ void TankHeroApp::mouseDrag(MouseEvent event) { mouse_pos_ = event.getPos(); }
 
 void TankHeroApp::mouseUp(MouseEvent event) { mouse_down_ = false; }
 
-}  // namespace tank_hero::visualizer
+}  // namespace tank_hero::app

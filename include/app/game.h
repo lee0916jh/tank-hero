@@ -7,12 +7,12 @@
 #include "cinder/Rand.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
-#include "core/bullet.h"
-#include "core/enemy.h"
-#include "core/tank.h"
+#include "components/bullet.h"
+#include "components/enemy.h"
+#include "components/tank.h"
 #include "stdlib.h"
 
-namespace tank_hero::visualizer {
+namespace tank_hero::app {
 using ci::app::KeyEvent;
 using glm::vec2;
 using std::pair;
@@ -20,8 +20,10 @@ using std::set;
 using std::vector;
 
 constexpr size_t kFieldWidth = 1000;
-const vec2 kSpawnPoint = vec2(100, 100);
 constexpr float kInitialEnemySpeed = 1.0f;
+const ci::Color kTankColor = ci::Color("green");
+const ci::Color kEnemyColor = ci::Color("red");
+const ci::Color kBulletColor = ci::Color("yellow");
 
 class Game {
  public:
@@ -29,8 +31,11 @@ class Game {
 
   void Draw() const;
   void Update();
-  void HandleKeyInputs(const set<int>& keys);
+  /// Move tank according to the given key input
+  /// \param keys Pressed keys that determine where the tank moves.
+  void HandleTankMovement(const set<int>& keys);
   void FireBullet(const vec2& mouse_pos);
+  void DropBomb();
   void SpawnEnemy();
 
  private:
@@ -47,5 +52,5 @@ class Game {
   vector<Enemy> enemies_;
   vector<Bullet> bullets_;
 };
-}  // namespace tank_hero::visualizer
+}  // namespace tank_hero::app
 #endif  // TANK_HERO_GAME_H

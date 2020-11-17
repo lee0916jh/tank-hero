@@ -2,20 +2,20 @@
 #define TANK_HERO_TANK_H
 
 #include "cinder/gl/gl.h"
+#include "components/movable.h"
 
 namespace tank_hero {
 using glm::vec2;
 
 constexpr float kDefaultSpeed = 2;
 constexpr float kDefaultBulletSize = 5;
-constexpr size_t kDefaultTankWidth = 30;
+constexpr size_t kTankWidth = 30;
 
-class Tank {
+class Tank : public Movable {
  public:
   explicit Tank(const vec2& position);
 
   // Getters
-  const vec2& GetPosition() const { return position_; }
   vec2 GetTopLeftCorner() const;
   vec2 GetBottomRightCorner() const;
   float GetBulletSize() const { return bullet_size_; }
@@ -26,8 +26,6 @@ class Tank {
   void MoveRight();
 
  private:
-  vec2 position_;
-  float speed_;
   float bullet_size_ = kDefaultBulletSize;
 };
 }  // namespace tank_hero
