@@ -28,7 +28,7 @@ class TankHeroApp : public ci::app::App {
   void mouseUp(MouseEvent event) override;
 
  private:
-  std::set<int> held_keys_;
+  std::set<int> movement_keys_;
   vec2 mouse_pos_;
   bool mouse_down_;
   Game game_;

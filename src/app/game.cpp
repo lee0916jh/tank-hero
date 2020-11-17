@@ -6,10 +6,10 @@ Game::Game(size_t window_width)
     : window_width_(window_width),
       tank_(vec2(window_width / 2, window_width / 2)) {}
 
-void Game::HandleTankMovement(const std::set<int>& key) {
+void Game::HandleTankMovement(const set<int>& keys) {
   bool a_pressed = false, s_pressed = false, d_pressed = false,
        w_pressed = false;
-  for (int key : key) {
+  for (int key : keys) {
     if (key == KeyEvent::KEY_a) a_pressed = true;
     if (key == KeyEvent::KEY_s) s_pressed = true;
     if (key == KeyEvent::KEY_d) d_pressed = true;

@@ -10,7 +10,7 @@ void TankHeroApp::update() {
   frame_count_++;
 
   if (mouse_down_) game_.FireBullet(mouse_pos_);
-  game_.HandleTankMovement(held_keys_);
+  game_.HandleTankMovement(movement_keys_);
   game_.Update();
 }
 
@@ -25,11 +25,12 @@ void TankHeroApp::keyDown(KeyEvent event) {
   if (event.getCode() == KeyEvent::KEY_SPACE) {
     game_.DropBomb();
   } else {
-    held_keys_.insert(event.getCode());
+    movement_keys_.insert(event.getCode());
   }
 }
 
-void TankHeroApp::keyUp(KeyEvent event) { held_keys_.erase(event.getCode()); }
+void TankHeroApp::keyUp(KeyEvent event) {
+  movement_keys_.erase(event.getCode()); }
 
 void TankHeroApp::mouseDown(MouseEvent event) {
   mouse_down_ = true;
