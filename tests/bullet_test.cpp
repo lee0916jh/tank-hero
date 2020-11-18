@@ -1,10 +1,10 @@
-#include "components/bullet.h"
+#include "core/bullet.h"
 
 #include <catch2/catch.hpp>
 
 #include "cinder/gl/gl.h"
-#include "components/enemy.h"
-#include "components/tank.h"
+#include "core/enemy.h"
+#include "core/tank.h"
 
 using glm::vec2;
 using tank_hero::Bullet;

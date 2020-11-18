@@ -1,4 +1,4 @@
-#include "components/enemy.h"
+#include "core/enemy.h"
 
 namespace tank_hero {
 

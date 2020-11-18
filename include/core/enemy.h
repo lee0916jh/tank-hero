@@ -1,8 +1,8 @@
 #ifndef TANK_HERO_ENEMY_H
 #define TANK_HERO_ENEMY_H
 #include "cinder/gl/gl.h"
-#include "components/movable.h"
-#include "components/tank.h"
+#include "core/movable.h"
+#include "core/tank.h"
 
 namespace tank_hero {
 using glm::vec2;

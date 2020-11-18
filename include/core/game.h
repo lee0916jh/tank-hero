@@ -4,15 +4,14 @@
 #include <set>
 #include <vector>
 
+#include "bullet.h"
 #include "cinder/Rand.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
-#include "components/bullet.h"
-#include "components/enemy.h"
-#include "components/tank.h"
-#include "stdlib.h"
+#include "enemy.h"
+#include "tank.h"
 
-namespace tank_hero::app {
+namespace tank_hero {
 using ci::app::KeyEvent;
 using glm::vec2;
 using std::pair;
@@ -29,8 +28,11 @@ class Game {
  public:
   Game(size_t window_width);
 
-  /// Draws the tank, enemies, and bullets.
-  void Draw() const;
+  // Getters
+  const Tank& GetTank() const { return tank_; }
+  const vector<Enemy>& GetEnemies() const { return enemies_; }
+  const vector<Bullet>& GetBullets() const { return bullets_; }
+
   void Update();
 
   /// Moves tank according to the given key input
@@ -48,10 +50,6 @@ class Game {
   void SpawnEnemy();
 
  private:
-  void DrawTank() const;
-  void DrawEnemies() const;
-  void DrawBullets() const;
-
   /// Checks if any of the bullets hit an enemy, and if a bullet hit an enemy,
   /// set the bullet inactive, and the enemy dead.
   void HandleBulletEnemyCollision();
@@ -64,9 +62,11 @@ class Game {
 
   // member variables
   size_t window_width_;
+
+ private:
   Tank tank_;
   vector<Enemy> enemies_;
   vector<Bullet> bullets_;
 };
-}  // namespace tank_hero::app
+}  // namespace tank_hero
 #endif  // TANK_HERO_GAME_H

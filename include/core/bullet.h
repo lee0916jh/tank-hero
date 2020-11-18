@@ -4,14 +4,13 @@
 #include <vector>
 
 #include "cinder/gl/gl.h"
-#include "components/enemy.h"
-#include "components/movable.h"
-#include "components/tank.h"
+#include "core/enemy.h"
+#include "core/movable.h"
+#include "core/tank.h"
 
 namespace tank_hero {
 using glm::vec2;
 
-const float kBulletSpeed = 8.0f;
 
 class Bullet : public Movable {
  public:

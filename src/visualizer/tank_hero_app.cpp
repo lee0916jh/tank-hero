@@ -1,4 +1,4 @@
-#include "app/tank_hero_app.h"
+#include "visualizer/tank_hero_app.h"
 namespace tank_hero::app {
 TankHeroApp::TankHeroApp() : game_(kWindowSize) {
   ci::app::setWindowSize(static_cast<int>(kWindowSize),
@@ -18,7 +18,30 @@ void TankHeroApp::draw() {
   ci::Color8u background_color(ci::Color("grey"));
   ci::gl::clear(background_color);
 
-  game_.Draw();
+  DrawTank();
+  DrawEnemies();
+  DrawBullets();
+}
+
+void TankHeroApp::DrawTank() const {
+  ci::gl::color(kTankColor);
+  const Tank& tank = game_.GetTank();
+  ci::Rectf tank_rect(tank.GetTopLeftCorner(), tank.GetBottomRightCorner());
+  ci::gl::drawSolidRect(tank_rect);
+}
+
+void TankHeroApp::DrawEnemies() const {
+  ci::gl::color(kEnemyColor);
+  for (const Enemy& enemy : game_.GetEnemies()) {
+    ci::gl::drawSolidCircle(enemy.GetPosition(), enemy.GetRadius());
+  }
+}
+
+void TankHeroApp::DrawBullets() const {
+  ci::gl::color(kBulletColor);
+  for (const Bullet& bullet : game_.GetBullets()) {
+    ci::gl::drawSolidCircle(bullet.GetPosition(), bullet.GetRadius());
+  }
 }
 
 void TankHeroApp::keyDown(KeyEvent event) {
@@ -41,4 +64,4 @@ void TankHeroApp::mouseDrag(MouseEvent event) { mouse_pos_ = event.getPos(); }
 
 void TankHeroApp::mouseUp(MouseEvent event) { mouse_down_ = false; }
 
-}  // namespace tank_hero::app
+}  // namespace tank_hero::visualizer

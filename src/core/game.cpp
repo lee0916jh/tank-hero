@@ -1,6 +1,6 @@
-#include "app/game.h"
+#include "core/game.h"
 
-namespace tank_hero::app {
+namespace tank_hero {
 
 Game::Game(size_t window_width)
     : window_width_(window_width),
@@ -22,12 +22,6 @@ void Game::HandleTankMovement(const set<int>& keys) {
   if (s_pressed) tank_.MoveDown();
 }
 
-void Game::Draw() const {
-  DrawTank();
-  DrawEnemies();
-  DrawBullets();
-}
-
 void Game::Update() {
   HandleBulletEnemyCollision();
   RemoveInvalidBullets();
@@ -38,26 +32,6 @@ void Game::Update() {
   }
   for (Enemy& enemy : enemies_) {
     enemy.Move();
-  }
-}
-
-void Game::DrawTank() const {
-  ci::gl::color(kTankColor);
-  ci::Rectf tank_rect(tank_.GetTopLeftCorner(), tank_.GetBottomRightCorner());
-  ci::gl::drawSolidRect(tank_rect);
-}
-
-void Game::DrawEnemies() const {
-  ci::gl::color(kEnemyColor);
-  for (const Enemy& enemy : enemies_) {
-    ci::gl::drawSolidCircle(enemy.GetPosition(), enemy.GetRadius());
-  }
-}
-
-void Game::DrawBullets() const {
-  ci::gl::color(kBulletColor);
-  for (const Bullet& bullet : bullets_) {
-    ci::gl::drawSolidCircle(bullet.GetPosition(), bullet.GetRadius());
   }
 }
 
@@ -98,8 +72,6 @@ void Game::SpawnEnemy() {
   enemies_.emplace_back(spawn_point, kInitialEnemySpeed, &tank_);
 }
 
-void Game::DropBomb() {
-  enemies_.clear();
-}
+void Game::DropBomb() { enemies_.clear(); }
 
-}  // namespace tank_hero::app
+}  // namespace tank_hero

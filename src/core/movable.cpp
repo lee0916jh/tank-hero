@@ -1,4 +1,4 @@
-#include "components/movable.h"
+#include "core/movable.h"
 namespace tank_hero {
 Movable::Movable(const glm::vec2& position, const glm::vec2& direction,
                  float speed)

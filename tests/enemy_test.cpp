@@ -1,8 +1,8 @@
-#include "components/enemy.h"
+#include "core/enemy.h"
 
 #include "catch2/catch.hpp"
 #include "cinder/gl/gl.h"
-#include "components/tank.h"
+#include "core/tank.h"
 
 using glm::vec2;
 using tank_hero::Enemy;
