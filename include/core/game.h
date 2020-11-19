@@ -18,7 +18,7 @@ using std::pair;
 using std::set;
 using std::vector;
 
-constexpr size_t kFieldWidth = 1000;
+constexpr size_t kFieldWidth = 10000;
 constexpr float kInitialEnemySpeed = 1.0f;
 const ci::Color kTankColor = ci::Color("green");
 const ci::Color kEnemyColor = ci::Color("red");

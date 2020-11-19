@@ -3,10 +3,10 @@
 
 #include <set>
 
-#include "core/game.h"
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
+#include "core/game.h"
 
 namespace tank_hero::app {
 using ci::app::KeyEvent;
@@ -32,11 +32,14 @@ class TankHeroApp : public ci::app::App {
   void DrawEnemies() const;
   void DrawBullets() const;
 
+  void AdjustCameraOffset();
+
   std::set<int> movement_keys_;
   vec2 mouse_pos_;
   bool mouse_down_;
   Game game_;
   size_t frame_count_ = 0;
+  vec2 camera_offset_;
 };
-}  // namespace tank_hero::visualizer
+}  // namespace tank_hero::app
 #endif  // TANK_HERO_TANK_HERO_APP_H

@@ -1,11 +1,13 @@
 #include "visualizer/tank_hero_app.h"
 namespace tank_hero::app {
-TankHeroApp::TankHeroApp() : game_(kWindowSize) {
+TankHeroApp::TankHeroApp()
+    : game_(kWindowSize), camera_offset_(kWindowSize / 2, kWindowSize / 2) {
   ci::app::setWindowSize(static_cast<int>(kWindowSize),
                          static_cast<int>(kWindowSize));
 }
 
 void TankHeroApp::update() {
+  AdjustCameraOffset();
   if (frame_count_ % 10 == 0) game_.SpawnEnemy();
   frame_count_++;
 
@@ -26,21 +28,24 @@ void TankHeroApp::draw() {
 void TankHeroApp::DrawTank() const {
   ci::gl::color(kTankColor);
   const Tank& tank = game_.GetTank();
-  ci::Rectf tank_rect(tank.GetTopLeftCorner(), tank.GetBottomRightCorner());
+  ci::Rectf tank_rect(tank.GetTopLeftCorner() - camera_offset_,
+                      tank.GetBottomRightCorner() - camera_offset_);
   ci::gl::drawSolidRect(tank_rect);
 }
 
 void TankHeroApp::DrawEnemies() const {
   ci::gl::color(kEnemyColor);
   for (const Enemy& enemy : game_.GetEnemies()) {
-    ci::gl::drawSolidCircle(enemy.GetPosition(), enemy.GetRadius());
+    ci::gl::drawSolidCircle(enemy.GetPosition() - camera_offset_,
+                            enemy.GetRadius());
   }
 }
 
 void TankHeroApp::DrawBullets() const {
   ci::gl::color(kBulletColor);
   for (const Bullet& bullet : game_.GetBullets()) {
-    ci::gl::drawSolidCircle(bullet.GetPosition(), bullet.GetRadius());
+    ci::gl::drawSolidCircle(bullet.GetPosition() - camera_offset_,
+                            bullet.GetRadius());
   }
 }
 
@@ -53,7 +58,8 @@ void TankHeroApp::keyDown(KeyEvent event) {
 }
 
 void TankHeroApp::keyUp(KeyEvent event) {
-  movement_keys_.erase(event.getCode()); }
+  movement_keys_.erase(event.getCode());
+}
 
 void TankHeroApp::mouseDown(MouseEvent event) {
   mouse_down_ = true;
@@ -64,4 +70,12 @@ void TankHeroApp::mouseDrag(MouseEvent event) { mouse_pos_ = event.getPos(); }
 
 void TankHeroApp::mouseUp(MouseEvent event) { mouse_down_ = false; }
 
-}  // namespace tank_hero::visualizer
+void TankHeroApp::AdjustCameraOffset() {
+  const vec2& tank_pos = game_.GetTank().GetPosition();
+  camera_offset_.x =
+      (tank_pos.x > kWindowSize / 2) ? (tank_pos.x - kWindowSize / 2) : 0;
+  camera_offset_.y =
+      (tank_pos.y > kWindowSize / 2) ? (tank_pos.y - kWindowSize / 2) : 0;
+}
+
+}  // namespace tank_hero::app
