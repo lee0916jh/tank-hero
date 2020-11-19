@@ -12,12 +12,14 @@ void TankHeroApp::setup() {
 
 void TankHeroApp::update() {
   AdjustCameraOffset();
-  if (frame_count_ % 10 == 0) game_.SpawnEnemy();
-  frame_count_++;
+  game_.SpawnEnemy();
 
-  if (mouse_down_) game_.FireBullet(mouse_pos_ + camera_offset_);
+  if (mouse_down_ && game_.TankIsLoaded()) {
+    game_.FireBullet(mouse_pos_ + camera_offset_);
+  }
   game_.HandleTankMovement(move_keys_);
   game_.Update();
+  if (ReadyToIncreaseDifficulty()) game_.IncreaseDifficulty();
 }
 
 void TankHeroApp::draw() {
@@ -130,5 +132,13 @@ void TankHeroApp::DrawGameEndScreen() const {
   vec2 center(kWindowSize / 2, kWindowSize / 2);
   ci::gl::drawStringCentered("GAME OVER", center, kGameOverColor,
                              kGameOverFont);
+}
+
+bool TankHeroApp::ReadyToIncreaseDifficulty() {
+  if (increase_difficulty_timer_.getSeconds() > kIncreaseDifficultyThreshold) {
+    increase_difficulty_timer_.start();
+    return true;
+  }
+  return false;
 }
 }  // namespace tank_hero::app

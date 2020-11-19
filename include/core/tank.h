@@ -13,14 +13,8 @@ constexpr size_t kTankWidth = 30;
 
 constexpr float kDefaultBulletSize = 5;
 constexpr float kDefaultBulletSpeed = 8;
-constexpr float kDefaultBulletDelay = .5f;
+constexpr float kDefaultBulletDelay = 1.5;
 constexpr unsigned kDefaultLife = 3;
-
-struct BulletConfig {
-  float size = kDefaultBulletSize;
-  float speed = kDefaultBulletSpeed;
-  float delay = kDefaultBulletDelay;
-};
 
 class Enemy;
 class Tank : public Movable {
@@ -30,7 +24,9 @@ class Tank : public Movable {
   // Getters
   vec2 GetTopLeftCorner() const;
   vec2 GetBottomRightCorner() const;
-  const BulletConfig& GetBulletConfig() const { return bullet_config_; }
+  float GetBulletSize() const { return bullet_size_; }
+  float GetBulletSpeed() const { return bullet_speed_; }
+  float GetReloadTime() const { return reload_time_; }
   bool IsAlive() const { return life_ > 0; }
   void DecrementLife() { life_--; }
   size_t GetLifeCount() const { return life_; };
@@ -48,8 +44,13 @@ class Tank : public Movable {
   /// \param enemy Enemy to check collision with
   bool DidCollideWith(const Enemy& enemy) const;
 
+  /// Reduce this tank's reload time by given amount
+  void ReduceReloadTime(float reduce_amount);
+
  private:
-  BulletConfig bullet_config_;
+  float bullet_size_ = kDefaultBulletSize;
+  float bullet_speed_ = kDefaultBulletSpeed;
+  float reload_time_ = kDefaultBulletDelay;
   int life_ = kDefaultLife;
 };
 }  // namespace tank_hero

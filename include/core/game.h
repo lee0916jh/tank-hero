@@ -21,7 +21,12 @@ using std::set;
 using std::vector;
 
 constexpr size_t kFieldWidth = 2000;
-constexpr float kInitialEnemySpeed = 1.0f;
+constexpr float kInitialEnemySpeed = 1;
+constexpr float kUpgradeAmount = 0.002;
+constexpr float kInitialSpawnFreq = 2;
+constexpr float kEnemySpeedIncreaseAmount = 0.1;
+constexpr float kEnemySpawnFreqReduceAmount = 0.1;
+
 const ci::Color kTankColor = ci::Color("green");
 const ci::Color kEnemyColor = ci::Color("red");
 const ci::Color kBulletColor = ci::Color("yellow");
@@ -35,7 +40,7 @@ class Game {
   const vector<Enemy>& GetEnemies() const { return enemies_; }
   const vector<Bullet>& GetBullets() const { return bullets_; }
   size_t GetCurrentLife() const { return tank_.GetLifeCount(); }
-  float GetReloadTime() const { return tank_.GetBulletConfig().delay; }
+  float GetReloadTime() const { return tank_.GetReloadTime(); }
   size_t GetKillCount() const { return kill_count_; }
   bool IsOn() const { return tank_.IsAlive(); }
 
@@ -57,6 +62,12 @@ class Game {
   /// Spawns an enemy around the player.
   void SpawnEnemy();
 
+  /// Increases speed and spawn frequency of newly spawned enemies.
+  void IncreaseDifficulty();
+
+  /// Returns true if tank is reloaded and is ready to fire.
+  bool TankIsLoaded();
+
  private:
   /// Checks if any of the bullets hit an enemy, and if a bullet hit an enemy,
   /// set the bullet inactive, and the enemy dead.
@@ -71,18 +82,19 @@ class Game {
   /// Removes dead enemies that got hit by a bullet.
   void RemoveDeadEnemies();
 
-  /// Returns true if tank is reloaded and is ready to fire.
-  bool TankIsLoaded();
-
-  // member variables
-  size_t window_width_;
 
  private:
+  // member variables
+  size_t window_width_;
   Tank tank_;
   vector<Enemy> enemies_;
   vector<Bullet> bullets_;
-  Timer timer_;
+  Timer reload_timer_;
+  Timer enemy_spawn_timer_;
   size_t kill_count_ = 0;
+
+  float new_enemy_speed_ = kInitialEnemySpeed;
+  float enemy_spawn_freq_ = kInitialSpawnFreq;
 };
 }  // namespace tank_hero
 #endif  // TANK_HERO_GAME_H

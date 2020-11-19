@@ -3,8 +3,8 @@ namespace tank_hero {
 Bullet::Bullet(const Tank& tank, const vec2& mouse_pos)
     : Movable(tank.GetPosition(),
               glm::normalize(mouse_pos - tank.GetPosition()),
-              tank.GetBulletConfig().speed),
-      radius_(tank.GetBulletConfig().size) {}
+              tank.GetBulletSpeed()),
+      radius_(tank.GetBulletSize()) {}
 
 bool Bullet::DidHit(const Enemy& enemy) const {
   return glm::distance2(position_, enemy.GetPosition()) <=

@@ -5,8 +5,8 @@ namespace tank_hero {
 Game::Game(size_t window_width)
     : window_width_(window_width),
       tank_(vec2(window_width / 2, window_width / 2)),
-      timer_(0) {
-  timer_.start();
+      reload_timer_(0) {
+  reload_timer_.start();
 }
 
 void Game::HandleTankMovement(const set<int>& keys) {
@@ -41,7 +41,7 @@ void Game::Update() {
 }
 
 void Game::FireBullet(const vec2& mouse_pos) {
-  if (TankIsLoaded()) bullets_.emplace_back(tank_, mouse_pos);
+  bullets_.emplace_back(tank_, mouse_pos);
 }
 
 void Game::HandleBulletEnemyCollision() {
@@ -51,6 +51,7 @@ void Game::HandleBulletEnemyCollision() {
         bullet.GoesInactive();
         enemy.Dies();
         kill_count_++;
+        tank_.ReduceReloadTime(kUpgradeAmount);
       }
     }
   }
@@ -73,23 +74,22 @@ void Game::RemoveDeadEnemies() {
 }
 
 void Game::SpawnEnemy() {
-  vec2 spawn_point =
-      tank_.GetPosition() + ci::randVec2() * static_cast<float>(window_width_);
-  enemies_.emplace_back(spawn_point, kInitialEnemySpeed, &tank_);
+  if (enemy_spawn_timer_.getSeconds() > enemy_spawn_freq_) {
+    vec2 spawn_point = tank_.GetPosition() +
+                       ci::randVec2() * static_cast<float>(window_width_);
+    enemies_.emplace_back(spawn_point, new_enemy_speed_, &tank_);
+    enemy_spawn_timer_.start();
+  }
 }
 
 void Game::DropBomb() { enemies_.clear(); }
 
 bool Game::TankIsLoaded() {
-  timer_.stop();
-  bool is_loaded = false;
-  if (timer_.getSeconds() > tank_.GetBulletConfig().delay) {
-    is_loaded = true;
-    timer_.start();
-  } else {
-    timer_.resume();
+  if (reload_timer_.getSeconds() > tank_.GetReloadTime()) {
+    reload_timer_.start();
+    return true;
   }
-  return is_loaded;
+  return false;
 }
 
 void Game::HandleTankEnemyCollision() {
@@ -100,6 +100,11 @@ void Game::HandleTankEnemyCollision() {
       return;
     }
   }
+}
+
+void Game::IncreaseDifficulty() {
+  new_enemy_speed_ += kEnemySpeedIncreaseAmount;
+  enemy_spawn_freq_ -= kEnemySpawnFreqReduceAmount;
 }
 
 }  // namespace tank_hero

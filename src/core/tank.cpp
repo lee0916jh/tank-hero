@@ -44,4 +44,8 @@ bool Tank::DidCollideWith(const Enemy& enemy) const {
   return glm::distance2(position_, enemy.GetPosition()) <
          powf(kTankWidth + enemy.GetRadius(), 2);
 }
+
+void Tank::ReduceReloadTime(float reduce_amount) {
+  reload_time_ -= reduce_amount;
+}
 }  // namespace tank_hero
