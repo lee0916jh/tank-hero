@@ -31,4 +31,13 @@ vec2 Tank::GetBottomRightCorner() const {
   return position_ + vec2(kTankWidth / 2, kTankWidth / 2);
 }
 
+void Tank::KeepInMap(const size_t field_width) {
+  if (position_.x < kTankWidth / 2) position_.x = kTankWidth / 2;
+  if (position_.y < kTankWidth / 2) position_.y = kTankWidth / 2;
+  if (position_.x > field_width - kTankWidth / 2)
+    position_.x = field_width - kTankWidth / 2;
+  if (position_.y > field_width - kTankWidth / 2)
+    position_.y = field_width - kTankWidth / 2;
+}
+
 }  // namespace tank_hero

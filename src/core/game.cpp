@@ -4,7 +4,10 @@ namespace tank_hero {
 
 Game::Game(size_t window_width)
     : window_width_(window_width),
-      tank_(vec2(window_width / 2, window_width / 2)) {}
+      tank_(vec2(window_width / 2, window_width / 2)),
+      timer_(0) {
+  timer_.start();
+}
 
 void Game::HandleTankMovement(const set<int>& keys) {
   bool a_pressed = false, s_pressed = false, d_pressed = false,
@@ -20,6 +23,7 @@ void Game::HandleTankMovement(const set<int>& keys) {
   if (a_pressed) tank_.MoveLeft();
   if (d_pressed) tank_.MoveRight();
   if (s_pressed) tank_.MoveDown();
+  tank_.KeepInMap(kFieldWidth);
 }
 
 void Game::Update() {
@@ -36,7 +40,7 @@ void Game::Update() {
 }
 
 void Game::FireBullet(const vec2& mouse_pos) {
-  bullets_.emplace_back(tank_, mouse_pos);
+  if (TankIsLoaded()) bullets_.emplace_back(tank_, mouse_pos);
 }
 
 void Game::HandleBulletEnemyCollision() {
@@ -73,5 +77,17 @@ void Game::SpawnEnemy() {
 }
 
 void Game::DropBomb() { enemies_.clear(); }
+
+bool Game::TankIsLoaded() {
+  timer_.stop();
+  bool is_loaded = false;
+  if (timer_.getSeconds() > tank_.GetBulletConfig().delay) {
+    is_loaded = true;
+    timer_.start();
+  } else {
+    timer_.resume();
+  }
+  return is_loaded;
+}
 
 }  // namespace tank_hero

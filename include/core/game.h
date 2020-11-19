@@ -6,19 +6,21 @@
 
 #include "bullet.h"
 #include "cinder/Rand.h"
+#include "cinder/Timer.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
 #include "enemy.h"
 #include "tank.h"
 
 namespace tank_hero {
+using ci::Timer;
 using ci::app::KeyEvent;
 using glm::vec2;
 using std::pair;
 using std::set;
 using std::vector;
 
-constexpr size_t kFieldWidth = 10000;
+constexpr size_t kFieldWidth = 2000;
 constexpr float kInitialEnemySpeed = 1.0f;
 const ci::Color kTankColor = ci::Color("green");
 const ci::Color kEnemyColor = ci::Color("red");
@@ -35,11 +37,13 @@ class Game {
 
   void Update();
 
-  /// Moves tank according to the given key input
+  /// Moves tank according to the given key input. If tank goes outside of the
+  /// map, return it back onto the map.
   /// \param keys Pressed keys that determine where the tank moves.
   void HandleTankMovement(const set<int>& keys);
 
-  /// Fires a bullet from the tank to the mouse pointer.
+  /// Fires a bullet from the tank to the mouse pointer if tank is loaded.
+  /// If tank isn't reloaded, bullet does not fire.
   /// \param mouse_pos Position that bullet will fly to,
   void FireBullet(const vec2& mouse_pos);
 
@@ -60,6 +64,10 @@ class Game {
   /// Removes dead enemies that got hit by a bullet.
   void RemoveDeadEnemies();
 
+  /// Returns true if tank is loaded and is ready to fire.
+  bool TankIsLoaded();
+
+  void KeepTankInMap();
   // member variables
   size_t window_width_;
 
@@ -67,6 +75,7 @@ class Game {
   Tank tank_;
   vector<Enemy> enemies_;
   vector<Bullet> bullets_;
+  Timer timer_;
 };
 }  // namespace tank_hero
 #endif  // TANK_HERO_GAME_H
