@@ -33,6 +33,7 @@ class Tank : public Movable {
   const BulletConfig& GetBulletConfig() const { return bullet_config_; }
   bool IsAlive() const { return life_ > 0; }
   void DecrementLife() { life_--; }
+  size_t GetLifeCount() const { return life_; };
 
   void MoveUp();
   void MoveDown();
@@ -43,11 +44,13 @@ class Tank : public Movable {
   /// \param field_width Size of the map
   void KeepInMap(const size_t field_width);
 
+  /// Returns true only if this tank and the enemy collided with each other.
+  /// \param enemy Enemy to check collision with
   bool DidCollideWith(const Enemy& enemy) const;
 
  private:
   BulletConfig bullet_config_;
-  unsigned life_ = kDefaultLife;
+  int life_ = kDefaultLife;
 };
 }  // namespace tank_hero
 

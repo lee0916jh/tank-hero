@@ -34,6 +34,10 @@ class Game {
   const Tank& GetTank() const { return tank_; }
   const vector<Enemy>& GetEnemies() const { return enemies_; }
   const vector<Bullet>& GetBullets() const { return bullets_; }
+  size_t GetCurrentLife() const { return tank_.GetLifeCount(); }
+  float GetReloadTime() const { return tank_.GetBulletConfig().delay; }
+  size_t GetKillCount() const { return kill_count_; }
+  bool IsOn() const { return tank_.IsAlive(); }
 
   void Update();
 
@@ -58,6 +62,7 @@ class Game {
   /// set the bullet inactive, and the enemy dead.
   void HandleBulletEnemyCollision();
 
+  /// Checks if an enemy hit the tank. If that happened, tank loses a life.
   void HandleTankEnemyCollision();
 
   /// Removes bullets that went outside the play area, or that are inactive.
@@ -77,6 +82,7 @@ class Game {
   vector<Enemy> enemies_;
   vector<Bullet> bullets_;
   Timer timer_;
+  size_t kill_count_ = 0;
 };
 }  // namespace tank_hero
 #endif  // TANK_HERO_GAME_H

@@ -6,6 +6,8 @@ TankHeroApp::TankHeroApp()
                          static_cast<int>(kWindowSize));
 }
 
+void TankHeroApp::setup() {}
+
 void TankHeroApp::update() {
   AdjustCameraOffset();
   if (frame_count_ % 10 == 0) game_.SpawnEnemy();
@@ -20,9 +22,14 @@ void TankHeroApp::draw() {
   ci::Color8u background_color(ci::Color("grey"));
   ci::gl::clear(background_color);
 
-  DrawTank();
-  DrawEnemies();
-  DrawBullets();
+  if (game_.IsOn()) {
+    DrawTank();
+    DrawEnemies();
+    DrawBullets();
+    DisplayGameStatus();
+  } else {
+    DrawGameEndScreen();
+  }
 }
 
 void TankHeroApp::DrawTank() const {
@@ -95,4 +102,26 @@ void TankHeroApp::AdjustCameraOffset() {
   }
 }
 
+void TankHeroApp::DisplayGameStatus() const {
+  vec2 text_pos(kTextMargin, kTextMargin);
+  ci::gl::drawString("LIFE: " + std::to_string(game_.GetCurrentLife()),
+                     text_pos, kTextColor, kTextFont);
+
+  text_pos.y += kTextMargin;
+  ci::gl::drawString(
+      "Reload Time: " + std::to_string(game_.GetReloadTime()) + " sec",
+      text_pos, kTextColor, kTextFont);
+
+  text_pos.y += kTextMargin;
+  ci::gl::drawString("Kills: " + std::to_string(game_.GetKillCount()), text_pos,
+                     kTextColor, kTextFont);
+}
+
+void TankHeroApp::DrawGameEndScreen() {
+  ci::Color8u background_color(ci::Color("black"));
+  ci::gl::clear(background_color);
+  vec2 center(kWindowSize / 2, kWindowSize / 2);
+  ci::gl::drawStringCentered("GAME OVER", center, kGameOverColor,
+                             kGameOverFont);
+}
 }  // namespace tank_hero::app

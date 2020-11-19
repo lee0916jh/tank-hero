@@ -50,6 +50,7 @@ void Game::HandleBulletEnemyCollision() {
       if (bullet.DidHit(enemy)) {
         bullet.GoesInactive();
         enemy.Dies();
+        kill_count_++;
       }
     }
   }

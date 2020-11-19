@@ -44,5 +44,4 @@ bool Tank::DidCollideWith(const Enemy& enemy) const {
   return glm::distance2(position_, enemy.GetPosition()) <
          powf(kTankWidth + enemy.GetRadius(), 2);
 }
-
 }  // namespace tank_hero
