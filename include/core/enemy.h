@@ -9,6 +9,7 @@ using glm::vec2;
 
 constexpr float kEnemyRadius = 10;
 
+class Tank;
 class Enemy : public Movable {
  public:
   /// Constructor

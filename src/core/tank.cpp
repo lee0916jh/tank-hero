@@ -40,4 +40,9 @@ void Tank::KeepInMap(const size_t field_width) {
     position_.y = field_width - kTankWidth / 2;
 }
 
+bool Tank::DidCollideWith(const Enemy& enemy) const {
+  return glm::distance2(position_, enemy.GetPosition()) <
+         powf(kTankWidth + enemy.GetRadius(), 2);
+}
+
 }  // namespace tank_hero

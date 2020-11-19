@@ -28,6 +28,7 @@ void Game::HandleTankMovement(const set<int>& keys) {
 
 void Game::Update() {
   HandleBulletEnemyCollision();
+  HandleTankEnemyCollision();
   RemoveInvalidBullets();
   RemoveDeadEnemies();
 
@@ -88,6 +89,16 @@ bool Game::TankIsLoaded() {
     timer_.resume();
   }
   return is_loaded;
+}
+
+void Game::HandleTankEnemyCollision() {
+  for (size_t i = 0; i < enemies_.size(); i++) {
+    if (tank_.DidCollideWith(enemies_[i])) {
+      tank_.DecrementLife();
+      enemies_.erase(enemies_.begin() + i);
+      return;
+    }
+  }
 }
 
 }  // namespace tank_hero

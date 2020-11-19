@@ -58,6 +58,8 @@ class Game {
   /// set the bullet inactive, and the enemy dead.
   void HandleBulletEnemyCollision();
 
+  void HandleTankEnemyCollision();
+
   /// Removes bullets that went outside the play area, or that are inactive.
   void RemoveInvalidBullets();
 
@@ -67,7 +69,6 @@ class Game {
   /// Returns true if tank is loaded and is ready to fire.
   bool TankIsLoaded();
 
-  void KeepTankInMap();
   // member variables
   size_t window_width_;
 
