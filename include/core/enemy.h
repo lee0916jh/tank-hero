@@ -18,7 +18,6 @@ class Enemy : public Movable {
   Enemy(const vec2& position, float speed, Tank* target);
 
   // Getters and Setters
-  float GetRadius() const { return radius_; }
   bool IsDead() const { return dead_; }
   void Dies() { dead_ = true; }
 
@@ -26,7 +25,6 @@ class Enemy : public Movable {
   void Move() override;
 
  private:
-  float radius_ = kEnemyRadius;
   Tank* target_;
   bool dead_ = false;
 };

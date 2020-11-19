@@ -8,15 +8,16 @@ using glm::vec2;
 class Movable {
  public:
   Movable(const vec2& position, const vec2& direction = vec2(0, 0),
-          float speed = 0.0f);
+          float speed = 0.0f, size_t size = 1);
   Movable(const Movable& source) = default;
   Movable& operator=(const Movable& source) = default;
   Movable(Movable&& source) = default;
   Movable& operator=(Movable&& source) = default;
   virtual ~Movable() = default;
 
-  // Getters and Setters
+  // Getters
   const vec2& GetPosition() const { return position_; }
+  size_t GetSize() const { return size_; }
 
   /// Move this object 1 unit of time
   virtual void Move();
@@ -25,6 +26,7 @@ class Movable {
   vec2 position_;
   vec2 direction_;
   float speed_;
+  size_t size_;
 };
 }  // namespace tank_hero
 

@@ -11,13 +11,11 @@
 namespace tank_hero {
 using glm::vec2;
 
-
 class Bullet : public Movable {
  public:
   Bullet(const Tank& tank, const vec2& mouse_pos);
 
   // Getters and Setters
-  float GetRadius() const { return radius_; }
   bool IsActive() const { return active_; }
   void GoesInactive() { active_ = false; }
 
@@ -28,7 +26,6 @@ class Bullet : public Movable {
   bool DidHit(const Enemy& enemy) const;
 
  private:
-  float radius_;
   bool active_ = true;
 };
 }  // namespace tank_hero

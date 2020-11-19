@@ -47,7 +47,7 @@ void TankHeroApp::DrawEnemies() const {
   ci::gl::color(kEnemyColor);
   for (const Enemy& enemy : game_.GetEnemies()) {
     ci::gl::drawSolidCircle(enemy.GetPosition() - camera_offset_,
-                            enemy.GetRadius());
+                            enemy.GetSize());
   }
 }
 
@@ -55,7 +55,7 @@ void TankHeroApp::DrawBullets() const {
   ci::gl::color(kBulletColor);
   for (const Bullet& bullet : game_.GetBullets()) {
     ci::gl::drawSolidCircle(bullet.GetPosition() - camera_offset_,
-                            bullet.GetRadius());
+                            bullet.GetSize());
   }
 }
 

@@ -54,6 +54,7 @@ list(APPEND CORE_SOURCE_FILES
         src/core/tank.cpp
         src/core/enemy.cpp
         src/core/bullet.cpp
+        src/core/obstacle.cpp
         src/core/game.cpp)
 
 list(APPEND SOURCE_FILES ${CORE_SOURCE_FILES}

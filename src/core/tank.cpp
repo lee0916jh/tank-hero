@@ -24,25 +24,25 @@ void Tank::MoveRight() {
 }
 
 vec2 Tank::GetTopLeftCorner() const {
-  return position_ - vec2(kTankWidth / 2, kTankWidth / 2);
+  return position_ - vec2(kTankSize / 2, kTankSize / 2);
 }
 
 vec2 Tank::GetBottomRightCorner() const {
-  return position_ + vec2(kTankWidth / 2, kTankWidth / 2);
+  return position_ + vec2(kTankSize / 2, kTankSize / 2);
 }
 
 void Tank::KeepInMap(const size_t field_width) {
-  if (position_.x < kTankWidth / 2) position_.x = kTankWidth / 2;
-  if (position_.y < kTankWidth / 2) position_.y = kTankWidth / 2;
-  if (position_.x > field_width - kTankWidth / 2)
-    position_.x = field_width - kTankWidth / 2;
-  if (position_.y > field_width - kTankWidth / 2)
-    position_.y = field_width - kTankWidth / 2;
+  if (position_.x < kTankSize / 2) position_.x = kTankSize / 2;
+  if (position_.y < kTankSize / 2) position_.y = kTankSize / 2;
+  if (position_.x > field_width - kTankSize / 2)
+    position_.x = field_width - kTankSize / 2;
+  if (position_.y > field_width - kTankSize / 2)
+    position_.y = field_width - kTankSize / 2;
 }
 
 bool Tank::DidCollideWith(const Enemy& enemy) const {
   return glm::distance2(position_, enemy.GetPosition()) <
-         powf(kTankWidth + enemy.GetRadius(), 2);
+         powf(kTankSize + enemy.GetSize(), 2);
 }
 
 void Tank::ReduceReloadTime(float reduce_amount) {
