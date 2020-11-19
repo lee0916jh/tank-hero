@@ -6,7 +6,9 @@ TankHeroApp::TankHeroApp()
                          static_cast<int>(kWindowSize));
 }
 
-void TankHeroApp::setup() {}
+void TankHeroApp::setup() {
+  heart_img_ = ci::gl::Texture2d::create(loadImage(loadAsset("heart.png")));
+}
 
 void TankHeroApp::update() {
   AdjustCameraOffset();
@@ -14,14 +16,13 @@ void TankHeroApp::update() {
   frame_count_++;
 
   if (mouse_down_) game_.FireBullet(mouse_pos_ + camera_offset_);
-  game_.HandleTankMovement(movement_keys_);
+  game_.HandleTankMovement(move_keys_);
   game_.Update();
 }
 
 void TankHeroApp::draw() {
   ci::Color8u background_color(ci::Color("grey"));
   ci::gl::clear(background_color);
-
   if (game_.IsOn()) {
     DrawTank();
     DrawEnemies();
@@ -60,13 +61,11 @@ void TankHeroApp::keyDown(KeyEvent event) {
   if (event.getCode() == KeyEvent::KEY_SPACE) {
     game_.DropBomb();
   } else {
-    movement_keys_.insert(event.getCode());
+    move_keys_.insert(event.getCode());
   }
 }
 
-void TankHeroApp::keyUp(KeyEvent event) {
-  movement_keys_.erase(event.getCode());
-}
+void TankHeroApp::keyUp(KeyEvent event) { move_keys_.erase(event.getCode()); }
 
 void TankHeroApp::mouseDown(MouseEvent event) {
   mouse_down_ = true;
@@ -104,8 +103,16 @@ void TankHeroApp::AdjustCameraOffset() {
 
 void TankHeroApp::DisplayGameStatus() const {
   vec2 text_pos(kTextMargin, kTextMargin);
-  ci::gl::drawString("LIFE: " + std::to_string(game_.GetCurrentLife()),
-                     text_pos, kTextColor, kTextFont);
+  ci::gl::drawString("LIFE: ", text_pos, kTextColor, kTextFont);
+
+  vec2 heart_top_left = vec2(3 * kTextMargin, kTextMargin);
+  vec2 heart_bottom_right =
+      heart_top_left + vec2(kHeartImgWidth, kHeartImgWidth);
+  for (size_t i = 0; i < game_.GetCurrentLife(); i++) {
+    ci::gl::draw(heart_img_, ci::Rectf(heart_top_left, heart_bottom_right));
+    heart_top_left.x += kTextMargin;
+    heart_bottom_right.x += kTextMargin;
+  }
 
   text_pos.y += kTextMargin;
   ci::gl::drawString(
@@ -117,7 +124,7 @@ void TankHeroApp::DisplayGameStatus() const {
                      kTextColor, kTextFont);
 }
 
-void TankHeroApp::DrawGameEndScreen() {
+void TankHeroApp::DrawGameEndScreen() const {
   ci::Color8u background_color(ci::Color("black"));
   ci::gl::clear(background_color);
   vec2 center(kWindowSize / 2, kWindowSize / 2);

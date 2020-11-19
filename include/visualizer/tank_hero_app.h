@@ -20,6 +20,7 @@ const ci::Font kTextFont("Arial", 20);
 const ci::Color kGameOverColor("red");
 const ci::Font kGameOverFont("Arial", 50);
 const size_t kTextMargin = 30;
+const size_t kHeartImgWidth = 20;
 
 class TankHeroApp : public ci::app::App {
  public:
@@ -39,17 +40,18 @@ class TankHeroApp : public ci::app::App {
   void DrawEnemies() const;
   void DrawBullets() const;
   void DisplayGameStatus() const;
+  void DrawGameEndScreen() const;
 
   /// Calculates camera offset from the position of the tank.
   void AdjustCameraOffset();
 
-  std::set<int> movement_keys_;
+  std::set<int> move_keys_;
   vec2 mouse_pos_;
   bool mouse_down_;
   Game game_;
   size_t frame_count_ = 0;
   vec2 camera_offset_;
-  void DrawGameEndScreen();
+  ci::gl::Texture2dRef heart_img_;
 };
 }  // namespace tank_hero::app
 #endif  // TANK_HERO_TANK_HERO_APP_H

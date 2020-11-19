@@ -71,7 +71,7 @@ class Game {
   /// Removes dead enemies that got hit by a bullet.
   void RemoveDeadEnemies();
 
-  /// Returns true if tank is loaded and is ready to fire.
+  /// Returns true if tank is reloaded and is ready to fire.
   bool TankIsLoaded();
 
   // member variables
