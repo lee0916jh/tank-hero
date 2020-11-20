@@ -4,9 +4,9 @@
 #include <vector>
 
 #include "cinder/gl/gl.h"
-#include "core/enemy.h"
-#include "core/movable.h"
-#include "core/tank.h"
+#include "enemy.h"
+#include "movable.h"
+#include "tank.h"
 
 namespace tank_hero {
 using glm::vec2;

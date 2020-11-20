@@ -42,7 +42,7 @@ void Tank::KeepInMap(const size_t field_width) {
 
 bool Tank::DidCollideWith(const Enemy& enemy) const {
   return glm::distance2(position_, enemy.GetPosition()) <
-         powf(kTankSize + enemy.GetSize(), 2);
+         powf(kTankSize + enemy.GetColliderRadius(), 2);
 }
 
 void Tank::ReduceReloadTime(float reduce_amount) {

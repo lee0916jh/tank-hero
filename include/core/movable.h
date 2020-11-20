@@ -15,9 +15,11 @@ class Movable {
   Movable& operator=(Movable&& source) = default;
   virtual ~Movable() = default;
 
-  // Getters
+  // Getters and Setters
   const vec2& GetPosition() const { return position_; }
-  size_t GetSize() const { return size_; }
+  void SetPositionX(float x) { position_.x = x; }
+  void SetPositionY(float y) { position_.y = y; }
+  size_t GetColliderRadius() const { return collider_radius_; }
 
   /// Move this object 1 unit of time
   virtual void Move();
@@ -26,7 +28,7 @@ class Movable {
   vec2 position_;
   vec2 direction_;
   float speed_;
-  size_t size_;
+  size_t collider_radius_;
 };
 }  // namespace tank_hero
 
