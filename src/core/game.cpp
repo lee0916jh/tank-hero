@@ -1,12 +1,14 @@
 #include "core/game.h"
 
 namespace tank_hero {
+using ci::app::KeyEvent;
 
-Game::Game(size_t window_width)
+Game::Game(size_t window_width, const vector<Obstacle>& obstacles)
     : window_width_(window_width),
       tank_(vec2(window_width / 2, window_width / 2)),
-      reload_timer_(0) {
+      obstacles_(obstacles) {
   reload_timer_.start();
+  enemy_spawn_timer_.start();
 }
 
 void Game::HandleTankMovement(const set<int>& keys) {
@@ -27,24 +29,26 @@ void Game::HandleTankMovement(const set<int>& keys) {
 }
 
 void Game::Update() {
-  HandleBulletEnemyCollision();
-  HandleTankEnemyCollision();
-  RemoveInvalidBullets();
-  RemoveDeadEnemies();
-
   for (Bullet& bullet : bullets_) {
     bullet.Move();
   }
   for (Enemy& enemy : enemies_) {
     enemy.Move();
   }
+
+  HandleBulletsEnemiesCollisions();
+  HandleTanksEnemiesCollisions();
+  HandleMovablesObstaclesCollisions();
+
+  RemoveInvalidBullets();
+  RemoveDeadEnemies();
 }
 
 void Game::FireBullet(const vec2& mouse_pos) {
   bullets_.emplace_back(tank_, mouse_pos);
 }
 
-void Game::HandleBulletEnemyCollision() {
+void Game::HandleBulletsEnemiesCollisions() {
   for (Bullet& bullet : bullets_) {
     for (Enemy& enemy : enemies_) {
       if (bullet.DidHit(enemy)) {
@@ -92,13 +96,25 @@ bool Game::TankIsLoaded() {
   return false;
 }
 
-void Game::HandleTankEnemyCollision() {
+void Game::HandleTanksEnemiesCollisions() {
   for (size_t i = 0; i < enemies_.size(); i++) {
     if (tank_.DidCollideWith(enemies_[i])) {
       tank_.DecrementLife();
       enemies_.erase(enemies_.begin() + i);
       return;
     }
+  }
+}
+
+void Game::HandleMovablesObstaclesCollisions() {
+  for (const Obstacle& obstacle : obstacles_) {
+    for (Bullet& bullet : bullets_) {
+      obstacle.HandleCollisionWith(&bullet);
+    }
+    for (Enemy& enemy : enemies_) {
+      obstacle.HandleCollisionWith(&enemy);
+    }
+    obstacle.HandleCollisionWith(&tank_);
   }
 }
 

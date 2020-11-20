@@ -21,7 +21,7 @@ class Tank : public Movable {
  public:
   explicit Tank(const vec2& position);
 
-  // Getters
+  // Getters and Setters
   vec2 GetTopLeftCorner() const;
   vec2 GetBottomRightCorner() const;
   float GetBulletSize() const { return bullet_size_; }

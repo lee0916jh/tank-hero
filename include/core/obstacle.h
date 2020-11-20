@@ -1,7 +1,9 @@
 #ifndef TANK_HERO_OBSTACLE_H
 #define TANK_HERO_OBSTACLE_H
 
+#include <algorithm>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "bullet.h"
@@ -20,10 +22,14 @@ class Obstacle {
   const vec2& GetTopLeft() const { return top_left_; }
   const vec2& GetBottomRight() const { return bottom_right_; }
 
-  void HandleCollisionWith(Movable* movable) const;
+  void HandleCollisionWith(Bullet* bullet) const;
+  void HandleCollisionWith(Tank* tank) const;
+  void HandleCollisionWith(Enemy* enemy) const;
 
  private:
-  vector<string> FindCollisionDirection(const Movable& movable) const;
+  void HandleCollisionWith(Movable* movable) const;
+  string FindCollisionDirection(const Movable& movable) const;
+  bool DidCollideWith(const Movable& movable) const;
 
   vec2 top_left_;
   vec2 bottom_right_;

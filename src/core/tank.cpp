@@ -1,7 +1,8 @@
 #include "core/tank.h"
 
 namespace tank_hero {
-Tank::Tank(const vec2& position) : Movable(position, position, kDefaultSpeed) {}
+Tank::Tank(const vec2& position)
+    : Movable(position, position, kDefaultSpeed, kTankSize / 2) {}
 
 void Tank::MoveUp() {
   direction_ = vec2(0, -1);

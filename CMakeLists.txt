@@ -60,7 +60,8 @@ list(APPEND CORE_SOURCE_FILES
 list(APPEND SOURCE_FILES ${CORE_SOURCE_FILES}
         src/visualizer/tank_hero_app.cpp)
 
-list(APPEND TEST_FILES tests/bullet_test.cpp tests/enemy_test.cpp tests/game_test.cpp)
+list(APPEND TEST_FILES tests/bullet_test.cpp tests/enemy_test.cpp tests/game_test.cpp
+        tests/obstacle_test.cpp)
 
 
 ci_make_app(

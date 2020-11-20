@@ -1,7 +1,8 @@
 #include "visualizer/tank_hero_app.h"
 namespace tank_hero::app {
 TankHeroApp::TankHeroApp()
-    : game_(kWindowSize), camera_offset_(kWindowSize / 2, kWindowSize / 2) {
+    : game_(kWindowSize, kObstacles),
+      camera_offset_(kWindowSize / 2, kWindowSize / 2) {
   ci::app::setWindowSize(static_cast<int>(kWindowSize),
                          static_cast<int>(kWindowSize));
 }
@@ -26,6 +27,7 @@ void TankHeroApp::draw() {
   ci::Color8u background_color(ci::Color("grey"));
   ci::gl::clear(background_color);
   if (game_.IsOn()) {
+    DrawObstacles();
     DrawTank();
     DrawEnemies();
     DrawBullets();
@@ -58,6 +60,14 @@ void TankHeroApp::DrawBullets() const {
                             bullet.GetColliderRadius());
   }
 }
+void TankHeroApp::DrawObstacles() const {
+  ci::gl::color(kObstacleColor);
+  for (const Obstacle& obstacle : game_.GetObstacles()) {
+    ci::gl::drawSolidRect(
+        ci::Rectf(obstacle.GetTopLeft() - camera_offset_,
+                  obstacle.GetBottomRight() - camera_offset_));
+  }
+}
 
 void TankHeroApp::keyDown(KeyEvent event) {
   if (event.getCode() == KeyEvent::KEY_SPACE) {
@@ -82,21 +92,21 @@ void TankHeroApp::AdjustCameraOffset() {
   const vec2& tank_pos = game_.GetTank().GetPosition();
 
   // if tank is in the middle of map camera follows the tank
-  if (tank_pos.x > kWindowSize / 2 &&
-      tank_pos.x < kFieldWidth - (kWindowSize / 2)) {
-    camera_offset_.x = tank_pos.x - kWindowSize / 2;
+  if (tank_pos.x > kWindowSize / 2.0 &&
+      tank_pos.x < kFieldWidth - (kWindowSize / 2.0)) {
+    camera_offset_.x = tank_pos.x - kWindowSize / 2.0;
   }
   // if tank is close to the edge of the map camera stops following tank.
-  else if (tank_pos.x <= kWindowSize / 2) {
+  else if (tank_pos.x <= kWindowSize / 2.0) {
     camera_offset_.x = 0;
   } else {
     camera_offset_.x = kFieldWidth - kWindowSize;
   }
 
-  if (tank_pos.y > kWindowSize / 2 &&
-      tank_pos.y < kFieldWidth - (kWindowSize / 2)) {
-    camera_offset_.y = tank_pos.y - kWindowSize / 2;
-  } else if (tank_pos.y <= kWindowSize / 2) {
+  if (tank_pos.y > kWindowSize / 2.0 &&
+      tank_pos.y < kFieldWidth - (kWindowSize / 2.0)) {
+    camera_offset_.y = tank_pos.y - kWindowSize / 2.0;
+  } else if (tank_pos.y <= kWindowSize / 2.0) {
     camera_offset_.y = 0;
   } else {
     camera_offset_.y = kFieldWidth - kWindowSize;
