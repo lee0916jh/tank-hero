@@ -1,6 +1,7 @@
 #ifndef TANK_HERO_TANK_HERO_APP_H
 #define TANK_HERO_TANK_HERO_APP_H
 
+#include <cmath>
 #include <set>
 #include <vector>
 
@@ -13,19 +14,21 @@
 #include "core/obstacle.h"
 
 namespace tank_hero::app {
+using ci::loadImage;
 using ci::Timer;
 using ci::app::KeyEvent;
+using ci::app::loadAsset;
 using ci::app::MouseEvent;
+using ci::gl::Texture2dRef;
 using glm::vec2;
 using std::pair;
 using std::vector;
 
-const ci::Color kTankColor = ci::Color("green");
-const ci::Color kEnemyColor = ci::Color("red");
+const ci::Color kBgColor = ci::Color("grey");
 const ci::Color kBulletColor = ci::Color("yellow");
-const ci::Color kObstacleColor = ci::Color("black");
 
-constexpr int kWindowSize = 1000;
+constexpr size_t kWindowSize = 1000;
+
 const ci::Color kTextColor("white");
 const ci::Font kTextFont("Arial", 20);
 const ci::Color kGameOverColor("red");
@@ -64,13 +67,31 @@ class TankHeroApp : public ci::app::App {
   /// Checks if it's time to increase difficulty
   bool ReadyToIncreaseDifficulty();
 
+  void DrawRotatedImage(Texture2dRef image, const vec2& position,
+                        float rotation) const;
+
+  /// Returns rotation(angle between up vector and the direction) given
+  /// direction as below.
+  ///         0
+  ///    315     45
+  ///  270    x     90
+  ///    225     135
+  ///        180
+  float CalcRotation(const vec2& direction) const;
+
   std::set<int> move_keys_;
   vec2 mouse_pos_;
   bool mouse_down_;
   Game game_;
   vec2 camera_offset_;
   Timer increase_difficulty_timer_;
-  ci::gl::Texture2dRef heart_img_;
+
+  // images
+  Texture2dRef heart_img_;
+  Texture2dRef wall_img_;
+  Texture2dRef tank_body_img_;
+  Texture2dRef tank_gun_img_;
+  Texture2dRef melee_enemy_img_;
 };
 }  // namespace tank_hero::app
 #endif  // TANK_HERO_TANK_HERO_APP_H

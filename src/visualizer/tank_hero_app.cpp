@@ -9,6 +9,13 @@ TankHeroApp::TankHeroApp()
 
 void TankHeroApp::setup() {
   heart_img_ = ci::gl::Texture2d::create(loadImage(loadAsset("heart.png")));
+  wall_img_ = ci::gl::Texture2d::create(loadImage(loadAsset("wall.png")));
+  tank_body_img_ =
+      ci::gl::Texture2d::create(ci::loadImage(loadAsset("tank_body.png")));
+  tank_gun_img_ =
+      ci::gl::Texture2d::create(ci::loadImage(loadAsset("tank_gun.png")));
+  melee_enemy_img_ =
+      ci::gl::Texture2d::create(ci::loadImage(loadAsset("melee_enemy.png")));
 }
 
 void TankHeroApp::update() {
@@ -24,8 +31,8 @@ void TankHeroApp::update() {
 }
 
 void TankHeroApp::draw() {
-  ci::Color8u background_color(ci::Color("grey"));
-  ci::gl::clear(background_color);
+  ci::gl::clear(kBgColor);
+
   if (game_.IsOn()) {
     DrawObstacles();
     DrawTank();
@@ -38,18 +45,19 @@ void TankHeroApp::draw() {
 }
 
 void TankHeroApp::DrawTank() const {
-  ci::gl::color(kTankColor);
+  vec2 window_center(kWindowSize / 2, kWindowSize / 2);
   const Tank& tank = game_.GetTank();
-  ci::Rectf tank_rect(tank.GetTopLeftCorner() - camera_offset_,
-                      tank.GetBottomRightCorner() - camera_offset_);
-  ci::gl::drawSolidRect(tank_rect);
+  float tank_body_rotation = CalcRotation(tank.GetDirection());
+  float tank_gun_rotation = CalcRotation(mouse_pos_ - window_center);
+
+  DrawRotatedImage(tank_body_img_, tank.GetPosition(), tank_body_rotation);
+  DrawRotatedImage(tank_gun_img_, tank.GetPosition(), tank_gun_rotation);
 }
 
 void TankHeroApp::DrawEnemies() const {
-  ci::gl::color(kEnemyColor);
   for (const Enemy& enemy : game_.GetEnemies()) {
-    ci::gl::drawSolidCircle(enemy.GetPosition() - camera_offset_,
-                            enemy.GetColliderRadius());
+    float rotation = CalcRotation(enemy.GetPosition());
+    DrawRotatedImage(melee_enemy_img_, enemy.GetPosition(), rotation);
   }
 }
 
@@ -61,11 +69,10 @@ void TankHeroApp::DrawBullets() const {
   }
 }
 void TankHeroApp::DrawObstacles() const {
-  ci::gl::color(kObstacleColor);
   for (const Obstacle& obstacle : game_.GetObstacles()) {
-    ci::gl::drawSolidRect(
-        ci::Rectf(obstacle.GetTopLeft() - camera_offset_,
-                  obstacle.GetBottomRight() - camera_offset_));
+    ci::gl::draw(wall_img_,
+                 ci::Rectf(obstacle.GetTopLeft() - camera_offset_,
+                           obstacle.GetBottomRight() - camera_offset_));
   }
 }
 
@@ -151,4 +158,23 @@ bool TankHeroApp::ReadyToIncreaseDifficulty() {
   }
   return false;
 }
+
+void TankHeroApp::DrawRotatedImage(Texture2dRef image, const vec2& position,
+                                   float rotation) const {
+  vec2 img_center = image->getSize() / 2;
+
+  ci::gl::pushModelView();
+  ci::gl::translate(position - camera_offset_);
+  ci::gl::rotate(rotation);
+  ci::gl::translate(-img_center);
+
+  ci::gl::draw(image);
+  ci::gl::popModelView();
+}
+
+float TankHeroApp::CalcRotation(const vec2& direction) const {
+  float angle = acos(glm::dot(vec2(0, -1), glm::normalize(direction)));
+  return direction.x > 0 ? angle : 4 * glm::pi<float>() - angle;
+}
+
 }  // namespace tank_hero::app

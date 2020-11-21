@@ -12,12 +12,25 @@ Game::Game(size_t window_width, const vector<Obstacle>& obstacles)
 }
 
 void Game::HandleTankMovement(const set<int>& keys) {
-  if (keys.contains(KeyEvent::KEY_w)) tank_.MoveUp();
-  if (keys.contains(KeyEvent::KEY_s)) tank_.MoveDown();
-  if (keys.contains(KeyEvent::KEY_a)) tank_.MoveLeft();
-  if (keys.contains(KeyEvent::KEY_d)) tank_.MoveRight();
+  if (keys.contains(KeyEvent::KEY_w) && keys.contains(KeyEvent::KEY_a)) {
+    tank_.MoveUpLeft();
+  } else if (keys.contains(KeyEvent::KEY_w) && keys.contains(KeyEvent::KEY_d)) {
+    tank_.MoveUpRight();
+  } else if (keys.contains(KeyEvent::KEY_s) && keys.contains(KeyEvent::KEY_a)) {
+    tank_.MoveDownLeft();
+  } else if (keys.contains(KeyEvent::KEY_s) && keys.contains(KeyEvent::KEY_d)) {
+    tank_.MoveDownRight();
+  } else if (keys.contains(KeyEvent::KEY_w)) {
+    tank_.MoveUp();
+  } else if (keys.contains(KeyEvent::KEY_s)) {
+    tank_.MoveDown();
+  } else if (keys.contains(KeyEvent::KEY_a)) {
+    tank_.MoveLeft();
+  } else if (keys.contains(KeyEvent::KEY_d)) {
+    tank_.MoveRight();
+  }
 
-  tank_.KeepInMap(kFieldWidth);
+  tank_.KeepInMap(map_width_);
 }
 
 void Game::Update() {

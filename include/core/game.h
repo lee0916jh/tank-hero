@@ -83,6 +83,8 @@ class Game {
   void HandleMovablesObstaclesCollisions();
 
   size_t window_width_;
+  size_t map_width_;
+
   // Game Objects
   Tank tank_;
   vector<Enemy> enemies_;

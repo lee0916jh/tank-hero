@@ -24,12 +24,24 @@ void Tank::MoveRight() {
   Move();
 }
 
-vec2 Tank::GetTopLeftCorner() const {
-  return position_ - vec2(kTankSize / 2, kTankSize / 2);
+void Tank::MoveUpLeft() {
+  direction_ = glm::normalize(vec2(-1, -1));
+  Move();
 }
 
-vec2 Tank::GetBottomRightCorner() const {
-  return position_ + vec2(kTankSize / 2, kTankSize / 2);
+void Tank::MoveUpRight() {
+  direction_ = glm::normalize(vec2(1, -1));
+  Move();
+}
+
+void Tank::MoveDownLeft() {
+  direction_ = glm::normalize(vec2(-1, 1));
+  Move();
+}
+
+void Tank::MoveDownRight() {
+  direction_ = glm::normalize(vec2(1, 1));
+  Move();
 }
 
 void Tank::KeepInMap(const size_t field_width) {

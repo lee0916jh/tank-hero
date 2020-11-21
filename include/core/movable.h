@@ -17,6 +17,7 @@ class Movable {
 
   // Getters and Setters
   const vec2& GetPosition() const { return position_; }
+  const vec2& GetDirection() const { return direction_; }
   void SetPositionX(float x) { position_.x = x; }
   void SetPositionY(float y) { position_.y = y; }
   size_t GetColliderRadius() const { return collider_radius_; }

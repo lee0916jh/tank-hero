@@ -10,7 +10,7 @@ namespace tank_hero {
 using glm::vec2;
 
 constexpr float kDefaultSpeed = 2;
-constexpr size_t kTankSize = 30;
+constexpr size_t kTankSize = 40;
 
 constexpr unsigned kDefaultLife = 5;
 
@@ -20,17 +20,19 @@ class Tank : public Movable {
   explicit Tank(const vec2& position);
 
   // Getters and Setters
-  vec2 GetTopLeftCorner() const;
-  vec2 GetBottomRightCorner() const;
   const BulletConfig& GetBulletConfig() const { return bullet_config_; }
   bool IsAlive() const { return life_ > 0; }
-  void DecrementLife() { life_--; }
   size_t GetLifeCount() const { return life_; };
+  void DecrementLife() { life_--; }
 
   void MoveUp();
   void MoveDown();
   void MoveLeft();
   void MoveRight();
+  void MoveUpLeft();
+  void MoveUpRight();
+  void MoveDownLeft();
+  void MoveDownRight();
 
   /// Puts the tank back into the map if it went outside the map.
   /// \param field_width Size of the map
