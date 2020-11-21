@@ -96,7 +96,7 @@ void Game::SpawnEnemy() {
 void Game::DropBomb() { enemies_.clear(); }
 
 bool Game::TankIsLoaded() {
-  if (reload_timer_.getSeconds() > tank_.GetBulletConfig().reload_time) {
+  if (reload_timer_.getSeconds() > tank_.GetReloadTime()) {
     reload_timer_.start();
     return true;
   }

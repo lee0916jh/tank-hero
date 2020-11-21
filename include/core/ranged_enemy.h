@@ -2,9 +2,11 @@
 #define TANK_HERO_RANGED_ENEMY_H
 
 #include "enemy.h"
-#include "bullet_config.h"
+#include "ranged.h"
 namespace tank_hero {
-class RangedEnemy : public Enemy{};
+class RangedEnemy : public Enemy, public Ranged {
+ private:
+};
 
 }  // namespace tank_hero
 

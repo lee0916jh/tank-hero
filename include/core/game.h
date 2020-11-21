@@ -37,7 +37,7 @@ class Game {
   const vector<Bullet>& GetBullets() const { return bullets_; }
   const vector<Obstacle>& GetObstacles() const { return obstacles_; }
   size_t GetCurrentLife() const { return tank_.GetLifeCount(); }
-  float GetReloadTime() const { return tank_.GetBulletConfig().reload_time; }
+  float GetReloadTime() const { return tank_.GetReloadTime(); }
   size_t GetKillCount() const { return kill_count_; }
   bool IsOn() const { return tank_.IsAlive(); }
 

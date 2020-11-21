@@ -2,7 +2,8 @@
 
 namespace tank_hero {
 Tank::Tank(const vec2& position)
-    : Movable(position, position, kDefaultSpeed, kTankSize / 2) {}
+    : Movable(position, position, kDefaultSpeed, kTankSize / 2),
+      Ranged(kDefaultBulletSize, kDefaultBulletSpeed, kDefaultReloadTime) {}
 
 void Tank::MoveUp() {
   direction_ = vec2(0, -1);
@@ -63,9 +64,4 @@ bool Tank::DidCollideWith(const Enemy& enemy) const {
   return glm::distance2(position_, enemy.GetPosition()) <
          powf(kTankSize + enemy.GetColliderRadius(), 2);
 }
-
-void Tank::ReduceReloadTime(float reduce_amount) {
-  bullet_config_.reload_time -= reduce_amount;
-}
-
 }  // namespace tank_hero
