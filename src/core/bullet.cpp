@@ -1,9 +1,10 @@
 #include "core/bullet.h"
 namespace tank_hero {
-Bullet::Bullet(const Tank& tank, const vec2& mouse_pos)
-    : Movable(tank.GetPosition(),
-              glm::normalize(mouse_pos - tank.GetPosition()),
-              tank.GetBulletSpeed(), tank.GetBulletSize()) {}
+Bullet::Bullet(const vec2& from, const vec2& to,
+               const BulletConfig& bullet_config)
+    : Movable(from, glm::normalize(to - from), bullet_config.speed,
+              bullet_config.radius) {}
+
 bool Bullet::DidHit(const Enemy& enemy) const {
   return glm::distance2(position_, enemy.GetPosition()) <=
          pow(collider_radius_ + enemy.GetColliderRadius(), 2);

@@ -47,6 +47,6 @@ bool Tank::DidCollideWith(const Enemy& enemy) const {
 }
 
 void Tank::ReduceReloadTime(float reduce_amount) {
-  reload_time_ -= reduce_amount;
+  bullet_config_.reload_time -= reduce_amount;
 }
 }  // namespace tank_hero

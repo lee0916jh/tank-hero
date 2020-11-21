@@ -10,23 +10,28 @@ using glm::vec2;
 
 constexpr float kEnemyRadius = 10;
 
-class Tank;
 class Enemy : public Movable {
  public:
   /// Constructor
   /// \param position Spawn position
-  /// \param target Target to chase
-  Enemy(const vec2& position, float speed, Tank* target);
+  /// \param tank Target to chase
+  Enemy(const vec2& position, float speed, const vec2* target);
+
+  Enemy(const Enemy& source) = default;
+  Enemy(Enemy&& source) = default;
+  Enemy& operator=(const Enemy& source) = default;
+  Enemy& operator=(Enemy&& source) = default;
+  ~Enemy() = default;
 
   // Getters and Setters
   bool IsDead() const { return dead_; }
-  void Dies() { dead_ = true; }
+  void Die() { dead_ = true; }
 
   /// The Enemy moves towards the target
   void Move() override;
 
  private:
-  Tank* target_;
+  const vec2* target_;
   bool dead_ = false;
 };
 }  // namespace tank_hero

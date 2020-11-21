@@ -12,19 +12,11 @@ Game::Game(size_t window_width, const vector<Obstacle>& obstacles)
 }
 
 void Game::HandleTankMovement(const set<int>& keys) {
-  bool a_pressed = false, s_pressed = false, d_pressed = false,
-       w_pressed = false;
-  for (int key : keys) {
-    if (key == KeyEvent::KEY_a) a_pressed = true;
-    if (key == KeyEvent::KEY_s) s_pressed = true;
-    if (key == KeyEvent::KEY_d) d_pressed = true;
-    if (key == KeyEvent::KEY_w) w_pressed = true;
-  }
+  if (keys.contains(KeyEvent::KEY_w)) tank_.MoveUp();
+  if (keys.contains(KeyEvent::KEY_s)) tank_.MoveDown();
+  if (keys.contains(KeyEvent::KEY_a)) tank_.MoveLeft();
+  if (keys.contains(KeyEvent::KEY_d)) tank_.MoveRight();
 
-  if (w_pressed) tank_.MoveUp();
-  if (a_pressed) tank_.MoveLeft();
-  if (d_pressed) tank_.MoveRight();
-  if (s_pressed) tank_.MoveDown();
   tank_.KeepInMap(kFieldWidth);
 }
 
@@ -45,15 +37,16 @@ void Game::Update() {
 }
 
 void Game::FireBullet(const vec2& mouse_pos) {
-  bullets_.emplace_back(tank_, mouse_pos);
+  bullets_.emplace_back(tank_.GetPosition(), mouse_pos,
+                        tank_.GetBulletConfig());
 }
 
 void Game::HandleBulletsEnemiesCollisions() {
   for (Bullet& bullet : bullets_) {
     for (Enemy& enemy : enemies_) {
       if (bullet.DidHit(enemy)) {
-        bullet.GoesInactive();
-        enemy.Dies();
+        bullet.MakeInactive();
+        enemy.Die();
         kill_count_++;
         tank_.ReduceReloadTime(kUpgradeAmount);
       }
@@ -81,7 +74,7 @@ void Game::SpawnEnemy() {
   if (enemy_spawn_timer_.getSeconds() > enemy_spawn_freq_) {
     vec2 spawn_point = tank_.GetPosition() +
                        ci::randVec2() * static_cast<float>(window_width_);
-    enemies_.emplace_back(spawn_point, new_enemy_speed_, &tank_);
+    enemies_.emplace_back(spawn_point, new_enemy_speed_, &tank_.GetPosition());
     enemy_spawn_timer_.start();
   }
 }
@@ -89,7 +82,7 @@ void Game::SpawnEnemy() {
 void Game::DropBomb() { enemies_.clear(); }
 
 bool Game::TankIsLoaded() {
-  if (reload_timer_.getSeconds() > tank_.GetReloadTime()) {
+  if (reload_timer_.getSeconds() > tank_.GetBulletConfig().reload_time) {
     reload_timer_.start();
     return true;
   }

@@ -13,11 +13,11 @@ using glm::vec2;
 
 class Bullet : public Movable {
  public:
-  Bullet(const Tank& tank, const vec2& mouse_pos);
+  Bullet(const vec2& from, const vec2& to, const BulletConfig& bullet_config);
 
   // Getters and Setters
   bool IsActive() const { return active_; }
-  void GoesInactive() { active_ = false; }
+  void MakeInactive() { active_ = false; }
 
   /// Returns true only if the bullet is outside the map.
   bool IsOutOfMap(size_t map_width) const;

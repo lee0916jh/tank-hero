@@ -37,7 +37,7 @@ class Game {
   const vector<Bullet>& GetBullets() const { return bullets_; }
   const vector<Obstacle>& GetObstacles() const { return obstacles_; }
   size_t GetCurrentLife() const { return tank_.GetLifeCount(); }
-  float GetReloadTime() const { return tank_.GetReloadTime(); }
+  float GetReloadTime() const { return tank_.GetBulletConfig().reload_time; }
   size_t GetKillCount() const { return kill_count_; }
   bool IsOn() const { return tank_.IsAlive(); }
 
@@ -80,19 +80,22 @@ class Game {
   void RemoveDeadEnemies();
 
  private:
-  // member variables
+  void HandleMovablesObstaclesCollisions();
+
   size_t window_width_;
+  // Game Objects
   Tank tank_;
   vector<Enemy> enemies_;
   vector<Bullet> bullets_;
   vector<Obstacle> obstacles_;
+
+  // Game Status
   Timer reload_timer_;
   Timer enemy_spawn_timer_;
   size_t kill_count_ = 0;
 
   float new_enemy_speed_ = kInitialEnemySpeed;
   float enemy_spawn_freq_ = kInitialSpawnFreq;
-  void HandleMovablesObstaclesCollisions();
 };
 }  // namespace tank_hero
 #endif  // TANK_HERO_GAME_H

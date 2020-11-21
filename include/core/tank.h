@@ -1,9 +1,10 @@
 #ifndef TANK_HERO_TANK_H
 #define TANK_HERO_TANK_H
 
+#include "bullet_config.h"
 #include "cinder/gl/gl.h"
-#include "core/movable.h"
 #include "enemy.h"
+#include "movable.h"
 
 namespace tank_hero {
 using glm::vec2;
@@ -11,10 +12,7 @@ using glm::vec2;
 constexpr float kDefaultSpeed = 2;
 constexpr size_t kTankSize = 30;
 
-constexpr float kDefaultBulletSize = 5;
-constexpr float kDefaultBulletSpeed = 8;
-constexpr float kDefaultBulletDelay = 1.5;
-constexpr unsigned kDefaultLife = 3;
+constexpr unsigned kDefaultLife = 5;
 
 class Enemy;
 class Tank : public Movable {
@@ -24,9 +22,7 @@ class Tank : public Movable {
   // Getters and Setters
   vec2 GetTopLeftCorner() const;
   vec2 GetBottomRightCorner() const;
-  float GetBulletSize() const { return bullet_size_; }
-  float GetBulletSpeed() const { return bullet_speed_; }
-  float GetReloadTime() const { return reload_time_; }
+  const BulletConfig& GetBulletConfig() const { return bullet_config_; }
   bool IsAlive() const { return life_ > 0; }
   void DecrementLife() { life_--; }
   size_t GetLifeCount() const { return life_; };
@@ -48,9 +44,7 @@ class Tank : public Movable {
   void ReduceReloadTime(float reduce_amount);
 
  private:
-  float bullet_size_ = kDefaultBulletSize;
-  float bullet_speed_ = kDefaultBulletSpeed;
-  float reload_time_ = kDefaultBulletDelay;
+  BulletConfig bullet_config_;
   int life_ = kDefaultLife;
 };
 }  // namespace tank_hero
