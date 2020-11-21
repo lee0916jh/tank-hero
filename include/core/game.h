@@ -49,10 +49,9 @@ class Game {
   /// \param mouse_pos Mouse position which the tank gun will aim at.
   void HandleTankMovement(const set<int>& keys, const vec2& mouse_pos);
 
-  /// Fires a bullet from the tank to the mouse pointer if tank is loaded.
+  /// Fires a bullet from the tank if tank is loaded.
   /// If tank isn't reloaded, bullet does not fire.
-  /// \param mouse_pos Position that bullet will fly to,
-  void FireBullet(const vec2& mouse_pos);
+  void FireBullet();
 
   /// Kills enemies instantly.
   void DropBomb();

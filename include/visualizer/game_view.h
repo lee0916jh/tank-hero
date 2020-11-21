@@ -1,21 +1,12 @@
 #ifndef TANK_HERO_GAME_VIEW_H
 #define TANK_HERO_GAME_VIEW_H
 
-#include <cmath>
-#include <set>
-#include <vector>
-
 #include "cinder/Font.h"
-#include "cinder/app/App.h"
-#include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 #include "core/game.h"
-#include "core/obstacle.h"
 
 namespace tank_hero::visualizer {
-using ci::app::KeyEvent;
 using ci::app::loadAsset;
-using ci::app::MouseEvent;
 using ci::gl::Texture2d;
 using ci::gl::Texture2dRef;
 
@@ -32,10 +23,12 @@ const size_t kHeartImgWidth = 20;
 
 class GameView {
  public:
-  explicit GameView(const Game* game, size_t window_size);
+  explicit GameView(const Game* game, size_t window_size,
+                    const vec2* camera_offset);
+
+  void SetCameraOffset(const vec2& camera_offset){};
 
   void Draw() const;
-  void SetCameraOffset(const vec2& camera_offset){};
 
  private:
   void DrawTank() const;
@@ -50,17 +43,16 @@ class GameView {
 
   /// Returns rotation(angle between up vector and the direction) given
   /// direction as below.
-  ///         0
-  ///    315     45
-  ///  270    x     90
-  ///    225     135
-  ///        pi
+  ///            0
+  ///    7/4 pi     pi/4
+  /// 3/2 pi     x      pi/2
+  ///    5/4 pi     3/4 pi
+  ///            pi
   float CalcRotation(const vec2& direction) const;
 
-  // Game Info
   const Game* game_;
   const size_t window_size_;
-  vec2 camera_offset_;
+  const vec2* camera_offset_;
 
   // images
   Texture2dRef heart_img_;

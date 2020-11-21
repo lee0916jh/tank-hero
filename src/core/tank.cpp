@@ -45,7 +45,7 @@ void Tank::MoveDownRight() {
 }
 
 void Tank::RotateGun(const vec2& direction) {
-  gun_rotation_ = direction - position_;
+  gun_rotation_ = glm::normalize(direction - position_);
 }
 
 void Tank::KeepInMap(const size_t field_width) {

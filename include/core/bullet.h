@@ -13,7 +13,8 @@ using glm::vec2;
 
 class Bullet : public Movable {
  public:
-  Bullet(const vec2& from, const vec2& to, const BulletConfig& bullet_config);
+  Bullet(const vec2& spawn_pos, const vec2& direction,
+         const BulletConfig& bullet_config);
 
   // Getters and Setters
   bool IsActive() const { return active_; }

@@ -10,7 +10,7 @@ namespace tank_hero {
 using glm::vec2;
 
 constexpr float kDefaultSpeed = 2;
-constexpr size_t kTankSize = 40;
+constexpr size_t kTankSize = 60;
 
 constexpr unsigned kDefaultLife = 5;
 

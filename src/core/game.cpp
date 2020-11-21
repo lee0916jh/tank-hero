@@ -50,8 +50,8 @@ void Game::Update() {
   RemoveDeadEnemies();
 }
 
-void Game::FireBullet(const vec2& mouse_pos) {
-  bullets_.emplace_back(tank_.GetPosition(), mouse_pos,
+void Game::FireBullet() {
+  bullets_.emplace_back(tank_.GetPosition(), tank_.GetGunRotation(),
                         tank_.GetBulletConfig());
 }
 

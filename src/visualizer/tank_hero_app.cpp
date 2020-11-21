@@ -1,8 +1,9 @@
 #include "visualizer/tank_hero_app.h"
+
 namespace tank_hero::visualizer {
 TankHeroApp::TankHeroApp()
     : game_(kWindowSize, kObstacles),
-      game_view_(&game_, kWindowSize),
+      game_view_(&game_, kWindowSize, &camera_offset_),
       camera_offset_(kWindowSize / 2, kWindowSize / 2) {
   ci::app::setWindowSize(static_cast<int>(kWindowSize),
                          static_cast<int>(kWindowSize));
@@ -12,14 +13,14 @@ void TankHeroApp::setup() {}
 
 void TankHeroApp::update() {
   AdjustCameraOffset();
-  game_.HandleTankMovement(move_keys_,mouse_pos_);
-  if (mouse_down_ && game_.TankIsLoaded()) {
-    game_.FireBullet(mouse_pos_ + camera_offset_);
-  }
-  game_.Update();
+  game_view_.SetCameraOffset(camera_offset_);
 
-  if (ReadyToIncreaseDifficulty()) game_.IncreaseDifficulty();
+  game_.HandleTankMovement(move_keys_, mouse_pos_ + camera_offset_);
+  game_.Update();
   game_.SpawnEnemy();
+
+  if (mouse_down_ && game_.TankIsLoaded()) game_.FireBullet();
+  if (ReadyToIncreaseDifficulty()) game_.IncreaseDifficulty();
 }
 
 void TankHeroApp::draw() {

@@ -30,9 +30,9 @@ class Enemy : public Movable {
   /// The Enemy moves towards the target
   void Move() override;
 
- private:
-  const vec2* target_;
+ protected:
   bool dead_ = false;
+  const vec2* target_;
 };
 }  // namespace tank_hero
 #endif  // TANK_HERO_ENEMY_H

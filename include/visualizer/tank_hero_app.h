@@ -58,5 +58,5 @@ class TankHeroApp : public ci::app::App {
 
   Timer increase_difficulty_timer_;
 };
-}  // namespace tank_hero::app
+}  // namespace tank_hero::visualizer
 #endif  // TANK_HERO_TANK_HERO_APP_H

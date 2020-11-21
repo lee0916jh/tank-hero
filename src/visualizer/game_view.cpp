@@ -2,9 +2,11 @@
 
 namespace tank_hero::visualizer {
 
-GameView::GameView(const Game* game, size_t window_size)
+GameView::GameView(const Game* game, size_t window_size,
+                   const vec2* camera_offset)
     : game_(game),
       window_size_(window_size),
+      camera_offset_(camera_offset),
       heart_img_(Texture2d::create(loadImage(loadAsset("heart.png")))),
       tank_body_img_(Texture2d::create(loadImage(loadAsset("tank_body.png")))),
       tank_gun_img_(Texture2d::create(loadImage(loadAsset("tank_gun.png")))),
@@ -43,7 +45,7 @@ void GameView::DrawEnemies() const {
 void GameView::DrawBullets() const {
   ci::gl::color(kBulletColor);
   for (const Bullet& bullet : game_->GetBullets()) {
-    ci::gl::drawSolidCircle(bullet.GetPosition() - camera_offset_,
+    ci::gl::drawSolidCircle(bullet.GetPosition() - *camera_offset_,
                             bullet.GetColliderRadius());
   }
 }
@@ -51,8 +53,8 @@ void GameView::DrawObstacles() const {
   ci::gl::color(kObstacleColor);
   for (const Obstacle& obstacle : game_->GetObstacles()) {
     ci::gl::drawSolidRect(
-        ci::Rectf(obstacle.GetTopLeft() - camera_offset_,
-                  obstacle.GetBottomRight() - camera_offset_));
+        ci::Rectf(obstacle.GetTopLeft() - *camera_offset_,
+                  obstacle.GetBottomRight() - *camera_offset_));
   }
 }
 
@@ -96,7 +98,7 @@ void GameView::DrawRotatedImage(Texture2dRef image, const vec2& position,
   vec2 img_center = image->getSize() / 2;
 
   ci::gl::pushModelView();
-  ci::gl::translate(position - camera_offset_);
+  ci::gl::translate(position - *camera_offset_);
   ci::gl::rotate(rotation);
   ci::gl::translate(-img_center);
 
