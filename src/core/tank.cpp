@@ -44,13 +44,19 @@ void Tank::MoveDownRight() {
   Move();
 }
 
+void Tank::RotateGun(const vec2& direction) {
+  gun_rotation_ = direction - position_;
+}
+
 void Tank::KeepInMap(const size_t field_width) {
-  if (position_.x < kTankSize / 2) position_.x = kTankSize / 2;
-  if (position_.y < kTankSize / 2) position_.y = kTankSize / 2;
-  if (position_.x > field_width - kTankSize / 2)
-    position_.x = field_width - kTankSize / 2;
-  if (position_.y > field_width - kTankSize / 2)
-    position_.y = field_width - kTankSize / 2;
+  if (position_.x < collider_radius_) position_.x = collider_radius_;
+  if (position_.y < collider_radius_) position_.y = collider_radius_;
+  if (position_.x > field_width - collider_radius_) {
+    position_.x = field_width - collider_radius_;
+  }
+  if (position_.y > field_width - collider_radius_) {
+    position_.y = field_width - collider_radius_;
+  }
 }
 
 bool Tank::DidCollideWith(const Enemy& enemy) const {
@@ -61,4 +67,5 @@ bool Tank::DidCollideWith(const Enemy& enemy) const {
 void Tank::ReduceReloadTime(float reduce_amount) {
   bullet_config_.reload_time -= reduce_amount;
 }
+
 }  // namespace tank_hero

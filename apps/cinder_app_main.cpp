@@ -1,6 +1,6 @@
-#include <visualizer//tank_hero_app.h>
+#include <visualizer/tank_hero_app.h>
 
-using tank_hero::app::TankHeroApp;
+using tank_hero::visualizer::TankHeroApp;
 
 void prepareSettings(TankHeroApp::Settings* settings) {
   settings->setResizable(false);

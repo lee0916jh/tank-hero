@@ -21,6 +21,7 @@ class Tank : public Movable {
 
   // Getters and Setters
   const BulletConfig& GetBulletConfig() const { return bullet_config_; }
+  const vec2& GetGunRotation() const { return gun_rotation_; }
   bool IsAlive() const { return life_ > 0; }
   size_t GetLifeCount() const { return life_; };
   void DecrementLife() { life_--; }
@@ -34,6 +35,9 @@ class Tank : public Movable {
   void MoveDownLeft();
   void MoveDownRight();
 
+  /// Rotates gun towards the given direction.
+  void RotateGun(const vec2& direction);
+
   /// Puts the tank back into the map if it went outside the map.
   /// \param field_width Size of the map
   void KeepInMap(const size_t field_width);
@@ -46,6 +50,7 @@ class Tank : public Movable {
   void ReduceReloadTime(float reduce_amount);
 
  private:
+  vec2 gun_rotation_;
   BulletConfig bullet_config_;
   int life_ = kDefaultLife;
 };

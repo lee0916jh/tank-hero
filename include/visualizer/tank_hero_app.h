@@ -12,33 +12,21 @@
 #include "cinder/gl/gl.h"
 #include "core/game.h"
 #include "core/obstacle.h"
+#include "game_view.h"
 
-namespace tank_hero::app {
-using ci::loadImage;
+namespace tank_hero::visualizer {
 using ci::Timer;
 using ci::app::KeyEvent;
-using ci::app::loadAsset;
 using ci::app::MouseEvent;
-using ci::gl::Texture2dRef;
 using glm::vec2;
-using std::pair;
 using std::vector;
-
-const ci::Color kBgColor = ci::Color("grey");
-const ci::Color kBulletColor = ci::Color("yellow");
 
 constexpr size_t kWindowSize = 1000;
 
-const ci::Color kTextColor("white");
-const ci::Font kTextFont("Arial", 20);
-const ci::Color kGameOverColor("red");
-const ci::Font kGameOverFont("Arial", 50);
-const size_t kTextMargin = 30;
-const size_t kHeartImgWidth = 20;
 const size_t kIncreaseDifficultyThreshold =
     30;  // difficulty will increase after this number of seconds.
-const vector<Obstacle> kObstacles = {Obstacle(vec2(0, 0), vec2(100, 100)),
-                                     Obstacle(vec2(200, 200), vec2(400, 800))};
+const vector<Obstacle> kObstacles = {{vec2(0, 0), vec2(100, 100)},
+                                     {vec2(200, 200), vec2(400, 800)}};
 
 class TankHeroApp : public ci::app::App {
  public:
@@ -54,44 +42,21 @@ class TankHeroApp : public ci::app::App {
   void mouseUp(MouseEvent event) override;
 
  private:
-  void DrawTank() const;
-  void DrawEnemies() const;
-  void DrawBullets() const;
-  void DrawObstacles() const;
-  void DisplayGameStatus() const;
-  void DrawGameEndScreen() const;
-
   /// Calculates camera offset from the position of the tank.
   void AdjustCameraOffset();
 
   /// Checks if it's time to increase difficulty
   bool ReadyToIncreaseDifficulty();
 
-  void DrawRotatedImage(Texture2dRef image, const vec2& position,
-                        float rotation) const;
+  Game game_;
+  GameView game_view_;
 
-  /// Returns rotation(angle between up vector and the direction) given
-  /// direction as below.
-  ///         0
-  ///    315     45
-  ///  270    x     90
-  ///    225     135
-  ///        180
-  float CalcRotation(const vec2& direction) const;
-
+  vec2 camera_offset_;
   std::set<int> move_keys_;
   vec2 mouse_pos_;
   bool mouse_down_;
-  Game game_;
-  vec2 camera_offset_;
-  Timer increase_difficulty_timer_;
 
-  // images
-  Texture2dRef heart_img_;
-  Texture2dRef wall_img_;
-  Texture2dRef tank_body_img_;
-  Texture2dRef tank_gun_img_;
-  Texture2dRef melee_enemy_img_;
+  Timer increase_difficulty_timer_;
 };
 }  // namespace tank_hero::app
 #endif  // TANK_HERO_TANK_HERO_APP_H

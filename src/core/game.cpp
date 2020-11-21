@@ -11,7 +11,7 @@ Game::Game(size_t window_width, const vector<Obstacle>& obstacles)
   enemy_spawn_timer_.start();
 }
 
-void Game::HandleTankMovement(const set<int>& keys) {
+void Game::HandleTankMovement(const set<int>& keys, const vec2& mouse_pos) {
   if (keys.contains(KeyEvent::KEY_w) && keys.contains(KeyEvent::KEY_a)) {
     tank_.MoveUpLeft();
   } else if (keys.contains(KeyEvent::KEY_w) && keys.contains(KeyEvent::KEY_d)) {
@@ -31,6 +31,7 @@ void Game::HandleTankMovement(const set<int>& keys) {
   }
 
   tank_.KeepInMap(map_width_);
+  tank_.RotateGun(mouse_pos);
 }
 
 void Game::Update() {

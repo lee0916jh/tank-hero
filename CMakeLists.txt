@@ -55,12 +55,17 @@ list(APPEND CORE_SOURCE_FILES
         src/core/enemy.cpp
         src/core/bullet.cpp
         src/core/obstacle.cpp
-        src/core/game.cpp)
+        src/core/game.cpp
+        src/core/ranged_enemy.cpp)
 
 list(APPEND SOURCE_FILES ${CORE_SOURCE_FILES}
-        src/visualizer/tank_hero_app.cpp)
+        src/visualizer/tank_hero_app.cpp
+        src/visualizer/game_view.cpp)
 
-list(APPEND TEST_FILES tests/bullet_test.cpp tests/enemy_test.cpp tests/game_test.cpp
+list(APPEND TEST_FILES
+        tests/bullet_test.cpp
+        tests/enemy_test.cpp
+        tests/game_test.cpp
         tests/obstacle_test.cpp)
 
 
