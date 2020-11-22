@@ -4,9 +4,8 @@
 #include <vector>
 
 #include "cinder/gl/gl.h"
-#include "enemy.h"
 #include "movable.h"
-#include "tank.h"
+#include "ranged.h"
 
 namespace tank_hero {
 using glm::vec2;
@@ -21,19 +20,20 @@ class Bullet : public Movable {
   bool IsActive() const { return active_; }
   void GoInactive() { active_ = false; }
 
-  /// Kills an enemy in the vector if it's hit by this bullet.
-  /// And returns the result (true if an enemy is killed)
-  /// \tparam EnemyType The vector must contain an EnemyType.
-  /// \param enemies Enemies to check
-  /// \return Returns true only if this bullet killed an enemy.
-  template <typename EnemyType>
-  bool TryAndKillEnemy(vector<EnemyType>* enemies);
-
   /// Returns true only if the bullet is outside the map.
   bool IsOutOfMap(size_t map_width) const;
 
   /// Returns true only if the bullet collided with the movable object.
   bool DidHit(const Movable& movable) const;
+
+  /// Kills an enemy in the vector if it's hit by this bullet.
+  /// \tparam EnemyType The vector must contain an EnemyType.
+  /// \param enemies Vector of Enemies to check.
+  /// \return Returns the iterator to the killed enemy if it's killed or the
+  /// iterator to the end if nobody is killed.
+  template <typename EnemyType>
+  typename vector<EnemyType>::iterator TryAndKillEnemy(
+      vector<EnemyType>* enemies);
 
  private:
   bool active_ = true;

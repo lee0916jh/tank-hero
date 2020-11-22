@@ -7,8 +7,8 @@ using glm::vec2;
 
 class Movable {
  public:
-  Movable(const vec2& position, const vec2& direction = vec2(0, 0),
-          float speed = 0.0f, size_t size = 1);
+  explicit Movable(const vec2& position, const vec2& direction = vec2(0, 0),
+                   float speed = 0.0f, size_t size = 1);
 
   Movable(const Movable& source) = default;
   Movable& operator=(const Movable& source) = default;

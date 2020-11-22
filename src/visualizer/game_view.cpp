@@ -5,8 +5,8 @@ namespace tank_hero::visualizer {
 GameView::GameView(const Game* game, size_t window_size,
                    const vec2* camera_offset)
     : game_(game),
-      window_size_(window_size),
       camera_offset_(camera_offset),
+      window_size_(window_size),
       heart_img_(Texture2d::create(loadImage(loadAsset("heart.png")))),
       bomb_img_(Texture2d::create(loadImage(loadAsset("bomb.png")))),
       tank_body_img_(Texture2d::create(loadImage(loadAsset("tank_body.png")))),

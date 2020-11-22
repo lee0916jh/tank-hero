@@ -26,6 +26,7 @@ class GameView {
   explicit GameView(const Game* game, size_t window_size,
                     const vec2* camera_offset);
 
+  /// Draws all game objects and texts showing game status
   void Draw() const;
 
  private:
@@ -49,8 +50,8 @@ class GameView {
   float CalcRotation(const vec2& direction) const;
 
   const Game* game_;
-  const size_t window_size_;
   const vec2* camera_offset_;
+  const size_t window_size_;
 
   // images
   Texture2dRef heart_img_;

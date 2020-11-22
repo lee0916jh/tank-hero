@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "core/bullet.h"
+
 namespace tank_hero {
 
 Obstacle::Obstacle(const vec2& top_left, const vec2& bottom_right)
@@ -28,6 +30,19 @@ void Obstacle::HandleCollisionWith(Movable* movable) const {
   }
 }
 
+bool Obstacle::CheckCollision(const Movable& movable) const {
+  vec2 center((bottom_right_.x + top_left_.x) / 2,
+              (bottom_right_.y + top_left_.y) / 2);
+  float width = bottom_right_.x - top_left_.x;
+  float length = bottom_right_.y - top_left_.y;
+
+  float x_diff = abs(center.x - movable.GetPosition().x);
+  float y_diff = abs(center.y - movable.GetPosition().y);
+
+  return x_diff < (movable.GetColliderRadius() + width / 2) &&
+         y_diff < (movable.GetColliderRadius() + length / 2);
+}
+
 string Obstacle::FindCollisionDirection(const Movable& movable) const {
   string collision_direction;
   const vec2& movable_pos = movable.GetPosition();
@@ -43,19 +58,4 @@ string Obstacle::FindCollisionDirection(const Movable& movable) const {
 
   return wall_min_distance.first;
 }
-
-bool Obstacle::CheckCollision(const Movable& movable) const {
-  vec2 center((bottom_right_.x + top_left_.x) / 2,
-              (bottom_right_.y + top_left_.y) / 2);
-  float width = bottom_right_.x - top_left_.x;
-  float length = bottom_right_.y - top_left_.y;
-
-  float x_diff = abs(center.x - movable.GetPosition().x);
-  float y_diff = abs(center.y - movable.GetPosition().y);
-
-  return x_diff < (movable.GetColliderRadius() + width / 2) &&
-         y_diff < (movable.GetColliderRadius() + length / 2);
-}
-
-
 }  // namespace tank_hero

@@ -9,7 +9,6 @@
 #include "cinder/Timer.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
-#include "enemy.h"
 #include "obstacle.h"
 #include "ranged_enemy.h"
 #include "tank.h"
@@ -39,16 +38,14 @@ class Game {
   // Getters
   const Tank& GetTank() const { return tank_; }
   const vector<Enemy>& GetEnemies() const { return melee_enemies_; }
-  const vector<RangedEnemy>& GetRangedEnemies() const {
-    return ranged_enemies_;
-  }
+  const vector<RangedEnemy>& GetRangedEnemies() const ;
   const vector<Bullet>& GetTankBullets() const { return tank_bullets_; }
   const vector<Bullet>& GetEnemyBullets() const { return enemy_bullets_; }
   const vector<Obstacle>& GetObstacles() const { return obstacles_; }
-  size_t GetCurrentLife() const { return tank_.GetLifeCount(); }
+  int GetCurrentLife() const { return tank_.GetLifeCount(); }
   float GetReloadTime() const { return tank_.GetReloadTime(); }
   size_t GetKillCount() const { return kill_count_; }
-  size_t GetBombCount() const { return tank_.GetBombCount(); }
+  int GetBombCount() const { return tank_.GetBombCount(); }
   bool IsOn() const { return tank_.IsAlive(); }
 
   void Update();
@@ -93,11 +90,10 @@ class Game {
   /// Removes bullets that went outside the play area, or that are inactive.
   void RemoveInvalidBullets();
 
-  /// Removes dead enemies that got hit by a bullet.
-  void RemoveDeadEnemies();
-
+  /// Handles the collisions between obstacles and all other game objects.
   void HandleObjectsCollisionWithObstacles();
 
+  /// Move all movable game objects.
   void MoveGameObjects();
 
   size_t window_width_;

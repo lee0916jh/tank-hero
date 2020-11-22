@@ -3,7 +3,6 @@
 
 #include "cinder/gl/gl.h"
 #include "movable.h"
-#include "tank.h"
 
 namespace tank_hero {
 using glm::vec2;
@@ -23,15 +22,10 @@ class Enemy : public Movable {
   Enemy& operator=(Enemy&& source) = default;
   ~Enemy() = default;
 
-  // Getters and Setters
-  bool IsDead() const { return dead_; }
-  void Die() { dead_ = true; }
-
   /// The Enemy moves towards the target
   virtual void Move() override;
 
  protected:
-  bool dead_ = false;
   const vec2* target_;
 };
 }  // namespace tank_hero
