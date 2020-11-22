@@ -5,9 +5,17 @@ Bullet::Bullet(const vec2& spawn_pos, const vec2& direction,
     : Movable(spawn_pos, glm::normalize(direction), bullet_config.speed,
               bullet_config.radius) {}
 
+bool Bullet::DidHit(const Tank& tank) const {
+  return CheckCollision(static_cast<Movable>(tank));
+}
+
 bool Bullet::DidHit(const Enemy& enemy) const {
-  return glm::distance2(position_, enemy.GetPosition()) <=
-         pow(collider_radius_ + enemy.GetColliderRadius(), 2);
+  return CheckCollision(static_cast<Movable>(enemy));
+}
+
+bool Bullet::CheckCollision(const Movable& movable) const {
+  return glm::distance2(position_, movable.GetPosition()) <=
+         pow(collider_radius_ + movable.GetColliderRadius(), 2);
 }
 
 bool Bullet::IsOutOfMap(size_t map_width) const {

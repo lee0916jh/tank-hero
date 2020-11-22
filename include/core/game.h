@@ -35,7 +35,7 @@ class Game {
 
   // Getters
   const Tank& GetTank() const { return tank_; }
-  const vector<Enemy>& GetEnemies() const { return enemies_; }
+  const vector<Enemy>& GetEnemies() const { return melee_enemies_; }
   const vector<RangedEnemy>& GetRangedEnemies() const {
     return ranged_enemies_;
   }
@@ -60,7 +60,6 @@ class Game {
   /// If tank isn't reloaded, bullet does not fire.
   void TryAndFireTankBullet();
 
-
   /// Kills enemies instantly.
   void DropBomb();
 
@@ -75,12 +74,18 @@ class Game {
   /// If not reloaded, bullet does not fire.
   void TryAndFireEnemiesBullet();
 
-  /// Checks if any of the bullets hit an enemy, and if a bullet hit an enemy,
-  /// set the bullet inactive, and the enemy dead.
-  void HandleBulletsEnemiesCollisions();
+  /// Checks if any of the tank's bullets hit an enemy. If a bullet hit an
+  /// enemy, set the bullet inactive, and the enemy dead.
+  void HandleTankBulletsHittingEnemies();
 
-  /// Checks if an enemy hit the tank. If that happened, tank loses a life.
-  void HandleTanksEnemiesCollisions();
+  /// Checks if any of the enemy's bullets hit the tank. If the tank is hit by a
+  /// bullet, tank loses a life.
+  void HandleEnemyBulletsHittingTank();
+
+  /// Checks if any enemy in the vector hits the tank. If that happened, tank
+  /// loses a life.
+  template <typename EnemyType>
+  void HandleTankEnemiesCollisions(vector<EnemyType>* enemies);
 
   /// Removes bullets that went outside the play area, or that are inactive.
   void RemoveInvalidBullets();
@@ -97,7 +102,7 @@ class Game {
 
   // Game Objects
   Tank tank_;
-  vector<Enemy> enemies_;
+  vector<Enemy> melee_enemies_;
   vector<RangedEnemy> ranged_enemies_;
   vector<Bullet> tank_bullets_;
   vector<Bullet> enemy_bullets_;
@@ -111,4 +116,7 @@ class Game {
   float enemy_spawn_freq_ = kInitialSpawnFreq;
 };
 }  // namespace tank_hero
+
+#include "game.hpp"
+
 #endif  // TANK_HERO_GAME_H

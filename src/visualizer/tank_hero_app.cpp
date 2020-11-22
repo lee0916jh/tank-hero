@@ -13,15 +13,17 @@ TankHeroApp::TankHeroApp()
 void TankHeroApp::setup() {}
 
 void TankHeroApp::update() {
-  AdjustCameraOffset();
-  game_view_.SetCameraOffset(camera_offset_);
+  if (game_.IsOn()) {
+    AdjustCameraOffset();
+    game_view_.SetCameraOffset(camera_offset_);
 
-  game_.HandleTankMovement(move_keys_, mouse_pos_ + camera_offset_);
-  game_.Update();
-  game_.SpawnEnemies();
+    game_.HandleTankMovement(move_keys_, mouse_pos_ + camera_offset_);
+    game_.Update();
+    game_.SpawnEnemies();
 
-  if (mouse_down_) game_.TryAndFireTankBullet();
-  if (ReadyToIncreaseDifficulty()) game_.IncreaseDifficulty();
+    if (mouse_down_) game_.TryAndFireTankBullet();
+    if (ReadyToIncreaseDifficulty()) game_.IncreaseDifficulty();
+  }
 }
 
 void TankHeroApp::draw() {

@@ -22,7 +22,7 @@ void Obstacle::HandleCollisionWith(Movable* movable) const {
 
   Bullet* bullet_ptr = dynamic_cast<Bullet*>(movable);
   if (bullet_ptr) {
-    bullet_ptr->MakeInactive();  // bullet dies regardless of direction
+    bullet_ptr->GoInactive();  // bullet dies regardless of direction
     return;
   }
 

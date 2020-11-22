@@ -37,10 +37,13 @@ void Game::Update() {
   MoveGameObjects();
   TryAndFireEnemiesBullet();
 
-  HandleBulletsEnemiesCollisions();
-  HandleTanksEnemiesCollisions();
-  HandleMovablesObstaclesCollisions();
+  HandleTankBulletsHittingEnemies();
+  HandleEnemyBulletsHittingTank();
 
+  HandleTankEnemiesCollisions(&melee_enemies_);
+  HandleTankEnemiesCollisions(&ranged_enemies_);
+
+  HandleMovablesObstaclesCollisions();
   RemoveInvalidBullets();
   RemoveDeadEnemies();
 }
@@ -52,7 +55,7 @@ void Game::MoveGameObjects() {
   for (Bullet& enemy_bullet : enemy_bullets_) {
     enemy_bullet.Move();
   }
-  for (Enemy& enemy : enemies_) {
+  for (Enemy& enemy : melee_enemies_) {
     enemy.Move();
   }
   for (RangedEnemy& ranged_enemy : ranged_enemies_) {
@@ -79,15 +82,24 @@ void Game::TryAndFireEnemiesBullet() {
   }
 }
 
-void Game::HandleBulletsEnemiesCollisions() {
-  for (Bullet& bullet : tank_bullets_) {
-    for (Enemy& enemy : enemies_) {
-      if (bullet.DidHit(enemy)) {
-        bullet.MakeInactive();
-        enemy.Die();
-        kill_count_++;
-        tank_.ReduceReloadTime(kUpgradeAmount);
-      }
+void Game::HandleTankBulletsHittingEnemies() {
+  for (Bullet& tank_bullet : tank_bullets_) {
+    bool enemy_killed = tank_bullet.TryAndKillEnemy(&melee_enemies_);
+    if (!enemy_killed) {
+      enemy_killed = tank_bullet.TryAndKillEnemy(&ranged_enemies_);
+    }
+    if (enemy_killed) {
+      kill_count_++;
+      tank_.ReduceReloadTime(kUpgradeAmount);
+    }
+  }
+}
+
+void Game::HandleEnemyBulletsHittingTank() {
+  for (Bullet& enemy_bullet : enemy_bullets_) {
+    if (enemy_bullet.DidHit(tank_)) {
+      enemy_bullet.GoInactive();
+      tank_.DecrementLife();
     }
   }
 }
@@ -99,20 +111,32 @@ void Game::RemoveInvalidBullets() {
                                               bullet.IsOutOfMap(kFieldWidth);
                                      }),
                       tank_bullets_.end());
+  enemy_bullets_.erase(
+      std::remove_if(enemy_bullets_.begin(), enemy_bullets_.end(),
+                     [](const Bullet& bullet) {
+                       return !bullet.IsActive() ||
+                              bullet.IsOutOfMap(kFieldWidth);
+                     }),
+      enemy_bullets_.end());
 }
 
 void Game::RemoveDeadEnemies() {
-  enemies_.erase(
-      std::remove_if(enemies_.begin(), enemies_.end(),
+  melee_enemies_.erase(
+      std::remove_if(melee_enemies_.begin(), melee_enemies_.end(),
                      [](const Enemy& enemy) { return enemy.IsDead(); }),
-      enemies_.end());
+      melee_enemies_.end());
+  ranged_enemies_.erase(
+      std::remove_if(ranged_enemies_.begin(), ranged_enemies_.end(),
+                     [](const RangedEnemy& enemy) { return enemy.IsDead(); }),
+      ranged_enemies_.end());
 }
 
 void Game::SpawnEnemies() {
   if (enemy_spawn_timer_.getSeconds() > enemy_spawn_freq_) {
     vec2 spawn_point = tank_.GetPosition() +
                        ci::randVec2() * static_cast<float>(window_width_);
-    enemies_.emplace_back(spawn_point, new_enemy_speed_, &tank_.GetPosition());
+    melee_enemies_.emplace_back(spawn_point, new_enemy_speed_,
+                                &tank_.GetPosition());
 
     if (difficulty_ > 3) {
       spawn_point = tank_.GetPosition() +
@@ -125,18 +149,8 @@ void Game::SpawnEnemies() {
 }
 
 void Game::DropBomb() {
-  enemies_.clear();
-  //  ranged_enemies_.clear();
-}
-
-void Game::HandleTanksEnemiesCollisions() {
-  for (size_t i = 0; i < enemies_.size(); i++) {
-    if (tank_.DidCollideWith(enemies_[i])) {
-      tank_.DecrementLife();
-      enemies_.erase(enemies_.begin() + i);
-      return;
-    }
-  }
+  melee_enemies_.clear();
+  ranged_enemies_.clear();
 }
 
 void Game::HandleMovablesObstaclesCollisions() {
@@ -144,7 +158,7 @@ void Game::HandleMovablesObstaclesCollisions() {
     for (Bullet& bullet : tank_bullets_) {
       obstacle.HandleCollisionWith(&bullet);
     }
-    for (Enemy& enemy : enemies_) {
+    for (Enemy& enemy : melee_enemies_) {
       obstacle.HandleCollisionWith(&enemy);
     }
     obstacle.HandleCollisionWith(&tank_);
