@@ -13,6 +13,8 @@ struct BulletConfig {
   float speed;
 };
 
+constexpr float kMinReloadTime = 0.3;
+
 class Ranged {
  public:
   Ranged(float bullet_radius, float bullet_speed, float reload_time);
@@ -21,8 +23,11 @@ class Ranged {
   const BulletConfig& GetBulletConfig() const { return bullet_config_; }
   float GetReloadTime() const { return reload_time_; }
   bool IsLoaded() const { return reload_timer_.getSeconds() >= reload_time_; }
-  void ReduceReloadTime(float amount) { reload_time_ -= amount; }
   void ResetReloadTimer() { reload_timer_.start(); }
+
+  /// Reduce the reload time by given amount only upto the minimum amount.
+  /// (look kMinReloadTime for the minimum value)
+  void ReduceReloadTime(float amount);
 
  protected:
   BulletConfig bullet_config_;

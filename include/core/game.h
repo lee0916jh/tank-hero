@@ -38,7 +38,7 @@ class Game {
   // Getters
   const Tank& GetTank() const { return tank_; }
   const vector<Enemy>& GetEnemies() const { return melee_enemies_; }
-  const vector<RangedEnemy>& GetRangedEnemies() const ;
+  const vector<RangedEnemy>& GetRangedEnemies() const;
   const vector<Bullet>& GetTankBullets() const { return tank_bullets_; }
   const vector<Bullet>& GetEnemyBullets() const { return enemy_bullets_; }
   const vector<Obstacle>& GetObstacles() const { return obstacles_; }

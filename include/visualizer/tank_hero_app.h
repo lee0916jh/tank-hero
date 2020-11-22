@@ -24,7 +24,7 @@ using std::vector;
 constexpr size_t kWindowSize = 1000;
 
 const size_t kIncreaseDifficultyThreshold =
-    10;  // difficulty will increase after this number of seconds.
+    30;  // difficulty will increase after this number of seconds.
 const vector<Obstacle> kObstacles = {{vec2(0, 0), vec2(100, 100)},
                                      {vec2(200, 200), vec2(400, 800)}};
 

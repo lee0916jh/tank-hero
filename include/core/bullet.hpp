@@ -4,7 +4,7 @@
 namespace tank_hero {
 
 template <typename EnemyType>
-typename vector<EnemyType, std::allocator<EnemyType>>::iterator
+typename vector<EnemyType>::iterator
 Bullet::TryAndKillEnemy(vector<EnemyType>* enemies) {
   if (enemies->empty()) return enemies->end();
   if (dynamic_cast<Enemy*>(&enemies->at(0)) == nullptr) {

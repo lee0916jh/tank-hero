@@ -86,16 +86,17 @@ void Game::TryAndFireEnemiesBullet() {
 }
 
 void Game::HandleTankBulletsHittingEnemies() {
-  for (Bullet& tank_bullet : tank_bullets_) {
-    auto killed_melee_enemy = tank_bullet.TryAndKillEnemy(&melee_enemies_);
+  for (Bullet& bullet : tank_bullets_) {
+    // handles bullet's killing of melee enemies
+    auto killed_melee_enemy = bullet.TryAndKillEnemy(&melee_enemies_);
     if (killed_melee_enemy != melee_enemies_.end()) {
       melee_enemies_.erase(killed_melee_enemy);
       kill_count_++;
       tank_.ReduceReloadTime(kUpgradeAmount);
       return;
     }
-
-    auto killed_ranged_enemy = tank_bullet.TryAndKillEnemy(&ranged_enemies_);
+    // handles bullet's killing of ranged enemies
+    auto killed_ranged_enemy = bullet.TryAndKillEnemy(&ranged_enemies_);
     if (killed_ranged_enemy != ranged_enemies_.end()) {
       ranged_enemies_.erase(killed_ranged_enemy);
       kill_count_++;
@@ -171,4 +172,5 @@ void Game::IncreaseDifficulty() {
     enemy_spawn_delay_ -= kEnemySpawnFreqReduceAmount;
   }
 }
+
 }  // namespace tank_hero
