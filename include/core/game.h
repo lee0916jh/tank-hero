@@ -49,7 +49,6 @@ class Game {
   float GetReloadTime() const { return tank_.GetReloadTime(); }
   size_t GetKillCount() const { return kill_count_; }
   size_t GetBombCount() const { return tank_.GetBombCount(); }
-
   bool IsOn() const { return tank_.IsAlive(); }
 
   void Update();

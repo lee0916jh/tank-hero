@@ -64,7 +64,7 @@ TEST_CASE("IsOutOfMap returns true when the bullet goes outside the map.",
   }
 }
 
-TEST_CASE("CheckCollision returns true only if it hits the enemy", "[CheckCollision]") {
+TEST_CASE("DidHit returns true only if it hits the enemy", "[DidHit]") {
   Tank tank(vec2(50, 50));
   Bullet bullet(tank, vec2(50, 100));   // radius 5
   Enemy enemy(vec2(50, 70), 0, &tank);  // radius 10

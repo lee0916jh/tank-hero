@@ -88,9 +88,11 @@ void Game::HandleTankBulletsHittingEnemies() {
     if (!enemy_killed) {
       enemy_killed = tank_bullet.TryAndKillEnemy(&ranged_enemies_);
     }
-    if (enemy_killed) {
+    if (enemy_killed && tank_.GetReloadTime() > kMinReloadTime) {
       kill_count_++;
       tank_.ReduceReloadTime(kUpgradeAmount);
+    } else if (enemy_killed) {
+      kill_count_++;
     }
   }
 }

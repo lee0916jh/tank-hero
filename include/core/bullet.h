@@ -21,23 +21,21 @@ class Bullet : public Movable {
   bool IsActive() const { return active_; }
   void GoInactive() { active_ = false; }
 
-  ///
+  /// Kills an enemy in the vector if it's hit by this bullet.
+  /// And returns the result (true if an enemy is killed)
+  /// \tparam EnemyType The vector must contain an EnemyType.
+  /// \param enemies Enemies to check
+  /// \return Returns true only if this bullet killed an enemy.
   template <typename EnemyType>
   bool TryAndKillEnemy(vector<EnemyType>* enemies);
 
   /// Returns true only if the bullet is outside the map.
   bool IsOutOfMap(size_t map_width) const;
 
-  /// Returns true only if the bullet collided with the tank.
-  bool DidHit(const Tank& tank) const;
-
-  /// Returns true only if the bullet collided with the enemy.
-  bool DidHit(const Enemy& enemy) const;
+  /// Returns true only if the bullet collided with the movable object.
+  bool DidHit(const Movable& movable) const;
 
  private:
-  /// Returns true only if the bullet collided with the movable object.
-  bool CheckCollision(const Movable& movable) const;
-
   bool active_ = true;
 };
 }  // namespace tank_hero

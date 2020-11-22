@@ -7,12 +7,8 @@ namespace tank_hero {
 Obstacle::Obstacle(const vec2& top_left, const vec2& bottom_right)
     : top_left_(top_left), bottom_right_(bottom_right) {}
 
-void Obstacle::HandleCollisionWith(Tank* tank) const {
-  HandleCollisionWith(static_cast<Movable*>(tank));
-}
-
 void Obstacle::HandleCollisionWith(Movable* movable) const {
-  if (!this->DidCollideWith(*movable)) return;
+  if (!CheckCollision(*movable)) return;
 
   Bullet* bullet_ptr = dynamic_cast<Bullet*>(movable);
   if (bullet_ptr) {
@@ -48,7 +44,7 @@ string Obstacle::FindCollisionDirection(const Movable& movable) const {
   return wall_min_distance.first;
 }
 
-bool Obstacle::DidCollideWith(const Movable& movable) const {
+bool Obstacle::CheckCollision(const Movable& movable) const {
   vec2 center((bottom_right_.x + top_left_.x) / 2,
               (bottom_right_.y + top_left_.y) / 2);
   float width = bottom_right_.x - top_left_.x;

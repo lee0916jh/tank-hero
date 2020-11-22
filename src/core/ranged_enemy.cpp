@@ -5,8 +5,9 @@ RangedEnemy::RangedEnemy(const vec2 &position, float speed, const vec2 *target)
       Ranged(kEnemyBulletSize, kEnemyBulletSpeed, kEnemyReloadTime) {}
 
 void RangedEnemy::Move() {
+  direction_ = glm::normalize(*target_ - position_);
   if (glm::distance2(*target_, position_) > powf(kRangedEnemyMinDistance, 2)) {
-    Enemy::Move();
+    Movable::Move();
   }
 }
 }  // namespace tank_hero

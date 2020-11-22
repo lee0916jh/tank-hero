@@ -25,12 +25,11 @@ class Obstacle {
   template <typename MovableType>
   void HandleCollisionWith(vector<MovableType>* movables) const;
 
-  void HandleCollisionWith(Tank* tank) const;
+  void HandleCollisionWith(Movable* movable) const;
 
  private:
-  void HandleCollisionWith(Movable* movable) const;
   string FindCollisionDirection(const Movable& movable) const;
-  bool DidCollideWith(const Movable& movable) const;
+  bool CheckCollision(const Movable& movable) const;
 
   vec2 top_left_;
   vec2 bottom_right_;

@@ -41,11 +41,11 @@ void GameView::DrawTank() const {
 void GameView::DrawEnemies() const {
   for (const Enemy& enemy : game_->GetEnemies()) {
     DrawRotatedImage(melee_enemy_img_, enemy.GetPosition(),
-                     enemy.GetPosition());
+                     enemy.GetDirection());
   }
   for (const RangedEnemy& ranged_enemy : game_->GetRangedEnemies()) {
     DrawRotatedImage(ranged_enemy_img_, ranged_enemy.GetPosition(),
-                     ranged_enemy.GetPosition());
+                     ranged_enemy.GetDirection());
   }
 }
 

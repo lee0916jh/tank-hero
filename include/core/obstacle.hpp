@@ -8,7 +8,7 @@ void Obstacle::HandleCollisionWith(vector<MovableType>* movables) const {
     throw std::invalid_argument("Elements are not of Movable type.");
   }
   for (MovableType& movable : *movables) {
-    HandleCollisionWith(static_cast<Movable*>(&movable));
+    HandleCollisionWith(&movable);
   }
 }
 }  // namespace tank_hero

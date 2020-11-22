@@ -13,6 +13,7 @@ constexpr float kDefaultBulletSize = 5;
 constexpr float kDefaultBulletSpeed = 8;
 constexpr float kDefaultReloadTime = 1.5;
 
+constexpr float kMinReloadTime = 0.3;
 constexpr float kDefaultSpeed = 3;
 constexpr size_t kTankSize = 60;
 

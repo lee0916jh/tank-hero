@@ -5,15 +5,7 @@ Bullet::Bullet(const vec2& spawn_pos, const vec2& direction,
     : Movable(spawn_pos, glm::normalize(direction), bullet_config.speed,
               bullet_config.radius) {}
 
-bool Bullet::DidHit(const Tank& tank) const {
-  return CheckCollision(static_cast<Movable>(tank));
-}
-
-bool Bullet::DidHit(const Enemy& enemy) const {
-  return CheckCollision(static_cast<Movable>(enemy));
-}
-
-bool Bullet::CheckCollision(const Movable& movable) const {
+bool Bullet::DidHit(const Movable& movable) const {
   return glm::distance2(position_, movable.GetPosition()) <=
          pow(collider_radius_ + movable.GetColliderRadius(), 2);
 }
