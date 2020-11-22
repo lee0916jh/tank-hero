@@ -34,12 +34,8 @@ void Game::HandleTankMovement(const set<int>& keys, const vec2& mouse_pos) {
 }
 
 void Game::Update() {
-  for (Bullet& bullet : tank_bullets_) {
-    bullet.Move();
-  }
-  for (Enemy& enemy : enemies_) {
-    enemy.Move();
-  }
+  MoveGameObjects();
+  TryAndFireEnemiesBullet();
 
   HandleBulletsEnemiesCollisions();
   HandleTanksEnemiesCollisions();
@@ -49,18 +45,36 @@ void Game::Update() {
   RemoveDeadEnemies();
 }
 
-void Game::TankTryAndFireBullet() {
-  if (tank_.IsLoaded()) {
-    tank_bullets_.emplace_back(tank_.GetPosition(), tank_.GetGunRotation(),
-                               tank_.GetBulletConfig());
+void Game::MoveGameObjects() {
+  for (Bullet& tank_bullet : tank_bullets_) {
+    tank_bullet.Move();
+  }
+  for (Bullet& enemy_bullet : enemy_bullets_) {
+    enemy_bullet.Move();
+  }
+  for (Enemy& enemy : enemies_) {
+    enemy.Move();
+  }
+  for (RangedEnemy& ranged_enemy : ranged_enemies_) {
+    ranged_enemy.Move();
   }
 }
 
-void Game::EnemyTryAndFireBullet() {
-  for (const RangedEnemy& enemy : ranged_enemies_) {
-    if (enemy.IsLoaded()) {
-      enemy_bullets_.emplace_back(enemy.GetPosition(), enemy.GetGunRotation(),
-                                  enemy.GetBulletConfig());
+void Game::TryAndFireTankBullet() {
+  if (tank_.IsLoaded()) {
+    tank_bullets_.emplace_back(tank_.GetPosition(), tank_.GetGunRotation(),
+                               tank_.GetBulletConfig());
+    tank_.ResetReloadTimer();
+  }
+}
+
+void Game::TryAndFireEnemiesBullet() {
+  for (RangedEnemy& ranged_enemy : ranged_enemies_) {
+    if (ranged_enemy.IsLoaded()) {
+      enemy_bullets_.emplace_back(ranged_enemy.GetPosition(),
+                                  ranged_enemy.GetDirection(),
+                                  ranged_enemy.GetBulletConfig());
+      ranged_enemy.ResetReloadTimer();
     }
   }
 }
@@ -94,7 +108,7 @@ void Game::RemoveDeadEnemies() {
       enemies_.end());
 }
 
-void Game::SpawnEnemy() {
+void Game::SpawnEnemies() {
   if (enemy_spawn_timer_.getSeconds() > enemy_spawn_freq_) {
     vec2 spawn_point = tank_.GetPosition() +
                        ci::randVec2() * static_cast<float>(window_width_);
@@ -110,7 +124,10 @@ void Game::SpawnEnemy() {
   }
 }
 
-void Game::DropBomb() { enemies_.clear(); }
+void Game::DropBomb() {
+  enemies_.clear();
+  //  ranged_enemies_.clear();
+}
 
 void Game::HandleTanksEnemiesCollisions() {
   for (size_t i = 0; i < enemies_.size(); i++) {

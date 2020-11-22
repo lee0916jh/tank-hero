@@ -28,7 +28,7 @@ class Enemy : public Movable {
   void Die() { dead_ = true; }
 
   /// The Enemy moves towards the target
-  void Move() override;
+  virtual void Move() override;
 
  protected:
   bool dead_ = false;

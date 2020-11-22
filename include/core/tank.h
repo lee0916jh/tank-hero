@@ -13,7 +13,7 @@ constexpr float kDefaultBulletSize = 5;
 constexpr float kDefaultBulletSpeed = 8;
 constexpr float kDefaultReloadTime = 1.5;
 
-constexpr float kDefaultSpeed = 2;
+constexpr float kDefaultSpeed = 3;
 constexpr size_t kTankSize = 60;
 
 constexpr unsigned kDefaultLife = 5;
@@ -24,6 +24,7 @@ class Tank : public Movable, public Ranged {
   explicit Tank(const vec2& position);
 
   // Getters and Setters
+  const vec2& GetGunRotation() const { return gun_rotation_; }
   bool IsAlive() const { return life_ > 0; }
   size_t GetLifeCount() const { return life_; };
   void DecrementLife() { life_--; }
@@ -37,9 +38,6 @@ class Tank : public Movable, public Ranged {
   void MoveDownLeft();
   void MoveDownRight();
 
-  /// Rotates the gun towards the direction
-  void RotateGun(const vec2& direction);
-
   /// Puts the tank back into the map if it went outside the map.
   /// \param field_width Size of the map
   void KeepInMap(const size_t field_width);
@@ -48,8 +46,12 @@ class Tank : public Movable, public Ranged {
   /// \param enemy Enemy to check collision with
   bool DidCollideWith(const Enemy& enemy) const;
 
+  /// Rotates the gun towards the direction
+  void RotateGun(const vec2& direction);
+
  private:
   int life_ = kDefaultLife;
+  vec2 gun_rotation_;
 };
 }  // namespace tank_hero
 

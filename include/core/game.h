@@ -22,7 +22,7 @@ using std::vector;
 
 constexpr size_t kFieldWidth = 2000;
 constexpr float kInitialEnemySpeed = 1;
-constexpr float kUpgradeAmount = 0.002;
+constexpr float kUpgradeAmount = 0.005;
 constexpr float kInitialSpawnFreq = 2;
 
 constexpr float kEnemySpeedIncreaseAmount = 0.2;
@@ -36,11 +36,16 @@ class Game {
   // Getters
   const Tank& GetTank() const { return tank_; }
   const vector<Enemy>& GetEnemies() const { return enemies_; }
-  const vector<Bullet>& GetBullets() const { return tank_bullets_; }
+  const vector<RangedEnemy>& GetRangedEnemies() const {
+    return ranged_enemies_;
+  }
+  const vector<Bullet>& GetTankBullets() const { return tank_bullets_; }
+  const vector<Bullet>& GetEnemyBullets() const { return enemy_bullets_; }
   const vector<Obstacle>& GetObstacles() const { return obstacles_; }
   size_t GetCurrentLife() const { return tank_.GetLifeCount(); }
   float GetReloadTime() const { return tank_.GetReloadTime(); }
   size_t GetKillCount() const { return kill_count_; }
+
   bool IsOn() const { return tank_.IsAlive(); }
 
   void Update();
@@ -53,22 +58,23 @@ class Game {
 
   /// Fires a bullet from the tank if tank is loaded.
   /// If tank isn't reloaded, bullet does not fire.
-  void TankTryAndFireBullet();
+  void TryAndFireTankBullet();
 
-  /// Fires a bullet from ranged enemies if they are loaded.
-  /// If not reloaded, bullet does not fire.
-  void EnemyTryAndFireBullet();
 
   /// Kills enemies instantly.
   void DropBomb();
 
   /// Spawns an enemy around the player.
-  void SpawnEnemy();
+  void SpawnEnemies();
 
   /// Increases speed and spawn frequency of newly spawned enemies.
   void IncreaseDifficulty();
 
  private:
+  /// Fires a bullet from ranged enemies if they are loaded.
+  /// If not reloaded, bullet does not fire.
+  void TryAndFireEnemiesBullet();
+
   /// Checks if any of the bullets hit an enemy, and if a bullet hit an enemy,
   /// set the bullet inactive, and the enemy dead.
   void HandleBulletsEnemiesCollisions();
@@ -82,8 +88,9 @@ class Game {
   /// Removes dead enemies that got hit by a bullet.
   void RemoveDeadEnemies();
 
- private:
   void HandleMovablesObstaclesCollisions();
+
+  void MoveGameObjects();
 
   size_t window_width_;
   size_t map_width_;

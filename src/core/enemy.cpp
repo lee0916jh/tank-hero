@@ -7,6 +7,6 @@ Enemy::Enemy(const vec2& position, float speed, const vec2* target)
 
 void Enemy::Move() {
   direction_ = glm::normalize(*target_ - position_);
-  position_ += speed_ * direction_;
+  Movable::Move();
 }
 }  // namespace tank_hero

@@ -7,6 +7,7 @@ TankHeroApp::TankHeroApp()
       camera_offset_(kWindowSize / 2, kWindowSize / 2) {
   ci::app::setWindowSize(static_cast<int>(kWindowSize),
                          static_cast<int>(kWindowSize));
+  increase_difficulty_timer_.start();
 }
 
 void TankHeroApp::setup() {}
@@ -17,9 +18,9 @@ void TankHeroApp::update() {
 
   game_.HandleTankMovement(move_keys_, mouse_pos_ + camera_offset_);
   game_.Update();
-  game_.SpawnEnemy();
+  game_.SpawnEnemies();
 
-  if (mouse_down_) game_.TankTryAndFireBullet();
+  if (mouse_down_) game_.TryAndFireTankBullet();
   if (ReadyToIncreaseDifficulty()) game_.IncreaseDifficulty();
 }
 

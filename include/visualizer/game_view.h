@@ -59,6 +59,7 @@ class GameView {
   Texture2dRef tank_body_img_;
   Texture2dRef tank_gun_img_;
   Texture2dRef melee_enemy_img_;
+  Texture2dRef ranged_enemy_img_;
 };
 }  // namespace tank_hero::visualizer
 

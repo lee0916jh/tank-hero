@@ -39,47 +39,47 @@ TEST_CASE("Tank Movement tests", "[HandleTankMovement]") {
   }
 }
 
-TEST_CASE("TankTryAndFireBullet shoots a bullet from a tank", "[TankTryAndFireBullet]") {
+TEST_CASE("TryAndFireTankBullet shoots a bullet from a tank", "[TryAndFireTankBullet]") {
   Game game(100);  // Tank spawns at (50,50) with speed of 2
 
   SECTION("Shoots bullet to the right") {
-    game.TankTryAndFireBullet(vec2(100, 50));
-    REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 50));
+    game.TryAndFireTankBullet(vec2(100, 50));
+    REQUIRE(game.GetTankBullets()[0].GetPosition() == vec2(50, 50));
     game.Update();
-    REQUIRE(game.GetBullets()[0].GetPosition() == vec2(58, 50));
+    REQUIRE(game.GetTankBullets()[0].GetPosition() == vec2(58, 50));
   }
   SECTION("Shoots bullet to the left") {
-    game.TankTryAndFireBullet(vec2(0, 50));
-    REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 50));
+    game.TryAndFireTankBullet(vec2(0, 50));
+    REQUIRE(game.GetTankBullets()[0].GetPosition() == vec2(50, 50));
     game.Update();
-    REQUIRE(game.GetBullets()[0].GetPosition() == vec2(42, 50));
+    REQUIRE(game.GetTankBullets()[0].GetPosition() == vec2(42, 50));
   }
   SECTION("Shoots bullet to the top") {
-    game.TankTryAndFireBullet(vec2(50, 0));
-    REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 50));
+    game.TryAndFireTankBullet(vec2(50, 0));
+    REQUIRE(game.GetTankBullets()[0].GetPosition() == vec2(50, 50));
     game.Update();
-    REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 42));
+    REQUIRE(game.GetTankBullets()[0].GetPosition() == vec2(50, 42));
   }
   SECTION("Shoots bullet to the bottom") {
-    game.TankTryAndFireBullet(vec2(50, 100));
-    REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 50));
+    game.TryAndFireTankBullet(vec2(50, 100));
+    REQUIRE(game.GetTankBullets()[0].GetPosition() == vec2(50, 50));
     game.Update();
-    REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 58));
+    REQUIRE(game.GetTankBullets()[0].GetPosition() == vec2(50, 58));
   }
   SECTION("Shoots bullet diagonally") {
-    game.TankTryAndFireBullet(vec2(51, 51));
-    REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 50));
+    game.TryAndFireTankBullet(vec2(51, 51));
+    REQUIRE(game.GetTankBullets()[0].GetPosition() == vec2(50, 50));
     game.Update();
-    const vec2& bullet_pos = game.GetBullets()[0].GetPosition();
+    const vec2& bullet_pos = game.GetTankBullets()[0].GetPosition();
     REQUIRE(bullet_pos.x == Approx(55.657).margin(.0001));
     REQUIRE(bullet_pos.y == Approx(55.657).margin(.0001));
   }
 }
 
-TEST_CASE("Enemy spawns <window size> away from the player)", "[SpawnEnemy]") {
+TEST_CASE("Enemy spawns <window size> away from the player)", "[SpawnEnemies]") {
   Game game(100);
   for (size_t i = 0; i < 5; i++) {
-    game.SpawnEnemy();
+    game.SpawnEnemies();
     REQUIRE(glm::distance(game.GetEnemies()[i].GetPosition(),
                           game.GetTank().GetPosition()) == Approx(100));
   }
@@ -88,7 +88,7 @@ TEST_CASE("Enemy spawns <window size> away from the player)", "[SpawnEnemy]") {
 TEST_CASE("DropBomb instantly kills all enemies", "[DropBomb]") {
   Game game(100);
   for (size_t i = 0; i < 100; i++) {
-    game.SpawnEnemy();
+    game.SpawnEnemies();
   }
   REQUIRE(game.GetEnemies().size() == 100);
   game.DropBomb();

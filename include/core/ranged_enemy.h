@@ -9,6 +9,8 @@ const float kEnemyBulletSize = 5;
 const float kEnemyBulletSpeed = 5;
 const float kEnemyReloadTime = 4;
 
+const float kRangedEnemyMinDistance = 300;
+
 namespace tank_hero {
 using glm::vec2;
 
@@ -16,6 +18,7 @@ class RangedEnemy : public Enemy, public Ranged {
  public:
   RangedEnemy(const vec2& position, float speed, const vec2* target);
 
+  void Move() override;
  private:
 };
 
