@@ -16,7 +16,8 @@ constexpr float kDefaultReloadTime = 1.5;
 constexpr float kDefaultSpeed = 3;
 constexpr size_t kTankSize = 60;
 
-constexpr unsigned kDefaultLife = 5;
+constexpr int kInitialLifeCount = 5;
+constexpr int kInitialBombCount = 5;
 
 class Enemy;
 class Tank : public Movable, public Ranged {
@@ -26,8 +27,11 @@ class Tank : public Movable, public Ranged {
   // Getters and Setters
   const vec2& GetGunRotation() const { return gun_rotation_; }
   bool IsAlive() const { return life_ > 0; }
-  size_t GetLifeCount() const { return life_; };
+  bool HasBomb() const { return bomb_ > 0; }
+  int GetLifeCount() const { return life_; };
+  int GetBombCount() const { return bomb_; };
   void DecrementLife() { life_--; }
+  void DecrementBombCount() { bomb_--; }
 
   void MoveUp();
   void MoveDown();
@@ -50,7 +54,8 @@ class Tank : public Movable, public Ranged {
   void RotateGun(const vec2& direction);
 
  private:
-  int life_ = kDefaultLife;
+  int life_ = kInitialLifeCount;
+  int bomb_ = kInitialBombCount;
   vec2 gun_rotation_;
 };
 }  // namespace tank_hero

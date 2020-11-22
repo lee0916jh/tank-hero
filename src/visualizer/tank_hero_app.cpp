@@ -15,7 +15,6 @@ void TankHeroApp::setup() {}
 void TankHeroApp::update() {
   if (game_.IsOn()) {
     AdjustCameraOffset();
-    game_view_.SetCameraOffset(camera_offset_);
 
     game_.HandleTankMovement(move_keys_, mouse_pos_ + camera_offset_);
     game_.Update();

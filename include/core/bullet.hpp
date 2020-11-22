@@ -5,7 +5,7 @@ template <typename EnemyType>
 bool Bullet::TryAndKillEnemy(vector<EnemyType>* enemies) {
   if (enemies->empty()) return false;
   if (dynamic_cast<Enemy*>(&enemies->at(0)) == nullptr) {
-    throw std::invalid_argument("Vector doesn't contain enemy type.");
+    throw std::invalid_argument("Elements are not of Enemy type.");
   }
 
   for (EnemyType& enemy : *enemies) {

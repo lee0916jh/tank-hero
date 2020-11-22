@@ -19,7 +19,6 @@ class RangedEnemy : public Enemy, public Ranged {
   RangedEnemy(const vec2& position, float speed, const vec2* target);
 
   void Move() override;
- private:
 };
 
 }  // namespace tank_hero

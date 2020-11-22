@@ -7,14 +7,8 @@ namespace tank_hero {
 Obstacle::Obstacle(const vec2& top_left, const vec2& bottom_right)
     : top_left_(top_left), bottom_right_(bottom_right) {}
 
-void Obstacle::HandleCollisionWith(Bullet* bullet) const {
-  HandleCollisionWith(static_cast<Movable*>(bullet));
-}
 void Obstacle::HandleCollisionWith(Tank* tank) const {
   HandleCollisionWith(static_cast<Movable*>(tank));
-}
-void Obstacle::HandleCollisionWith(Enemy* enemy) const {
-  HandleCollisionWith(static_cast<Movable*>(enemy));
 }
 
 void Obstacle::HandleCollisionWith(Movable* movable) const {
@@ -66,5 +60,6 @@ bool Obstacle::DidCollideWith(const Movable& movable) const {
   return x_diff < (movable.GetColliderRadius() + width / 2) &&
          y_diff < (movable.GetColliderRadius() + length / 2);
 }
+
 
 }  // namespace tank_hero

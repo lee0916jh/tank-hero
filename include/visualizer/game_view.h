@@ -26,8 +26,6 @@ class GameView {
   explicit GameView(const Game* game, size_t window_size,
                     const vec2* camera_offset);
 
-  void SetCameraOffset(const vec2& camera_offset){};
-
   void Draw() const;
 
  private:
@@ -38,7 +36,7 @@ class GameView {
   void DisplayGameStatus() const;
   void DrawGameEndScreen() const;
 
-  void DrawRotatedImage(Texture2dRef image, const vec2& position,
+  void DrawRotatedImage(const Texture2dRef& image, const vec2& position,
                         const vec2& direction) const;
 
   /// Returns rotation(angle between up vector and the direction) given
@@ -56,6 +54,7 @@ class GameView {
 
   // images
   Texture2dRef heart_img_;
+  Texture2dRef bomb_img_;
   Texture2dRef tank_body_img_;
   Texture2dRef tank_gun_img_;
   Texture2dRef tank_bullet_img_;

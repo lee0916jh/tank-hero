@@ -21,12 +21,15 @@ using std::set;
 using std::vector;
 
 constexpr size_t kFieldWidth = 2000;
+
+constexpr size_t kRangedEnemySpawnDifficulty = 3;
+constexpr float kMaxDifficulty = 20;
 constexpr float kInitialEnemySpeed = 1;
-constexpr float kUpgradeAmount = 0.005;
 constexpr float kInitialSpawnFreq = 2;
 
-constexpr float kEnemySpeedIncreaseAmount = 0.2;
-constexpr float kEnemySpawnFreqReduceAmount = 0.2;
+constexpr float kUpgradeAmount = 0.005;
+constexpr float kEnemySpeedIncreaseAmount = 0.1;
+constexpr float kEnemySpawnFreqReduceAmount = 0.1;
 
 class Game {
  public:
@@ -45,6 +48,7 @@ class Game {
   size_t GetCurrentLife() const { return tank_.GetLifeCount(); }
   float GetReloadTime() const { return tank_.GetReloadTime(); }
   size_t GetKillCount() const { return kill_count_; }
+  size_t GetBombCount() const { return tank_.GetBombCount(); }
 
   bool IsOn() const { return tank_.IsAlive(); }
 
@@ -60,7 +64,7 @@ class Game {
   /// If tank isn't reloaded, bullet does not fire.
   void TryAndFireTankBullet();
 
-  /// Kills enemies instantly.
+  /// Drops bomb which kills enemies instantly only if tank has bombs left.
   void DropBomb();
 
   /// Spawns an enemy around the player.
@@ -93,7 +97,7 @@ class Game {
   /// Removes dead enemies that got hit by a bullet.
   void RemoveDeadEnemies();
 
-  void HandleMovablesObstaclesCollisions();
+  void HandleObjectsCollisionWithObstacles();
 
   void MoveGameObjects();
 
@@ -113,7 +117,7 @@ class Game {
   size_t kill_count_ = 0;
   size_t difficulty_ = 0;
   float new_enemy_speed_ = kInitialEnemySpeed;
-  float enemy_spawn_freq_ = kInitialSpawnFreq;
+  float enemy_spawn_delay_ = kInitialSpawnFreq;
 };
 }  // namespace tank_hero
 

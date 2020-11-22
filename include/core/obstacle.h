@@ -22,9 +22,10 @@ class Obstacle {
   const vec2& GetTopLeft() const { return top_left_; }
   const vec2& GetBottomRight() const { return bottom_right_; }
 
-  void HandleCollisionWith(Bullet* bullet) const;
+  template <typename MovableType>
+  void HandleCollisionWith(vector<MovableType>* movables) const;
+
   void HandleCollisionWith(Tank* tank) const;
-  void HandleCollisionWith(Enemy* enemy) const;
 
  private:
   void HandleCollisionWith(Movable* movable) const;
@@ -36,5 +37,7 @@ class Obstacle {
 };
 
 }  // namespace tank_hero
+
+#include "obstacle.hpp"
 
 #endif  // TANK_HERO_OBSTACLE_H

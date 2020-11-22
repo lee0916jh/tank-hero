@@ -43,7 +43,7 @@ void Game::Update() {
   HandleTankEnemiesCollisions(&melee_enemies_);
   HandleTankEnemiesCollisions(&ranged_enemies_);
 
-  HandleMovablesObstaclesCollisions();
+  HandleObjectsCollisionWithObstacles();
   RemoveInvalidBullets();
   RemoveDeadEnemies();
 }
@@ -132,13 +132,13 @@ void Game::RemoveDeadEnemies() {
 }
 
 void Game::SpawnEnemies() {
-  if (enemy_spawn_timer_.getSeconds() > enemy_spawn_freq_) {
+  if (enemy_spawn_timer_.getSeconds() > enemy_spawn_delay_) {
     vec2 spawn_point = tank_.GetPosition() +
                        ci::randVec2() * static_cast<float>(window_width_);
     melee_enemies_.emplace_back(spawn_point, new_enemy_speed_,
                                 &tank_.GetPosition());
 
-    if (difficulty_ > 3) {
+    if (difficulty_ > kRangedEnemySpawnDifficulty) {
       spawn_point = tank_.GetPosition() +
                     ci::randVec2() * static_cast<float>(window_width_);
       ranged_enemies_.emplace_back(spawn_point, new_enemy_speed_,
@@ -149,26 +149,28 @@ void Game::SpawnEnemies() {
 }
 
 void Game::DropBomb() {
-  melee_enemies_.clear();
-  ranged_enemies_.clear();
+  if (tank_.HasBomb()) {
+    melee_enemies_.clear();
+    ranged_enemies_.clear();
+    tank_.DecrementBombCount();
+  }
 }
 
-void Game::HandleMovablesObstaclesCollisions() {
+void Game::HandleObjectsCollisionWithObstacles() {
   for (const Obstacle& obstacle : obstacles_) {
-    for (Bullet& bullet : tank_bullets_) {
-      obstacle.HandleCollisionWith(&bullet);
-    }
-    for (Enemy& enemy : melee_enemies_) {
-      obstacle.HandleCollisionWith(&enemy);
-    }
+    obstacle.HandleCollisionWith(&tank_bullets_);
+    obstacle.HandleCollisionWith(&enemy_bullets_);
+    obstacle.HandleCollisionWith(&melee_enemies_);
+    obstacle.HandleCollisionWith(&ranged_enemies_);
     obstacle.HandleCollisionWith(&tank_);
   }
 }
 
 void Game::IncreaseDifficulty() {
-  difficulty_++;
-  new_enemy_speed_ += kEnemySpeedIncreaseAmount;
-  enemy_spawn_freq_ -= kEnemySpawnFreqReduceAmount;
+  if (difficulty_ < kMaxDifficulty) {
+    difficulty_++;
+    new_enemy_speed_ += kEnemySpeedIncreaseAmount;
+    enemy_spawn_delay_ -= kEnemySpawnFreqReduceAmount;
+  }
 }
-
 }  // namespace tank_hero
