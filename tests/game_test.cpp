@@ -39,35 +39,35 @@ TEST_CASE("Tank Movement tests", "[HandleTankMovement]") {
   }
 }
 
-TEST_CASE("FireBullet shoots a bullet from a tank", "[FireBullet]") {
+TEST_CASE("TankTryAndFireBullet shoots a bullet from a tank", "[TankTryAndFireBullet]") {
   Game game(100);  // Tank spawns at (50,50) with speed of 2
 
   SECTION("Shoots bullet to the right") {
-    game.FireBullet(vec2(100, 50));
+    game.TankTryAndFireBullet(vec2(100, 50));
     REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 50));
     game.Update();
     REQUIRE(game.GetBullets()[0].GetPosition() == vec2(58, 50));
   }
   SECTION("Shoots bullet to the left") {
-    game.FireBullet(vec2(0, 50));
+    game.TankTryAndFireBullet(vec2(0, 50));
     REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 50));
     game.Update();
     REQUIRE(game.GetBullets()[0].GetPosition() == vec2(42, 50));
   }
   SECTION("Shoots bullet to the top") {
-    game.FireBullet(vec2(50, 0));
+    game.TankTryAndFireBullet(vec2(50, 0));
     REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 50));
     game.Update();
     REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 42));
   }
   SECTION("Shoots bullet to the bottom") {
-    game.FireBullet(vec2(50, 100));
+    game.TankTryAndFireBullet(vec2(50, 100));
     REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 50));
     game.Update();
     REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 58));
   }
   SECTION("Shoots bullet diagonally") {
-    game.FireBullet(vec2(51, 51));
+    game.TankTryAndFireBullet(vec2(51, 51));
     REQUIRE(game.GetBullets()[0].GetPosition() == vec2(50, 50));
     game.Update();
     const vec2& bullet_pos = game.GetBullets()[0].GetPosition();

@@ -11,6 +11,7 @@
 #include "cinder/gl/gl.h"
 #include "enemy.h"
 #include "obstacle.h"
+#include "ranged_enemy.h"
 #include "tank.h"
 
 namespace tank_hero {
@@ -23,8 +24,9 @@ constexpr size_t kFieldWidth = 2000;
 constexpr float kInitialEnemySpeed = 1;
 constexpr float kUpgradeAmount = 0.002;
 constexpr float kInitialSpawnFreq = 2;
-constexpr float kEnemySpeedIncreaseAmount = 0.1;
-constexpr float kEnemySpawnFreqReduceAmount = 0.1;
+
+constexpr float kEnemySpeedIncreaseAmount = 0.2;
+constexpr float kEnemySpawnFreqReduceAmount = 0.2;
 
 class Game {
  public:
@@ -34,7 +36,7 @@ class Game {
   // Getters
   const Tank& GetTank() const { return tank_; }
   const vector<Enemy>& GetEnemies() const { return enemies_; }
-  const vector<Bullet>& GetBullets() const { return bullets_; }
+  const vector<Bullet>& GetBullets() const { return tank_bullets_; }
   const vector<Obstacle>& GetObstacles() const { return obstacles_; }
   size_t GetCurrentLife() const { return tank_.GetLifeCount(); }
   float GetReloadTime() const { return tank_.GetReloadTime(); }
@@ -51,7 +53,11 @@ class Game {
 
   /// Fires a bullet from the tank if tank is loaded.
   /// If tank isn't reloaded, bullet does not fire.
-  void FireBullet();
+  void TankTryAndFireBullet();
+
+  /// Fires a bullet from ranged enemies if they are loaded.
+  /// If not reloaded, bullet does not fire.
+  void EnemyTryAndFireBullet();
 
   /// Kills enemies instantly.
   void DropBomb();
@@ -61,9 +67,6 @@ class Game {
 
   /// Increases speed and spawn frequency of newly spawned enemies.
   void IncreaseDifficulty();
-
-  /// Returns true if tank is reloaded and is ready to fire.
-  bool TankIsLoaded();
 
  private:
   /// Checks if any of the bullets hit an enemy, and if a bullet hit an enemy,
@@ -88,14 +91,15 @@ class Game {
   // Game Objects
   Tank tank_;
   vector<Enemy> enemies_;
-  vector<Bullet> bullets_;
+  vector<RangedEnemy> ranged_enemies_;
+  vector<Bullet> tank_bullets_;
+  vector<Bullet> enemy_bullets_;
   vector<Obstacle> obstacles_;
 
   // Game Status
-  Timer reload_timer_;
   Timer enemy_spawn_timer_;
   size_t kill_count_ = 0;
-
+  size_t difficulty_ = 0;
   float new_enemy_speed_ = kInitialEnemySpeed;
   float enemy_spawn_freq_ = kInitialSpawnFreq;
 };

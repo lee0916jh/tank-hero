@@ -7,7 +7,6 @@ Game::Game(size_t window_width, const vector<Obstacle>& obstacles)
     : window_width_(window_width),
       tank_(vec2(window_width / 2, window_width / 2)),
       obstacles_(obstacles) {
-  reload_timer_.start();
   enemy_spawn_timer_.start();
 }
 
@@ -35,7 +34,7 @@ void Game::HandleTankMovement(const set<int>& keys, const vec2& mouse_pos) {
 }
 
 void Game::Update() {
-  for (Bullet& bullet : bullets_) {
+  for (Bullet& bullet : tank_bullets_) {
     bullet.Move();
   }
   for (Enemy& enemy : enemies_) {
@@ -50,13 +49,24 @@ void Game::Update() {
   RemoveDeadEnemies();
 }
 
-void Game::FireBullet() {
-  bullets_.emplace_back(tank_.GetPosition(), tank_.GetGunRotation(),
-                        tank_.GetBulletConfig());
+void Game::TankTryAndFireBullet() {
+  if (tank_.IsLoaded()) {
+    tank_bullets_.emplace_back(tank_.GetPosition(), tank_.GetGunRotation(),
+                               tank_.GetBulletConfig());
+  }
+}
+
+void Game::EnemyTryAndFireBullet() {
+  for (const RangedEnemy& enemy : ranged_enemies_) {
+    if (enemy.IsLoaded()) {
+      enemy_bullets_.emplace_back(enemy.GetPosition(), enemy.GetGunRotation(),
+                                  enemy.GetBulletConfig());
+    }
+  }
 }
 
 void Game::HandleBulletsEnemiesCollisions() {
-  for (Bullet& bullet : bullets_) {
+  for (Bullet& bullet : tank_bullets_) {
     for (Enemy& enemy : enemies_) {
       if (bullet.DidHit(enemy)) {
         bullet.MakeInactive();
@@ -69,12 +79,12 @@ void Game::HandleBulletsEnemiesCollisions() {
 }
 
 void Game::RemoveInvalidBullets() {
-  bullets_.erase(std::remove_if(bullets_.begin(), bullets_.end(),
-                                [](const Bullet& bullet) {
-                                  return !bullet.IsActive() ||
-                                         bullet.IsOutOfMap(kFieldWidth);
-                                }),
-                 bullets_.end());
+  tank_bullets_.erase(std::remove_if(tank_bullets_.begin(), tank_bullets_.end(),
+                                     [](const Bullet& bullet) {
+                                       return !bullet.IsActive() ||
+                                              bullet.IsOutOfMap(kFieldWidth);
+                                     }),
+                      tank_bullets_.end());
 }
 
 void Game::RemoveDeadEnemies() {
@@ -89,19 +99,18 @@ void Game::SpawnEnemy() {
     vec2 spawn_point = tank_.GetPosition() +
                        ci::randVec2() * static_cast<float>(window_width_);
     enemies_.emplace_back(spawn_point, new_enemy_speed_, &tank_.GetPosition());
+
+    if (difficulty_ > 3) {
+      spawn_point = tank_.GetPosition() +
+                    ci::randVec2() * static_cast<float>(window_width_);
+      ranged_enemies_.emplace_back(spawn_point, new_enemy_speed_,
+                                   &tank_.GetPosition());
+    }
     enemy_spawn_timer_.start();
   }
 }
 
 void Game::DropBomb() { enemies_.clear(); }
-
-bool Game::TankIsLoaded() {
-  if (reload_timer_.getSeconds() > tank_.GetReloadTime()) {
-    reload_timer_.start();
-    return true;
-  }
-  return false;
-}
 
 void Game::HandleTanksEnemiesCollisions() {
   for (size_t i = 0; i < enemies_.size(); i++) {
@@ -115,7 +124,7 @@ void Game::HandleTanksEnemiesCollisions() {
 
 void Game::HandleMovablesObstaclesCollisions() {
   for (const Obstacle& obstacle : obstacles_) {
-    for (Bullet& bullet : bullets_) {
+    for (Bullet& bullet : tank_bullets_) {
       obstacle.HandleCollisionWith(&bullet);
     }
     for (Enemy& enemy : enemies_) {
@@ -126,6 +135,7 @@ void Game::HandleMovablesObstaclesCollisions() {
 }
 
 void Game::IncreaseDifficulty() {
+  difficulty_++;
   new_enemy_speed_ += kEnemySpeedIncreaseAmount;
   enemy_spawn_freq_ -= kEnemySpawnFreqReduceAmount;
 }

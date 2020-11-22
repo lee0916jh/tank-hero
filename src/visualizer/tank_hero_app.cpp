@@ -19,7 +19,7 @@ void TankHeroApp::update() {
   game_.Update();
   game_.SpawnEnemy();
 
-  if (mouse_down_ && game_.TankIsLoaded()) game_.FireBullet();
+  if (mouse_down_) game_.TankTryAndFireBullet();
   if (ReadyToIncreaseDifficulty()) game_.IncreaseDifficulty();
 }
 
