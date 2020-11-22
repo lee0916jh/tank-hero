@@ -10,7 +10,7 @@ using ci::app::loadAsset;
 using ci::gl::Texture2d;
 using ci::gl::Texture2dRef;
 
-const ci::Color kBulletColor("gold");
+const ci::Color kEnemyBulletColor("black");
 const ci::Color kObstacleColor("saddlebrown");
 const ci::Color kTextColor("white");
 const ci::Color kGameOverColor("red");
@@ -39,7 +39,7 @@ class GameView {
   void DrawGameEndScreen() const;
 
   void DrawRotatedImage(Texture2dRef image, const vec2& position,
-                        float rotation) const;
+                        const vec2& direction) const;
 
   /// Returns rotation(angle between up vector and the direction) given
   /// direction as below.
@@ -58,6 +58,7 @@ class GameView {
   Texture2dRef heart_img_;
   Texture2dRef tank_body_img_;
   Texture2dRef tank_gun_img_;
+  Texture2dRef tank_bullet_img_;
   Texture2dRef melee_enemy_img_;
   Texture2dRef ranged_enemy_img_;
 };

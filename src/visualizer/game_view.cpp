@@ -10,6 +10,8 @@ GameView::GameView(const Game* game, size_t window_size,
       heart_img_(Texture2d::create(loadImage(loadAsset("heart.png")))),
       tank_body_img_(Texture2d::create(loadImage(loadAsset("tank_body.png")))),
       tank_gun_img_(Texture2d::create(loadImage(loadAsset("tank_gun.png")))),
+      tank_bullet_img_(
+          Texture2d::create(loadImage(loadAsset("tank_bullet.png")))),
       melee_enemy_img_(
           Texture2d::create(loadImage(loadAsset("melee_enemy.png")))),
       ranged_enemy_img_(
@@ -30,31 +32,28 @@ void GameView::Draw() const {
 void GameView::DrawTank() const {
   vec2 window_center(window_size_ / 2, window_size_ / 2);
   const Tank& tank = game_->GetTank();
-  float tank_body_rotation = CalcRotation(tank.GetDirection());
-  float tank_gun_rotation = CalcRotation(tank.GetGunRotation());
 
-  DrawRotatedImage(tank_body_img_, tank.GetPosition(), tank_body_rotation);
-  DrawRotatedImage(tank_gun_img_, tank.GetPosition(), tank_gun_rotation);
+  DrawRotatedImage(tank_body_img_, tank.GetPosition(), tank.GetDirection());
+  DrawRotatedImage(tank_gun_img_, tank.GetPosition(), tank.GetGunRotation());
 }
 
 void GameView::DrawEnemies() const {
   for (const Enemy& enemy : game_->GetEnemies()) {
-    float rotation = CalcRotation(enemy.GetPosition());
-    DrawRotatedImage(melee_enemy_img_, enemy.GetPosition(), rotation);
+    DrawRotatedImage(melee_enemy_img_, enemy.GetPosition(),
+                     enemy.GetPosition());
   }
   for (const RangedEnemy& ranged_enemy : game_->GetRangedEnemies()) {
-    float rotation = CalcRotation(ranged_enemy.GetPosition());
-    DrawRotatedImage(ranged_enemy_img_, ranged_enemy.GetPosition(), rotation);
+    DrawRotatedImage(ranged_enemy_img_, ranged_enemy.GetPosition(),
+                     ranged_enemy.GetPosition());
   }
 }
 
 void GameView::DrawBullets() const {
-  ci::gl::color(kBulletColor);
+  ci::gl::color(kEnemyBulletColor);
   for (const Bullet& tank_bullet : game_->GetTankBullets()) {
-    ci::gl::drawSolidCircle(tank_bullet.GetPosition() - *camera_offset_,
-                            tank_bullet.GetColliderRadius());
+    DrawRotatedImage(tank_bullet_img_, tank_bullet.GetPosition(),
+                     tank_bullet.GetDirection());
   }
-  ci::gl::color(ci::Color("red"));
   for (const Bullet& enemy_bullet : game_->GetEnemyBullets()) {
     ci::gl::drawSolidCircle(enemy_bullet.GetPosition() - *camera_offset_,
                             enemy_bullet.GetColliderRadius());
@@ -103,10 +102,10 @@ void GameView::DrawGameEndScreen() const {
 }
 
 void GameView::DrawRotatedImage(Texture2dRef image, const vec2& position,
-                                float rotation) const {
+                                const vec2& direction) const {
   ci::gl::color(ci::Color("white"));
-
   vec2 img_center = image->getSize() / 2;
+  float rotation = CalcRotation(direction);
 
   ci::gl::pushModelView();
   ci::gl::translate(position - *camera_offset_);
