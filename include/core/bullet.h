@@ -21,8 +21,10 @@ class Bullet : public Movable {
   bool IsActive() const { return active_; }
   void GoInactive() { active_ = false; }
 
+  ///
   template <typename EnemyType>
   bool TryAndKillEnemy(vector<EnemyType>* enemies);
+
   /// Returns true only if the bullet is outside the map.
   bool IsOutOfMap(size_t map_width) const;
 
