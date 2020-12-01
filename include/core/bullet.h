@@ -26,13 +26,14 @@ class Bullet : public Movable {
   /// Returns true only if the bullet collided with the movable object.
   bool DidHit(const Movable& movable) const;
 
-  /// Kills an enemy in the vector if it's hit by this bullet.
+  /// Returns the iterator pointing to the killed enemy (enemy that collided
+  /// with this bullet). If no one is killed, returns the iterator to the end.
   /// \tparam EnemyType The vector must contain an EnemyType.
   /// \param enemies Vector of Enemies to check.
   /// \return Returns the iterator to the killed enemy if it's killed or the
   /// iterator to the end if nobody is killed.
   template <typename EnemyType>
-  typename vector<EnemyType>::iterator TryAndKillEnemy(
+  typename vector<EnemyType>::iterator GetKilledEnemy(
       vector<EnemyType>* enemies);
 
  private:

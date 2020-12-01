@@ -66,7 +66,8 @@ class Game {
   /// Spawns an enemy around the player.
   void SpawnEnemies();
 
-  /// Increases speed and spawn frequency of newly spawned enemies.
+  /// Increases speed and spawn frequency of newly spawned enemies
+  /// if the current difficulty is not yet reaches max difficulty.
   void IncreaseDifficulty();
 
  private:
@@ -93,7 +94,7 @@ class Game {
   /// Handles the collisions between obstacles and all other game objects.
   void HandleObjectsCollisionWithObstacles();
 
-  /// Move all movable game objects.
+  /// Moves all movable game objects.
   void MoveGameObjects();
 
   size_t window_width_;

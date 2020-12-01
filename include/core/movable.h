@@ -8,7 +8,7 @@ using glm::vec2;
 class Movable {
  public:
   explicit Movable(const vec2& position, const vec2& direction = vec2(0, 0),
-                   float speed = 0.0f, size_t size = 1);
+                   float speed = 0.0f, size_t collider_radius = 1);
 
   Movable(const Movable& source) = default;
   Movable& operator=(const Movable& source) = default;

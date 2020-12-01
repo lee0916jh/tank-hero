@@ -86,19 +86,19 @@ void Game::TryAndFireEnemiesBullet() {
 }
 
 void Game::HandleTankBulletsHittingEnemies() {
-  for (Bullet& bullet : tank_bullets_) {
+  for (Bullet& tank_bullet : tank_bullets_) {
     // handles bullet's killing of melee enemies
-    auto killed_melee_enemy = bullet.TryAndKillEnemy(&melee_enemies_);
-    if (killed_melee_enemy != melee_enemies_.end()) {
-      melee_enemies_.erase(killed_melee_enemy);
+    auto killed_melee = tank_bullet.GetKilledEnemy(&melee_enemies_);
+    if (killed_melee != melee_enemies_.end()) {
+      melee_enemies_.erase(killed_melee);
       kill_count_++;
       tank_.ReduceReloadTime(kUpgradeAmount);
       return;
     }
     // handles bullet's killing of ranged enemies
-    auto killed_ranged_enemy = bullet.TryAndKillEnemy(&ranged_enemies_);
-    if (killed_ranged_enemy != ranged_enemies_.end()) {
-      ranged_enemies_.erase(killed_ranged_enemy);
+    auto killed_ranged = tank_bullet.GetKilledEnemy(&ranged_enemies_);
+    if (killed_ranged != ranged_enemies_.end()) {
+      ranged_enemies_.erase(killed_ranged);
       kill_count_++;
       tank_.ReduceReloadTime(kUpgradeAmount);
     }

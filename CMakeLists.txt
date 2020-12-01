@@ -67,7 +67,8 @@ list(APPEND TEST_FILES
         tests/bullet_test.cpp
         tests/enemy_test.cpp
         tests/game_test.cpp
-        tests/obstacle_test.cpp)
+        tests/obstacle_test.cpp
+        tests/ranged_enemy_test.cpp)
 
 
 ci_make_app(

@@ -4,8 +4,8 @@
 namespace tank_hero {
 
 template <typename EnemyType>
-typename vector<EnemyType>::iterator
-Bullet::TryAndKillEnemy(vector<EnemyType>* enemies) {
+typename vector<EnemyType>::iterator Bullet::GetKilledEnemy(
+    vector<EnemyType>* enemies) {
   if (enemies->empty()) return enemies->end();
   if (dynamic_cast<Enemy*>(&enemies->at(0)) == nullptr) {
     throw std::invalid_argument("vector element is not of Enemy type.");
@@ -18,7 +18,6 @@ Bullet::TryAndKillEnemy(vector<EnemyType>* enemies) {
     }
     enemy_it++;
   }
-  return enemy_it;
+  return enemies->end();
 }
-
 }  // namespace tank_hero
