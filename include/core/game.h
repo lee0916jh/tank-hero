@@ -50,8 +50,9 @@ class Game {
 
   void Update();
 
-  /// Moves tank according to the given key input. If tank goes outside of the
-  /// map, return it back onto the map.
+  /// Moves tank according to the given key input and rotates tank gun towards
+  /// the mouse pointer. If tank goes outside of the map, returns it back onto
+  /// the map.
   /// \param keys Pressed keys that determine where the tank moves.
   /// \param mouse_pos Mouse position which the tank gun will aim at.
   void HandleTankMovement(const set<int>& keys, const vec2& mouse_pos);

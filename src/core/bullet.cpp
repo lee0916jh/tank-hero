@@ -14,6 +14,4 @@ bool Bullet::IsOutOfMap(size_t map_width) const {
   return (position_.x < 0 || position_.x > map_width || position_.y < 0 ||
           position_.y > map_width);
 }
-
-
 }  // namespace tank_hero
