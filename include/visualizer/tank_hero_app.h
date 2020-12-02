@@ -26,7 +26,10 @@ constexpr size_t kWindowSize = 1000;
 const size_t kIncreaseDifficultyThreshold =
     30;  // difficulty will increase after this number of seconds.
 const vector<Obstacle> kObstacles = {{vec2(0, 0), vec2(100, 100)},
-                                     {vec2(200, 200), vec2(400, 800)}};
+                                     {vec2(200, 200), vec2(400, 800)},
+                                     {vec2(1300, 500), vec2(1800, 700)},
+                                     {vec2(300, 1200), vec2(750, 1400)},
+                                     {vec2(700, 500), vec2(900, 550)}};
 
 class TankHeroApp : public ci::app::App {
  public:
