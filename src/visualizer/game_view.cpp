@@ -9,6 +9,8 @@ GameView::GameView(const Game* game, size_t window_size,
       window_size_(window_size),
       heart_img_(Texture2d::create(loadImage(loadAsset("heart.png")))),
       bomb_img_(Texture2d::create(loadImage(loadAsset("bomb.png")))),
+      gun_img_(Texture2d::create(loadImage(loadAsset("gun.png")))),
+      shield_img_(Texture2d::create(loadImage(loadAsset("shield.png")))),
       tank_body_img_(Texture2d::create(loadImage(loadAsset("tank_body.png")))),
       tank_gun_img_(Texture2d::create(loadImage(loadAsset("tank_gun.png")))),
       tank_bullet_img_(
@@ -23,6 +25,7 @@ void GameView::Draw() const {
     DrawTank();
     DrawEnemies();
     DrawBullets();
+    DrawItems();
     DrawObstacles();
     DisplayGameStatus();
   } else {
@@ -50,16 +53,49 @@ void GameView::DrawEnemies() const {
 }
 
 void GameView::DrawBullets() const {
+  ci::gl::color(kBulletColor);
   for (const Bullet& tank_bullet : game_->GetTankBullets()) {
-    DrawRotatedImage(tank_bullet_img_, tank_bullet.GetPosition(),
-                     tank_bullet.GetDirection());
+    if (tank_bullet.IsBig()) {
+      ci::gl::drawSolidCircle(tank_bullet.GetPosition() - *camera_offset_,
+                              tank_bullet.GetColliderRadius());
+    } else {
+      DrawRotatedImage(tank_bullet_img_, tank_bullet.GetPosition(),
+                       tank_bullet.GetDirection());
+    }
   }
-  ci::gl::color(kEnemyBulletColor);
   for (const Bullet& enemy_bullet : game_->GetEnemyBullets()) {
     ci::gl::drawSolidCircle(enemy_bullet.GetPosition() - *camera_offset_,
                             enemy_bullet.GetColliderRadius());
   }
 }
+
+void GameView::DrawItems() const {
+  ci::gl::color(ci::Color("white"));
+  for (const Item& item : game_->GetItems()) {
+    ItemType item_type = item.GetType();
+    Texture2dRef image_to_draw;
+
+    switch (item_type) {
+      case ItemType::kLife:
+        image_to_draw = heart_img_;
+        break;
+      case ItemType::kShield:
+        image_to_draw = shield_img_;
+        break;
+      case ItemType::kBomb:
+        image_to_draw = bomb_img_;
+        break;
+      default:
+        image_to_draw = gun_img_;
+        break;
+    }
+    vec2 relative_pos = item.GetPosition() - *camera_offset_;
+    ci::Rectf item_rect(relative_pos - vec2(kTextMargin, kTextMargin),
+                        relative_pos + vec2(kTextMargin, kTextMargin));
+    ci::gl::draw(image_to_draw, item_rect);
+  }
+}
+
 void GameView::DrawObstacles() const {
   ci::gl::color(kObstacleColor);
   for (const Obstacle& obstacle : game_->GetObstacles()) {

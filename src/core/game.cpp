@@ -8,6 +8,7 @@ Game::Game(size_t window_width, const vector<Obstacle>& obstacles)
       tank_(vec2(window_width / 2, window_width / 2)),
       obstacles_(obstacles) {
   enemy_spawn_timer_.start();
+  item_spawn_timer_.start();
 }
 
 const vector<RangedEnemy>& Game::GetRangedEnemies() const {
@@ -51,10 +52,12 @@ void Game::HandleItemPickUp() {
         case ItemType::kBomb:
           tank_.IncrementBombCount();
           break;
-        default: // when Item is a gun
+        default:  // when Item is a gun
           tank_.SetBulletConfig(item_it->GetBulletConfig().value());
           break;
       }
+      items_.erase(item_it);
+      return;
     }
   }
 }
@@ -186,11 +189,11 @@ void Game::SpawnItem() {
         items_.emplace_back(random_pos, ItemType::kBomb);
         break;
       case 3:
-        bullet_config.radius = 2 * kDefaultBulletSize;
+        bullet_config.radius = kBigBulletSize;
         items_.emplace_back(random_pos, ItemType::kBigGun, bullet_config);
         break;
       case 4:
-        bullet_config.speed = 2 * kDefaultBulletSpeed;
+        bullet_config.speed = kFastBulletSpeed;
         items_.emplace_back(random_pos, ItemType::kFastGun, bullet_config);
         break;
       case 5:
@@ -199,6 +202,7 @@ void Game::SpawnItem() {
       default:
         break;
     }
+    item_spawn_timer_.start();
   }
 }
 

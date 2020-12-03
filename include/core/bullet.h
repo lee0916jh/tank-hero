@@ -6,6 +6,7 @@
 #include "cinder/gl/gl.h"
 #include "movable.h"
 #include "ranged.h"
+#include "tank.h"
 
 namespace tank_hero {
 using glm::vec2;
@@ -17,6 +18,7 @@ class Bullet : public Movable {
          const BulletConfig& bullet_config);
 
   // Getters and Setters
+  bool IsBig() const {return collider_radius_ > kDefaultBulletSize;}
   bool IsActive() const { return active_; }
   void GoInactive() { active_ = false; }
 

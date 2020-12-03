@@ -11,6 +11,8 @@ using glm::vec2;
 
 constexpr float kDefaultBulletSize = 5;
 constexpr float kDefaultBulletSpeed = 8;
+constexpr float kBigBulletSize = 20;
+constexpr float kFastBulletSpeed = 15;
 constexpr float kDefaultReloadTime = 1.5;
 
 constexpr float kDefaultSpeed = 3;

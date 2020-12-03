@@ -18,6 +18,7 @@ class Item {
        const std::optional<BulletConfig>& bullet_config = {});
 
   // Getters
+  const vec2& GetPosition() const { return position_; }
   bool IsGun() const { return bullet_config_.has_value(); }
   const std::optional<BulletConfig>& GetBulletConfig() const;
   const ItemType& GetType() const { return type_; }

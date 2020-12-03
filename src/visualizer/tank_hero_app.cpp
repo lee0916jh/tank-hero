@@ -19,6 +19,7 @@ void TankHeroApp::update() {
     game_.HandleTankMovement(move_keys_, mouse_pos_ + camera_offset_);
     game_.Update();
     game_.SpawnEnemies();
+    game_.SpawnItem();
 
     if (mouse_down_) game_.TryAndFireTankBullet();
     if (ReadyToIncreaseDifficulty()) game_.IncreaseDifficulty();

@@ -10,7 +10,7 @@ using ci::app::loadAsset;
 using ci::gl::Texture2d;
 using ci::gl::Texture2dRef;
 
-const ci::Color kEnemyBulletColor("black");
+const ci::Color kBulletColor("black");
 const ci::Color kObstacleColor("saddlebrown");
 const ci::Color kTextColor("white");
 const ci::Color kGameOverColor("red");
@@ -56,11 +56,14 @@ class GameView {
   // images
   Texture2dRef heart_img_;
   Texture2dRef bomb_img_;
+  Texture2dRef gun_img_;
+  Texture2dRef shield_img_;
   Texture2dRef tank_body_img_;
   Texture2dRef tank_gun_img_;
   Texture2dRef tank_bullet_img_;
   Texture2dRef melee_enemy_img_;
   Texture2dRef ranged_enemy_img_;
+  void DrawItems() const;
 };
 }  // namespace tank_hero::visualizer
 
