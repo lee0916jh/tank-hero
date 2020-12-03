@@ -57,7 +57,8 @@ list(APPEND CORE_SOURCE_FILES
         src/core/ranged.cpp
         src/core/obstacle.cpp
         src/core/game.cpp
-        src/core/ranged_enemy.cpp)
+        src/core/ranged_enemy.cpp
+        src/core/item.cpp)
 
 list(APPEND SOURCE_FILES ${CORE_SOURCE_FILES}
         src/visualizer/tank_hero_app.cpp

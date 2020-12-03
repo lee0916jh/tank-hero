@@ -28,10 +28,14 @@ class Tank : public Movable, public Ranged {
   const vec2& GetGunRotation() const { return gun_rotation_; }
   bool IsAlive() const { return life_ > 0; }
   bool HasBomb() const { return bomb_ > 0; }
+  bool IsShielded() const { return is_shielded_; }
+  void SetShielded(bool is_shielded) { is_shielded_ = is_shielded; }
   int GetLifeCount() const { return life_; };
   int GetBombCount() const { return bomb_; };
   void DecrementLife() { life_--; }
+  void IncrementLife() { life_++; }
   void DecrementBombCount() { bomb_--; }
+  void IncrementBombCount() { bomb_++; }
 
   void MoveUp();
   void MoveDown();
@@ -57,6 +61,7 @@ class Tank : public Movable, public Ranged {
   int life_ = kInitialLifeCount;
   int bomb_ = kInitialBombCount;
   vec2 gun_rotation_;
+  bool is_shielded_;
 };
 }  // namespace tank_hero
 

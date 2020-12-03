@@ -1,6 +1,7 @@
 #ifndef TANK_HERO_GAME_H
 #define TANK_HERO_GAME_H
 #include <algorithm>
+#include <cstdlib>
 #include <set>
 #include <vector>
 
@@ -9,6 +10,7 @@
 #include "cinder/Timer.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
+#include "item.h"
 #include "obstacle.h"
 #include "ranged_enemy.h"
 #include "tank.h"
@@ -25,6 +27,7 @@ constexpr size_t kRangedEnemySpawnDifficulty = 3;
 constexpr float kMaxDifficulty = 20;
 constexpr float kInitialEnemySpeed = 1;
 constexpr float kInitialSpawnFreq = 2;
+constexpr int kNumItems = 6;  // this should match the number of item types.
 
 constexpr float kUpgradeAmount = 0.005;
 constexpr float kEnemySpeedIncreaseAmount = 0.1;
@@ -67,6 +70,9 @@ class Game {
   /// Spawns an enemy around the player.
   void SpawnEnemies();
 
+  /// Spawns a random item in random location.
+  void SpawnItem();
+
   /// Increases speed and spawn frequency of newly spawned enemies
   /// if the current difficulty is not yet reaches max difficulty.
   void IncreaseDifficulty();
@@ -108,13 +114,17 @@ class Game {
   vector<Bullet> tank_bullets_;
   vector<Bullet> enemy_bullets_;
   vector<Obstacle> obstacles_;
+  vector<Item> items_;
 
   // Game Status
   Timer enemy_spawn_timer_;
+  Timer item_spawn_timer_;
   size_t kill_count_ = 0;
   size_t difficulty_ = 0;
   float new_enemy_speed_ = kInitialEnemySpeed;
-  float enemy_spawn_delay_ = kInitialSpawnFreq;
+  float enemy_spawn_cooldown_ = kInitialSpawnFreq;
+  float item_spawn_cooldown_ = kInitialSpawnFreq;
+  void HandleItemPickUp();
 };
 }  // namespace tank_hero
 

@@ -7,6 +7,10 @@ Ranged::Ranged(float bullet_radius, float bullet_speed, float reload_time)
   reload_timer_.start();
 }
 
+void Ranged::SetBulletConfig(const BulletConfig& bullet_config) {
+  bullet_config_ = bullet_config;
+}
+
 void Ranged::ReduceReloadTime(float amount) {
   reload_time_ -= amount;
   if (reload_time_ < kMinReloadTime) reload_time_ = kMinReloadTime;

@@ -35,6 +35,28 @@ void Game::HandleTankMovement(const set<int>& keys, const vec2& mouse_pos) {
 
   tank_.KeepInMap(map_width_);
   tank_.RotateGun(mouse_pos);
+  HandleItemPickUp();
+}
+
+void Game::HandleItemPickUp() {
+  for (auto item_it = items_.begin(); item_it != items_.end(); item_it++) {
+    if (item_it->IsInPickUpRange(tank_)) {
+      switch (item_it->GetType()) {
+        case ItemType::kLife:
+          tank_.IncrementLife();
+          break;
+        case ItemType::kShield:
+          tank_.SetShielded(true);
+          break;
+        case ItemType::kBomb:
+          tank_.IncrementBombCount();
+          break;
+        default: // when Item is a gun
+          tank_.SetBulletConfig(item_it->GetBulletConfig().value());
+          break;
+      }
+    }
+  }
 }
 
 void Game::Update() {
@@ -131,7 +153,7 @@ void Game::RemoveInvalidBullets() {
 }
 
 void Game::SpawnEnemies() {
-  if (enemy_spawn_timer_.getSeconds() > enemy_spawn_delay_) {
+  if (enemy_spawn_timer_.getSeconds() > enemy_spawn_cooldown_) {
     vec2 spawn_point = tank_.GetPosition() +
                        ci::randVec2() * static_cast<float>(window_width_);
     melee_enemies_.emplace_back(spawn_point, new_enemy_speed_,
@@ -144,6 +166,39 @@ void Game::SpawnEnemies() {
                                    &tank_.GetPosition());
     }
     enemy_spawn_timer_.start();
+  }
+}
+
+void Game::SpawnItem() {
+  if (item_spawn_timer_.getSeconds() > item_spawn_cooldown_) {
+    vec2 random_pos(rand() % kFieldWidth, rand() % kFieldWidth);
+    int random_item_code = rand() % kNumItems;
+    BulletConfig bullet_config{kDefaultBulletSize, kDefaultBulletSpeed};
+
+    switch (random_item_code) {
+      case 0:
+        items_.emplace_back(random_pos, ItemType::kLife);
+        break;
+      case 1:
+        items_.emplace_back(random_pos, ItemType::kShield);
+        break;
+      case 2:
+        items_.emplace_back(random_pos, ItemType::kBomb);
+        break;
+      case 3:
+        bullet_config.radius = 2 * kDefaultBulletSize;
+        items_.emplace_back(random_pos, ItemType::kBigGun, bullet_config);
+        break;
+      case 4:
+        bullet_config.speed = 2 * kDefaultBulletSpeed;
+        items_.emplace_back(random_pos, ItemType::kFastGun, bullet_config);
+        break;
+      case 5:
+        items_.emplace_back(random_pos, ItemType::kOriginalGun, bullet_config);
+        break;
+      default:
+        break;
+    }
   }
 }
 
@@ -169,7 +224,7 @@ void Game::IncreaseDifficulty() {
   if (difficulty_ < kMaxDifficulty) {
     difficulty_++;
     new_enemy_speed_ += kEnemySpeedIncreaseAmount;
-    enemy_spawn_delay_ -= kEnemySpawnFreqReduceAmount;
+    enemy_spawn_cooldown_ -= kEnemySpawnFreqReduceAmount;
   }
 }
 

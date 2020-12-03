@@ -3,7 +3,8 @@
 namespace tank_hero {
 Tank::Tank(const vec2& position)
     : Movable(position, position, kDefaultSpeed, kTankSize / 2),
-      Ranged(kDefaultBulletSize, kDefaultBulletSpeed, kDefaultReloadTime) {}
+      Ranged(kDefaultBulletSize, kDefaultBulletSpeed, kDefaultReloadTime),
+      is_shielded_(false) {}
 
 void Tank::MoveUp() {
   direction_ = vec2(0, -1);
