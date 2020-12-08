@@ -21,9 +21,9 @@ class Ranged {
 
   // Getters and Setters
   const BulletConfig& GetBulletConfig() const { return bullet_config_; }
-  void SetBulletConfig(const BulletConfig& bullet_config);
   float GetReloadTime() const { return reload_time_; }
   bool IsLoaded() const { return reload_timer_.getSeconds() >= reload_time_; }
+  void SetBulletConfig(const BulletConfig& bullet_config);
   void ResetReloadTimer() { reload_timer_.start(); }
 
   /// Reduce the reload time by given amount only upto the minimum amount.

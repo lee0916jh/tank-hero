@@ -1,6 +1,7 @@
 #ifndef TANK_HERO_TANK_H
 #define TANK_HERO_TANK_H
 
+#include "bullet.h"
 #include "cinder/gl/gl.h"
 #include "enemy.h"
 #include "movable.h"
@@ -9,12 +10,6 @@
 namespace tank_hero {
 using glm::vec2;
 
-constexpr float kDefaultBulletSize = 5;
-constexpr float kDefaultBulletSpeed = 8;
-constexpr float kBigBulletSize = 20;
-constexpr float kFastBulletSpeed = 15;
-constexpr float kDefaultReloadTime = 1.5;
-
 constexpr float kDefaultSpeed = 3;
 constexpr size_t kTankSize = 60;
 
@@ -22,6 +17,7 @@ constexpr int kInitialLifeCount = 5;
 constexpr int kInitialBombCount = 5;
 
 class Enemy;
+class Bullet;
 class Tank : public Movable, public Ranged {
  public:
   explicit Tank(const vec2& position);
@@ -30,14 +26,14 @@ class Tank : public Movable, public Ranged {
   const vec2& GetGunRotation() const { return gun_rotation_; }
   bool IsAlive() const { return life_ > 0; }
   bool HasBomb() const { return bomb_ > 0; }
-  bool IsShielded() const { return is_shielded_; }
-  void SetShielded(bool is_shielded) { is_shielded_ = is_shielded; }
   int GetLifeCount() const { return life_; };
   int GetBombCount() const { return bomb_; };
-  void DecrementLife() { life_--; }
+  bool IsShielded() const { return is_shielded_; }
+  void SetShielded(bool is_shielded) { is_shielded_ = is_shielded; }
   void IncrementLife() { life_++; }
-  void DecrementBombCount() { bomb_--; }
+  void DecrementLife() { life_--; }
   void IncrementBombCount() { bomb_++; }
+  void DecrementBombCount() { bomb_--; }
 
   void MoveUp();
   void MoveDown();
@@ -58,6 +54,10 @@ class Tank : public Movable, public Ranged {
 
   /// Rotates the gun towards the direction
   void RotateGun(const vec2& direction);
+
+  /// Returns a bullet fired from the tank, with the tank's current bullet
+  /// configuration
+  Bullet FireBullet();
 
  private:
   int life_ = kInitialLifeCount;

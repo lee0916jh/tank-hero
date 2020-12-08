@@ -10,4 +10,9 @@ void RangedEnemy::Move() {
     Movable::Move();
   }
 }
+
+Bullet RangedEnemy::FireBullet() {
+  ResetReloadTimer();
+  return Bullet(position_, direction_, bullet_config_);
+}
 }  // namespace tank_hero

@@ -93,18 +93,14 @@ void Game::MoveGameObjects() {
 
 void Game::TryAndFireTankBullet() {
   if (tank_.IsLoaded()) {
-    tank_bullets_.emplace_back(tank_.GetPosition(), tank_.GetGunRotation(),
-                               tank_.GetBulletConfig());
-    tank_.ResetReloadTimer();
+    tank_bullets_.push_back(tank_.FireBullet());
   }
 }
 
 void Game::TryAndFireEnemiesBullet() {
   for (RangedEnemy& ranged_enemy : ranged_enemies_) {
     if (ranged_enemy.IsLoaded()) {
-      enemy_bullets_.emplace_back(ranged_enemy.GetPosition(),
-                                  ranged_enemy.GetDirection(),
-                                  ranged_enemy.GetBulletConfig());
+      enemy_bullets_.push_back(ranged_enemy.FireBullet());
       ranged_enemy.ResetReloadTimer();
     }
   }

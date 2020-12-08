@@ -12,13 +12,17 @@ namespace tank_hero {
 using glm::vec2;
 using std::vector;
 
+constexpr float kDefaultBulletSize = 5;
+constexpr float kDefaultBulletSpeed = 8;
+constexpr float kDefaultReloadTime = 1.5;
+
 class Bullet : public Movable {
  public:
   Bullet(const vec2& spawn_pos, const vec2& direction,
          const BulletConfig& bullet_config);
 
   // Getters and Setters
-  bool IsBig() const {return collider_radius_ > kDefaultBulletSize;}
+  bool IsBig() const { return collider_radius_ > kDefaultBulletSize; }
   bool IsActive() const { return active_; }
   void GoInactive() { active_ = false; }
 

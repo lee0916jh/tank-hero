@@ -65,4 +65,9 @@ bool Tank::DidCollideWith(const Enemy& enemy) const {
   return glm::distance2(position_, enemy.GetPosition()) <
          powf(kTankSize + enemy.GetColliderRadius(), 2);
 }
+
+Bullet Tank::FireBullet() {
+  ResetReloadTimer();
+  return Bullet(position_, gun_rotation_, bullet_config_);
+}
 }  // namespace tank_hero

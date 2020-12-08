@@ -10,6 +10,9 @@
 namespace tank_hero {
 using glm::vec2;
 
+constexpr float kBigBulletSize = 20;
+constexpr float kFastBulletSpeed = 20;
+
 enum class ItemType { kLife, kShield, kBomb, kBigGun, kFastGun, kOriginalGun };
 
 class Item {
