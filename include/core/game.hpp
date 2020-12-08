@@ -9,8 +9,8 @@ using std::vector;
 template <typename T>
 void Game::HandleTankCollisionWith(vector<T>* dangerous_objects) {
   if (dangerous_objects->empty()) return;
-  bool is_enemy = dynamic_cast<Enemy*>(dangerous_objects[0]) != nullptr;
-  bool is_bullet = dynamic_cast<Bullet*>(dangerous_objects[0]) != nullptr;
+  bool is_enemy = dynamic_cast<Enemy*>(&dangerous_objects->at(0)) != nullptr;
+  bool is_bullet = dynamic_cast<Bullet*>(&dangerous_objects->at(0)) != nullptr;
   if (!is_bullet && !is_enemy) {
     throw std::invalid_argument(
         "The vector does not contain any dangerous object that can do harm to "

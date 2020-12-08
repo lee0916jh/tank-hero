@@ -4,6 +4,7 @@
 #include <optional>
 
 #include "cinder/gl/gl.h"
+#include "math.h"
 #include "ranged.h"
 #include "tank.h"
 
@@ -14,6 +15,8 @@ constexpr float kBigBulletSize = 20;
 constexpr float kFastBulletSpeed = 20;
 constexpr float kShotgunBulletSize = 10;
 constexpr float kShotgunBulletSpeed = 5;
+constexpr float kShotgunMaxRotation = M_PI / 6;
+constexpr float kShotgunBulletCount = 5;
 
 enum class ItemType {
   kLife,
@@ -33,6 +36,7 @@ class Item {
 
   // Getters
   const vec2& GetPosition() const { return position_; }
+  bool IsGun() const { return bullet_config_.has_value(); }
   bool IsShotgun() const { return type_ == ItemType::kShotgun; }
   const std::optional<BulletConfig>& GetBulletConfig() const;
   const ItemType& GetType() const { return type_; }

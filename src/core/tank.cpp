@@ -70,11 +70,6 @@ Bullet Tank::FireBullet(float rotation) {
 }
 
 void Tank::ApplyItem(const Item& item) {
-  if (item.IsShotgun()) {
-    has_shotgun_ = true;
-  } else {
-    has_shotgun_ = false;
-  }
   switch (item.GetType()) {
     case ItemType::kLife:
       life_++;
@@ -85,7 +80,12 @@ void Tank::ApplyItem(const Item& item) {
     case ItemType::kBomb:
       bomb_++;
       break;
-    default:  // when the item is a gun
+    case ItemType::kShotgun:
+      has_shotgun_ = true;
+      bullet_config_ = item.GetBulletConfig().value();
+      break;
+    default:  // when the item is a gun but not a shotgun
+      has_shotgun_ = false;
       bullet_config_ = item.GetBulletConfig().value();
       break;
   }

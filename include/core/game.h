@@ -10,6 +10,7 @@
 #include "cinder/Timer.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
+#include "helper.hpp"
 #include "item.h"
 #include "obstacle.h"
 #include "ranged_enemy.h"

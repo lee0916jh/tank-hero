@@ -40,10 +40,10 @@ void Game::HandleTankMovement(const set<int>& keys, const vec2& mouse_pos) {
 }
 
 void Game::HandleItemPickUp() {
-  for (auto item_it = items_.begin(); item_it != items_.end(); item_it++) {
-    if (item_it->IsInPickUpRange(tank_)) {
-      tank_.ApplyItem(*item_it);
-      items_.erase(item_it);
+  for (auto item = items_.begin(); item != items_.end(); item++) {
+    if (item->IsInPickUpRange(tank_)) {
+      tank_.ApplyItem(*item);
+      items_.erase(item);
       return;
     }
   }
@@ -80,7 +80,11 @@ void Game::MoveGameObjects() {
 
 void Game::TryAndFireTankBullet() {
   if (tank_.IsLoaded() && tank_.HasShotgun()) {
-    for(int i =0;i < kShotgutBulletCount)
+    vector<double> rotations = linspace(
+        -kShotgunMaxRotation, kShotgunMaxRotation, kShotgunBulletCount);
+    for (double rotation : rotations) {
+      tank_bullets_.push_back(tank_.FireBullet(rotation));
+    }
   } else if (tank_.IsLoaded()) {
     tank_bullets_.push_back(tank_.FireBullet());
   }
@@ -167,6 +171,7 @@ void Game::SpawnItem() {
         bullet_config.radius = kShotgunBulletSize;
         bullet_config.speed = kShotgunBulletSpeed;
         items_.emplace_back(random_pos, ItemType::kShotgun, bullet_config);
+        break;
       case 4:
         bullet_config.radius = kBigBulletSize;
         items_.emplace_back(random_pos, ItemType::kBigGun, bullet_config);

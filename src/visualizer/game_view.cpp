@@ -95,6 +95,9 @@ void GameView::DrawItems() const {
       case ItemType::kBomb:
         image_to_draw = bomb_img_;
         break;
+      case ItemType::kShotgun:
+        ci::gl::drawStringCentered("SHOTGUN",
+                                   item.GetPosition() - *camera_offset_);
       default:
         image_to_draw = gun_img_;
         break;
