@@ -6,16 +6,21 @@
 namespace tank_hero {
 using std::vector;
 
-template <typename EnemyType>
-void Game::HandleTankEnemiesCollisions(vector<EnemyType>* enemies) {
-  if (enemies->empty()) return;
-  if (dynamic_cast<Enemy*>(&enemies->at(0)) == nullptr) {
-    throw std::invalid_argument("Elements are not of Enemy type.");
+template <typename T>
+void Game::HandleTankCollisionWith(vector<T>* dangerous_objects) {
+  if (dangerous_objects->empty()) return;
+  bool is_enemy = dynamic_cast<Enemy*>(dangerous_objects[0]) != nullptr;
+  bool is_bullet = dynamic_cast<Bullet*>(dangerous_objects[0]) != nullptr;
+  if (!is_bullet && !is_enemy) {
+    throw std::invalid_argument(
+        "The vector does not contain any dangerous object that can do harm to "
+        "the tank");
   }
-  for (size_t i = 0; i < enemies->size(); i++) {
-    if (tank_.DidCollideWith(enemies->at(i))) {
-      tank_.DecrementLife();
-      enemies->erase(enemies->begin() + i);
+
+  for (size_t i = 0; i < dangerous_objects->size(); i++) {
+    if (tank_.DidCollideWith(dangerous_objects->at(i))) {
+      tank_.LoseLifeOrShield();
+      dangerous_objects->erase(dangerous_objects->begin() + i);
       return;
     }
   }

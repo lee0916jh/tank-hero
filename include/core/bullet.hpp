@@ -12,7 +12,7 @@ typename vector<EnemyType>::iterator Bullet::GetKilledEnemy(
   }
   auto enemy_it = enemies->begin();
   while (enemy_it != enemies->end()) {
-    if (this->DidHit(*enemy_it)) {
+    if (this->DidCollideWith(*enemy_it)) {
       this->GoInactive();
       return enemy_it;
     }

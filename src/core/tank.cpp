@@ -4,7 +4,8 @@ namespace tank_hero {
 Tank::Tank(const vec2& position)
     : Movable(position, position, kDefaultSpeed, kTankSize / 2),
       Ranged(kDefaultBulletSize, kDefaultBulletSpeed, kDefaultReloadTime),
-      is_shielded_(false) {}
+      is_shielded_(false),
+      has_shotgun_(false) {}
 
 void Tank::MoveUp() {
   direction_ = vec2(0, -1);
@@ -61,13 +62,40 @@ void Tank::KeepInMap(const size_t field_width) {
   }
 }
 
-bool Tank::DidCollideWith(const Enemy& enemy) const {
-  return glm::distance2(position_, enemy.GetPosition()) <
-         powf(kTankSize + enemy.GetColliderRadius(), 2);
+Bullet Tank::FireBullet(float rotation) {
+  vec2 bullet_direction = glm::rotate(gun_rotation_, rotation);
+  ResetReloadTimer();
+  return Bullet(position_ + kTankSize / 2 * gun_rotation_, bullet_direction,
+                bullet_config_);
 }
 
-Bullet Tank::FireBullet() {
-  ResetReloadTimer();
-  return Bullet(position_, gun_rotation_, bullet_config_);
+void Tank::ApplyItem(const Item& item) {
+  if (item.IsShotgun()) {
+    has_shotgun_ = true;
+  } else {
+    has_shotgun_ = false;
+  }
+  switch (item.GetType()) {
+    case ItemType::kLife:
+      life_++;
+      break;
+    case ItemType::kShield:
+      is_shielded_ = true;
+      break;
+    case ItemType::kBomb:
+      bomb_++;
+      break;
+    default:  // when the item is a gun
+      bullet_config_ = item.GetBulletConfig().value();
+      break;
+  }
+}
+
+void Tank::LoseLifeOrShield() {
+  if (this->is_shielded_) {
+    is_shielded_ = false;
+  } else {
+    life_--;
+  }
 }
 }  // namespace tank_hero

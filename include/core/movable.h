@@ -26,6 +26,10 @@ class Movable {
   /// Move this object 1 unit of time
   virtual void Move();
 
+  /// Returns true only if this tank and the enemy collided with each other.
+  /// \param enemy Enemy to check collision with
+  bool DidCollideWith(const Movable& movable) const;
+
  protected:
   vec2 position_;
   vec2 direction_;

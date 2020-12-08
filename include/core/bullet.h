@@ -29,9 +29,6 @@ class Bullet : public Movable {
   /// Returns true only if the bullet is outside the map.
   bool IsOutOfMap(size_t map_width) const;
 
-  /// Returns true only if the bullet collided with the movable object.
-  bool DidHit(const Movable& movable) const;
-
   /// Returns the iterator pointing to the killed enemy (enemy that collided
   /// with this bullet). If no one is killed, returns the iterator to the end.
   /// \tparam EnemyType The vector must contain an EnemyType.

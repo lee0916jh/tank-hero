@@ -36,6 +36,8 @@ class GameView {
   void DrawObstacles() const;
   void DisplayGameStatus() const;
   void DrawGameEndScreen() const;
+  void DrawItems() const;
+
 
   void DrawRotatedImage(const Texture2dRef& image, const vec2& position,
                         const vec2& direction) const;
@@ -60,10 +62,10 @@ class GameView {
   Texture2dRef shield_img_;
   Texture2dRef tank_body_img_;
   Texture2dRef tank_gun_img_;
+  Texture2dRef tank_shield_img_;
   Texture2dRef tank_bullet_img_;
   Texture2dRef melee_enemy_img_;
   Texture2dRef ranged_enemy_img_;
-  void DrawItems() const;
 };
 }  // namespace tank_hero::visualizer
 

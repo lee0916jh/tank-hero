@@ -42,20 +42,7 @@ void Game::HandleTankMovement(const set<int>& keys, const vec2& mouse_pos) {
 void Game::HandleItemPickUp() {
   for (auto item_it = items_.begin(); item_it != items_.end(); item_it++) {
     if (item_it->IsInPickUpRange(tank_)) {
-      switch (item_it->GetType()) {
-        case ItemType::kLife:
-          tank_.IncrementLife();
-          break;
-        case ItemType::kShield:
-          tank_.SetShielded(true);
-          break;
-        case ItemType::kBomb:
-          tank_.IncrementBombCount();
-          break;
-        default:  // when Item is a gun
-          tank_.SetBulletConfig(item_it->GetBulletConfig().value());
-          break;
-      }
+      tank_.ApplyItem(*item_it);
       items_.erase(item_it);
       return;
     }
@@ -67,10 +54,10 @@ void Game::Update() {
   TryAndFireEnemiesBullet();
 
   HandleTankBulletsHittingEnemies();
-  HandleEnemyBulletsHittingTank();
 
-  HandleTankEnemiesCollisions(&melee_enemies_);
-  HandleTankEnemiesCollisions(&ranged_enemies_);
+  HandleTankCollisionWith(&melee_enemies_);
+  HandleTankCollisionWith(&ranged_enemies_);
+  HandleTankCollisionWith(&enemy_bullets_);
 
   HandleObjectsCollisionWithObstacles();
   RemoveInvalidBullets();
@@ -92,7 +79,9 @@ void Game::MoveGameObjects() {
 }
 
 void Game::TryAndFireTankBullet() {
-  if (tank_.IsLoaded()) {
+  if (tank_.IsLoaded() && tank_.HasShotgun()) {
+    for(int i =0;i < kShotgutBulletCount)
+  } else if (tank_.IsLoaded()) {
     tank_bullets_.push_back(tank_.FireBullet());
   }
 }
@@ -101,7 +90,6 @@ void Game::TryAndFireEnemiesBullet() {
   for (RangedEnemy& ranged_enemy : ranged_enemies_) {
     if (ranged_enemy.IsLoaded()) {
       enemy_bullets_.push_back(ranged_enemy.FireBullet());
-      ranged_enemy.ResetReloadTimer();
     }
   }
 }
@@ -122,15 +110,6 @@ void Game::HandleTankBulletsHittingEnemies() {
       ranged_enemies_.erase(killed_ranged);
       kill_count_++;
       tank_.ReduceReloadTime(kUpgradeAmount);
-    }
-  }
-}
-
-void Game::HandleEnemyBulletsHittingTank() {
-  for (Bullet& enemy_bullet : enemy_bullets_) {
-    if (enemy_bullet.DidHit(tank_)) {
-      enemy_bullet.GoInactive();
-      tank_.DecrementLife();
     }
   }
 }
@@ -185,14 +164,18 @@ void Game::SpawnItem() {
         items_.emplace_back(random_pos, ItemType::kBomb);
         break;
       case 3:
+        bullet_config.radius = kShotgunBulletSize;
+        bullet_config.speed = kShotgunBulletSpeed;
+        items_.emplace_back(random_pos, ItemType::kShotgun, bullet_config);
+      case 4:
         bullet_config.radius = kBigBulletSize;
         items_.emplace_back(random_pos, ItemType::kBigGun, bullet_config);
         break;
-      case 4:
+      case 5:
         bullet_config.speed = kFastBulletSpeed;
         items_.emplace_back(random_pos, ItemType::kFastGun, bullet_config);
         break;
-      case 5:
+      case 6:
         items_.emplace_back(random_pos, ItemType::kOriginalGun, bullet_config);
         break;
       default:
@@ -227,5 +210,4 @@ void Game::IncreaseDifficulty() {
     enemy_spawn_cooldown_ -= kEnemySpawnFreqReduceAmount;
   }
 }
-
 }  // namespace tank_hero

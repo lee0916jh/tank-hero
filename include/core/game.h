@@ -27,7 +27,7 @@ constexpr size_t kRangedEnemySpawnDifficulty = 3;
 constexpr float kMaxDifficulty = 20;
 constexpr float kInitialEnemySpeed = 1;
 constexpr float kInitialSpawnFreq = 2;
-constexpr int kNumItems = 6;  // this should match the number of item types.
+constexpr int kNumItems = 7;  // this should match the number of item types.
 
 constexpr float kUpgradeAmount = 0.005;
 constexpr float kEnemySpeedIncreaseAmount = 0.1;
@@ -87,14 +87,12 @@ class Game {
   /// enemy, set the bullet inactive, and the enemy dead.
   void HandleTankBulletsHittingEnemies();
 
-  /// Checks if any of the enemy's bullets hit the tank. If the tank is hit by a
-  /// bullet, tank loses a life.
-  void HandleEnemyBulletsHittingTank();
-
-  /// Checks if any enemy in the vector hits the tank. If that happened, tank
-  /// loses a life.
-  template <typename EnemyType>
-  void HandleTankEnemiesCollisions(vector<EnemyType>* enemies);
+  /// Checks if any object in the vector hits the tank. If that happens, tank
+  /// loses a life or the shield, if the tank has one.
+  /// \param dangerous_objects Vector of Enemy, RangedEnemy, or Bullet
+  ///        that can do harm to the tank.
+  template <typename T>
+  void HandleTankCollisionWith(vector<T>* dangerous_objects);
 
   /// Removes bullets that went outside the play area, or that are inactive.
   void RemoveInvalidBullets();

@@ -12,9 +12,20 @@ using glm::vec2;
 
 constexpr float kBigBulletSize = 20;
 constexpr float kFastBulletSpeed = 20;
+constexpr float kShotgunBulletSize = 10;
+constexpr float kShotgunBulletSpeed = 5;
 
-enum class ItemType { kLife, kShield, kBomb, kBigGun, kFastGun, kOriginalGun };
+enum class ItemType {
+  kLife,
+  kShield,
+  kBomb,
+  kShotgun,
+  kBigGun,
+  kFastGun,
+  kOriginalGun
+};
 
+class Tank;
 class Item {
  public:
   Item(const vec2& position, const ItemType& type,
@@ -22,7 +33,7 @@ class Item {
 
   // Getters
   const vec2& GetPosition() const { return position_; }
-  bool IsGun() const { return bullet_config_.has_value(); }
+  bool IsShotgun() const { return type_ == ItemType::kShotgun; }
   const std::optional<BulletConfig>& GetBulletConfig() const;
   const ItemType& GetType() const { return type_; }
 
