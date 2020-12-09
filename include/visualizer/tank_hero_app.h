@@ -45,10 +45,7 @@ class TankHeroApp : public ci::app::App {
   void mouseUp(MouseEvent event) override;
 
  private:
-  /// Calculates camera offset from the position of the tank.
-  void AdjustCameraOffset();
-
-  /// Checks if it's time to increase difficulty
+  /// Checks if it's time to increase the difficulty
   bool ReadyToIncreaseDifficulty();
 
   Game game_;

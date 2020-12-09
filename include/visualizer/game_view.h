@@ -23,11 +23,13 @@ const size_t kHeartImgWidth = 20;
 
 class GameView {
  public:
-  explicit GameView(const Game* game, size_t window_size,
-                    const vec2* camera_offset);
+  explicit GameView(Game* game, size_t window_size, vec2* camera_offset);
 
   /// Draws all game objects and texts showing game status
   void Draw() const;
+
+  /// Calculates camera offset from the position of the tank.
+  void AdjustCameraOffset();
 
  private:
   void DrawTank() const;
@@ -37,7 +39,6 @@ class GameView {
   void DisplayGameStatus() const;
   void DrawGameEndScreen() const;
   void DrawItems() const;
-
 
   void DrawRotatedImage(const Texture2dRef& image, const vec2& position,
                         const vec2& direction) const;
@@ -51,8 +52,10 @@ class GameView {
   ///            pi
   float CalcRotation(const vec2& direction) const;
 
-  const Game* game_;
-  const vec2* camera_offset_;
+
+
+  Game* game_;
+  vec2* camera_offset_;
   const size_t window_size_;
 
   // images

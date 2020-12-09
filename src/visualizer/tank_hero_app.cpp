@@ -14,7 +14,7 @@ void TankHeroApp::setup() {}
 
 void TankHeroApp::update() {
   if (game_.IsOn()) {
-    AdjustCameraOffset();
+    game_view_.AdjustCameraOffset();
 
     game_.HandleTankMovement(move_keys_, mouse_pos_ + camera_offset_);
     game_.Update();
@@ -53,31 +53,6 @@ void TankHeroApp::mouseDrag(MouseEvent event) { mouse_pos_ = event.getPos(); }
 void TankHeroApp::mouseUp(MouseEvent event) {
   mouse_pos_ = event.getPos();
   mouse_down_ = false;
-}
-
-void TankHeroApp::AdjustCameraOffset() {
-  const vec2& tank_pos = game_.GetTank().GetPosition();
-
-  // if tank is in the middle of map camera follows the tank
-  if (tank_pos.x > kWindowSize / 2.0 &&
-      tank_pos.x < kFieldWidth - (kWindowSize / 2.0)) {
-    camera_offset_.x = tank_pos.x - kWindowSize / 2.0;
-  }
-  // if tank is close to the edge of the map camera stops following tank.
-  else if (tank_pos.x <= kWindowSize / 2.0) {
-    camera_offset_.x = 0;
-  } else {
-    camera_offset_.x = kFieldWidth - kWindowSize;
-  }
-
-  if (tank_pos.y > kWindowSize / 2.0 &&
-      tank_pos.y < kFieldWidth - (kWindowSize / 2.0)) {
-    camera_offset_.y = tank_pos.y - kWindowSize / 2.0;
-  } else if (tank_pos.y <= kWindowSize / 2.0) {
-    camera_offset_.y = 0;
-  } else {
-    camera_offset_.y = kFieldWidth - kWindowSize;
-  }
 }
 
 bool TankHeroApp::ReadyToIncreaseDifficulty() {

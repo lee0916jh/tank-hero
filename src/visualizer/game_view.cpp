@@ -2,8 +2,7 @@
 
 namespace tank_hero::visualizer {
 
-GameView::GameView(const Game* game, size_t window_size,
-                   const vec2* camera_offset)
+GameView::GameView(Game* game, size_t window_size, vec2* camera_offset)
     : game_(game),
       camera_offset_(camera_offset),
       window_size_(window_size),
@@ -184,4 +183,28 @@ float GameView::CalcRotation(const vec2& direction) const {
   return direction.x > 0 ? angle : 2 * glm::pi<float>() - angle;
 }
 
+void GameView::AdjustCameraOffset() {
+  const vec2& tank_pos = game_->GetTank().GetPosition();
+
+  // if tank is in the middle of map camera follows the tank
+  if (tank_pos.x > window_size_ / 2.0 &&
+      tank_pos.x < kFieldWidth - (window_size_ / 2.0)) {
+    camera_offset_->x = tank_pos.x - window_size_ / 2.0;
+  }
+  // if tank is close to the edge of the map camera stops following tank.
+  else if (tank_pos.x <= window_size_ / 2.0) {
+    camera_offset_->x = 0;
+  } else {
+    camera_offset_->x = kFieldWidth - window_size_;
+  }
+
+  if (tank_pos.y > window_size_ / 2.0 &&
+      tank_pos.y < kFieldWidth - (window_size_ / 2.0)) {
+    camera_offset_->y = tank_pos.y - window_size_ / 2.0;
+  } else if (tank_pos.y <= window_size_ / 2.0) {
+    camera_offset_->y = 0;
+  } else {
+    camera_offset_->y = kFieldWidth - window_size_;
+  }
+}
 }  // namespace tank_hero::visualizer
