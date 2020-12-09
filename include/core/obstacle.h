@@ -11,8 +11,9 @@
 
 namespace tank_hero {
 using glm::vec2;
-using std::string;
 using std::vector;
+
+enum class Direction { kLeft, kRight, kTop, kBottom };
 
 class Obstacle {
  public:
@@ -42,7 +43,7 @@ class Obstacle {
   /// occurred.
   /// \param movable Movable object that collided with this obstacle
   /// \return "left", "right", "top", or "bottom", depending on the result
-  string FindCollisionDirection(const Movable& movable) const;
+  Direction FindCollisionDirection(const Movable& movable) const;
 
   vec2 top_left_;
   vec2 bottom_right_;

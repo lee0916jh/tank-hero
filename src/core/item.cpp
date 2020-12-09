@@ -10,6 +10,6 @@ const std::optional<BulletConfig>& Item::GetBulletConfig() const {
 
 bool Item::IsInPickUpRange(const Tank& tank) const {
   return glm::distance2(tank.GetPosition(), position_) <
-         powf(tank.GetColliderRadius(), 2);
+         powf(tank.GetColliderRadius() + kItemRadius, 2);
 }
 }  // namespace tank_hero

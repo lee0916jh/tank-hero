@@ -18,15 +18,22 @@ void Obstacle::HandleCollisionWith(Movable* movable) const {
     return;
   }
 
-  string collision_direction = FindCollisionDirection(*movable);
-  if (collision_direction == "left") {
-    movable->SetPositionX(top_left_.x - movable->GetColliderRadius());
-  } else if (collision_direction == "right") {
-    movable->SetPositionX(bottom_right_.x + movable->GetColliderRadius());
-  } else if (collision_direction == "top") {
-    movable->SetPositionY(top_left_.y - movable->GetColliderRadius());
-  } else if (collision_direction == "bottom") {
-    movable->SetPositionY(bottom_right_.y + movable->GetColliderRadius());
+  Direction collision_direction = FindCollisionDirection(*movable);
+  switch (collision_direction) {
+    case Direction::kLeft:
+      movable->SetPositionX(top_left_.x - movable->GetColliderRadius());
+      break;
+    case Direction::kRight:
+      movable->SetPositionX(bottom_right_.x + movable->GetColliderRadius());
+      break;
+    case Direction::kTop:
+      movable->SetPositionY(top_left_.y - movable->GetColliderRadius());
+      break;
+    case Direction::kBottom:
+      movable->SetPositionY(bottom_right_.y + movable->GetColliderRadius());
+      break;
+    default:
+      break;
   }
 }
 
@@ -43,16 +50,15 @@ bool Obstacle::CheckCollision(const Movable& movable) const {
          y_diff < (movable.GetColliderRadius() + length / 2);
 }
 
-string Obstacle::FindCollisionDirection(const Movable& movable) const {
-  string collision_direction;
+Direction Obstacle::FindCollisionDirection(const Movable& movable) const {
   const vec2& movable_pos = movable.GetPosition();
-  std::unordered_map<string, float> distances_to_wall = {
-      {"left", abs(movable_pos.x - top_left_.x)},
-      {"right", abs(movable_pos.x - bottom_right_.x)},
-      {"top", abs(movable_pos.y - top_left_.y)},
-      {"bottom", abs(movable_pos.y - bottom_right_.y)}};
+  std::unordered_map<Direction, float> distances_to_wall = {
+      {Direction::kLeft, abs(movable_pos.x - top_left_.x)},
+      {Direction::kRight, abs(movable_pos.x - bottom_right_.x)},
+      {Direction::kTop, abs(movable_pos.y - top_left_.y)},
+      {Direction::kBottom, abs(movable_pos.y - bottom_right_.y)}};
 
-  std::pair<string, float> wall_min_distance = *std::min_element(
+  std::pair<Direction, float> wall_min_distance = *std::min_element(
       distances_to_wall.begin(), distances_to_wall.end(),
       [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
 

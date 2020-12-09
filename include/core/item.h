@@ -11,6 +11,7 @@
 namespace tank_hero {
 using glm::vec2;
 
+constexpr float kItemRadius = 10;
 constexpr float kBigBulletSize = 20;
 constexpr float kFastBulletSpeed = 20;
 constexpr float kShotgunBulletSize = 10;
