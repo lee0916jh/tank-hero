@@ -62,7 +62,8 @@ list(APPEND CORE_SOURCE_FILES
 
 list(APPEND SOURCE_FILES ${CORE_SOURCE_FILES}
         src/visualizer/tank_hero_app.cpp
-        src/visualizer/game_view.cpp)
+        src/visualizer/game_view.cpp
+        src/visualizer/button.cpp)
 
 list(APPEND TEST_FILES
         tests/bullet_test.cpp

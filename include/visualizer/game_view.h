@@ -27,6 +27,7 @@ class GameView {
 
   /// Draws all game objects and texts showing game status
   void Draw() const;
+  void DrawGameEndScreen() const;
 
   /// Calculates camera offset from the position of the tank.
   void AdjustCameraOffset();
@@ -37,7 +38,6 @@ class GameView {
   void DrawBullets() const;
   void DrawObstacles() const;
   void DisplayGameStatus() const;
-  void DrawGameEndScreen() const;
   void DrawItems() const;
 
   void DrawRotatedImage(const Texture2dRef& image, const vec2& position,
@@ -51,8 +51,6 @@ class GameView {
   ///    5/4 pi     3/4 pi
   ///            pi
   float CalcRotation(const vec2& direction) const;
-
-
 
   Game* game_;
   vec2* camera_offset_;

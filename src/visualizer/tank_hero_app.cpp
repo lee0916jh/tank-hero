@@ -4,6 +4,7 @@ namespace tank_hero::visualizer {
 TankHeroApp::TankHeroApp()
     : game_(kWindowSize, kObstacles),
       game_view_(&game_, kWindowSize, &camera_offset_),
+      restart_btn_("RESTART", kRestartBtnCenter, kBtnWidth, kBtnHeight),
       camera_offset_(kWindowSize / 2, kWindowSize / 2) {
   ci::app::setWindowSize(static_cast<int>(kWindowSize),
                          static_cast<int>(kWindowSize));
@@ -23,6 +24,8 @@ void TankHeroApp::update() {
 
     if (mouse_down_) game_.TryAndFireTankBullet();
     if (ReadyToIncreaseDifficulty()) game_.IncreaseDifficulty();
+  } else if (mouse_down_ && restart_btn_.CheckClicked(mouse_pos_)) {
+    game_ = Game(kWindowSize, kObstacles);
   }
 }
 
@@ -30,7 +33,12 @@ void TankHeroApp::draw() {
   ci::Color8u background_color("grey");
   ci::gl::clear(background_color);
 
-  game_view_.Draw();
+  if (game_.IsOn()) {
+    game_view_.Draw();
+  } else {
+    game_view_.DrawGameEndScreen();
+    restart_btn_.Draw();
+  }
 }
 
 void TankHeroApp::keyDown(KeyEvent event) {

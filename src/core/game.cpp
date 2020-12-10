@@ -5,6 +5,7 @@ using ci::app::KeyEvent;
 
 Game::Game(size_t window_width, const vector<Obstacle>& obstacles)
     : window_width_(window_width),
+      field_width_(kFieldWidth),
       tank_(vec2(window_width / 2, window_width / 2)),
       obstacles_(obstacles) {
   enemy_spawn_timer_.start();
@@ -34,7 +35,7 @@ void Game::HandleTankMovement(const set<int>& keys, const vec2& mouse_pos) {
     tank_.MoveRight();
   }
 
-  tank_.KeepInMap(map_width_);
+  tank_.KeepInMap(field_width_);
   tank_.RotateGun(mouse_pos);
   HandleItemPickUp();
 }

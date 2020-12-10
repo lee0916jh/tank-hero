@@ -37,8 +37,6 @@ class Item {
 
   // Getters
   const vec2& GetPosition() const { return position_; }
-  bool IsGun() const { return bullet_config_.has_value(); }
-  bool IsShotgun() const { return type_ == ItemType::kShotgun; }
   const std::optional<BulletConfig>& GetBulletConfig() const;
   const ItemType& GetType() const { return type_; }
 

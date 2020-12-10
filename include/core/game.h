@@ -27,7 +27,8 @@ constexpr size_t kFieldWidth = 2000;
 constexpr size_t kRangedEnemySpawnDifficulty = 3;
 constexpr float kMaxDifficulty = 20;
 constexpr float kInitialEnemySpeed = 1;
-constexpr float kInitialSpawnFreq = 2;
+constexpr float kInitialEnemySpawnFreq = 2;
+constexpr float kItemSpawnFreq = 5;
 constexpr int kNumItems = 7;  // this should match the number of item types.
 
 constexpr float kUpgradeAmount = 0.005;
@@ -104,8 +105,12 @@ class Game {
   /// Moves all movable game objects.
   void MoveGameObjects();
 
+  /// Checks if the tank pick up an item and if the tank can pick up an item,
+  /// apply the item effect to the tank
+  void HandleItemPickUp();
+
   size_t window_width_;
-  size_t map_width_;
+  size_t field_width_;
 
   // Game Objects
   Tank tank_;
@@ -122,9 +127,8 @@ class Game {
   size_t kill_count_ = 0;
   size_t difficulty_ = 0;
   float new_enemy_speed_ = kInitialEnemySpeed;
-  float enemy_spawn_cooldown_ = kInitialSpawnFreq;
-  float item_spawn_cooldown_ = kInitialSpawnFreq;
-  void HandleItemPickUp();
+  float enemy_spawn_cooldown_ = kInitialEnemySpawnFreq;
+  float item_spawn_cooldown_ = kItemSpawnFreq;
 };
 }  // namespace tank_hero
 

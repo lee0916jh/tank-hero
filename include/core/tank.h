@@ -14,8 +14,8 @@ using glm::vec2;
 constexpr float kDefaultSpeed = 3;
 constexpr float kTankSize = 60;
 
-constexpr int kInitialLifeCount = 5;
-constexpr int kInitialBombCount = 5;
+constexpr int kInitialLifeCount = 3;
+constexpr int kInitialBombCount = 3;
 
 class Enemy;
 class Bullet;

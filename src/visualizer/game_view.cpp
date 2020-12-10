@@ -22,16 +22,12 @@ GameView::GameView(Game* game, size_t window_size, vec2* camera_offset)
           Texture2d::create(loadImage(loadAsset("ranged_enemy.png")))) {}
 
 void GameView::Draw() const {
-  if (game_->IsOn()) {
-    DrawTank();
-    DrawEnemies();
-    DrawBullets();
-    DrawItems();
-    DrawObstacles();
-    DisplayGameStatus();
-  } else {
-    DrawGameEndScreen();
-  }
+  DrawTank();
+  DrawEnemies();
+  DrawBullets();
+  DrawItems();
+  DrawObstacles();
+  DisplayGameStatus();
 }
 
 void GameView::DrawTank() const {
@@ -94,9 +90,6 @@ void GameView::DrawItems() const {
       case ItemType::kBomb:
         image_to_draw = bomb_img_;
         break;
-      case ItemType::kShotgun:
-        ci::gl::drawStringCentered("SHOTGUN",
-                                   item.GetPosition() - *camera_offset_);
       default:
         image_to_draw = gun_img_;
         break;
@@ -161,6 +154,10 @@ void GameView::DrawGameEndScreen() const {
   vec2 center(window_size_ / 2, window_size_ / 2);
   ci::gl::drawStringCentered("GAME OVER", center, kGameOverColor,
                              kGameOverFont);
+
+  ci::gl::drawStringCentered(
+      "You killed " + std::to_string(game_->GetKillCount()) + " enemies.",
+      center + vec2(0, 3 * kTextMargin), kTextColor, kTextFont);
 }
 
 void GameView::DrawRotatedImage(const Texture2dRef& image, const vec2& position,

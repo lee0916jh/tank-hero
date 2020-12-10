@@ -5,6 +5,7 @@
 #include <set>
 #include <vector>
 
+#include "button.h"
 #include "cinder/Font.h"
 #include "cinder/Timer.h"
 #include "cinder/app/App.h"
@@ -23,13 +24,17 @@ using std::vector;
 
 constexpr size_t kWindowSize = 1000;
 
+const vec2 kRestartBtnCenter(kWindowSize / 2, kWindowSize * 3 / 4);
+constexpr float kBtnWidth = 100;
+constexpr float kBtnHeight = 50;
+
 const size_t kIncreaseDifficultyThreshold =
-    20;  // difficulty will increase after this number of seconds.
-const vector<Obstacle> kObstacles = {{vec2(0, 0), vec2(100, 100)},
-                                     {vec2(200, 200), vec2(400, 800)},
-                                     {vec2(1300, 500), vec2(1800, 700)},
-                                     {vec2(300, 1200), vec2(750, 1400)},
-                                     {vec2(700, 500), vec2(900, 550)}};
+    30;  // difficulty will increase after this number of seconds.
+const vector<Obstacle> kObstacles = {
+    {vec2(0, 0), vec2(100, 100)},       {vec2(200, 200), vec2(400, 800)},
+    {vec2(1300, 500), vec2(1800, 700)}, {vec2(300, 1200), vec2(750, 1400)},
+    {vec2(500, 1300), vec2(750, 1800)}, {vec2(1500, 1700), vec2(2000, 2000)},
+    {vec2(700, 500), vec2(900, 550)}};
 
 class TankHeroApp : public ci::app::App {
  public:
@@ -50,6 +55,7 @@ class TankHeroApp : public ci::app::App {
 
   Game game_;
   GameView game_view_;
+  Button restart_btn_;
 
   vec2 camera_offset_;
   std::set<int> move_keys_;
